@@ -1,7 +1,12 @@
+using InfoSupport.TradingCardGenerator.Agent;
 using InfoSupport.TradingCardGenerator.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InfoSupport.TradingCardGenerator.Endpoints;
 
+/// <summary>
+/// Endpoints used to generate trading card photos.
+/// </summary>
 public static class CardGenerationEndpoints
 {
     /// <summary>
@@ -13,8 +18,9 @@ public static class CardGenerationEndpoints
         app.MapPost("/generate", GenerateTradingCard);
     }
 
-    private static GenerateCardResponse GenerateTradingCard(GenerateCardRequest request)
+    private static async Task<GenerateCardResponse> GenerateTradingCard(
+        GenerateCardRequest request, [FromServices] TradingCardPhotoGenerator generator)
     {
-        throw new NotImplementedException();
+        return await generator.TransformPhoto(request);
     }
 }

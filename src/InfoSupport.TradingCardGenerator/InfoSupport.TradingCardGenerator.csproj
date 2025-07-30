@@ -4,12 +4,20 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <NoWarn>SKEXP0010</NoWarn>
+    <NoWarn>SKEXP0010;SKEXP0001;OPENAI001</NoWarn>
     <UserSecretsId>2b737a48-bf4d-42a3-91af-9ee1d65a4a12</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.AI.OpenAI" Version="2.2.0-beta.5" />
+    <PackageReference Include="Handlebars.Net" Version="2.1.6" />
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.61.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.PromptTemplates.Handlebars" Version="1.61.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Prompts\generate-photo.md" />
+    <EmbeddedResource Include="Prompts\generate-photo.md" />
   </ItemGroup>
 
 </Project>

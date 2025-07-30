@@ -26,4 +26,4 @@ jobs:
         run: dotnet build InfoSupport.TradingCardGenerator.sln --no-restore --configuration Release
 
       - name: Run tests
-        run: dotnet test InfoSupport.TradingCardGenerator.sln --no-build --configuration Release --verbosity normal
+        run: dotnet test InfoSupport.TradingCardGenerator.sln --no-build --configuration Release --verbosity normal --filter "Category!=Integration"
