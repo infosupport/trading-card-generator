@@ -181,10 +181,6 @@ This project is developed by InfoSupport.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📞 Support
-
-For questions and support, please contact the InfoSupport development team.
-
 ---
 
 **Note**: This application requires a valid Azure OpenAI subscription and API access to function properly.
