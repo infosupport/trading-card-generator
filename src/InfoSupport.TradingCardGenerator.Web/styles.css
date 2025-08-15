@@ -1,0 +1,100 @@
+html {
+    font-size: 1px; /* baseline for rem scaling */
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f0f0;
+  text-align: center;
+}
+
+.header {
+    font-size: 16px;
+}
+
+.preview {
+    display: flex;
+    justify-content: center;
+}
+
+.card {
+  width: 375rem;
+  height: 525rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  background-color: #174a6f;
+}
+
+.card-frame {
+  background-color: #f1e4ce;
+  border-radius: 16rem; 
+  margin: 8rem 8rem 0rem 8rem;
+  height: 400rem;
+}
+
+.card-player-name {
+  text-align: center;
+  font-family: 'Bebas Neue', Arial, sans-serif;
+  margin-top: 8rem;
+  font-size: 32rem;
+  color: #174a6f;
+}
+
+#video-canvas {
+  width: 340rem;
+  height: 340rem;
+  border-radius: 16rem;
+  margin-top: 8rem;
+}
+
+.team-logo {
+  width: 100rem;
+  height: 100rem;
+  object-fit: contain;
+  background: #f1e4ce;
+  border-radius: 50%;
+  border: 2rem solid #eee;
+}
+
+.inputs {
+    margin: 20px 0;
+}
+
+.inputs input {
+    font-size: 1.2em;
+    margin: 0 10px;
+    padding: 5px;
+}
+
+
+
+@media print {
+    * {
+    -webkit-print-color-adjust: exact !important; /* Chrome, Safari */
+    print-color-adjust: exact !important;         /* Firefox */
+  }
+
+  html {
+    font-size: 2px; /* scales everything 2x */
+  }
+
+  body {
+    width: 750px;
+    height: 1050px;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+  }
+  
+  .header {
+    display: none;
+  }
+
+  .card {
+    box-shadow: none;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
