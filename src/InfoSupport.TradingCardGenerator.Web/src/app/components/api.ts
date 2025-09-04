@@ -1,6 +1,6 @@
 import { GenerateCardRequest, GenerateCardResponse } from './types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5241';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:7250';
 
 export class TradingCardApi {
   static async generateCard(request: GenerateCardRequest): Promise<GenerateCardResponse> {
