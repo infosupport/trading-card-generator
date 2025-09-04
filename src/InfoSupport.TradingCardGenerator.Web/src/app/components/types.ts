@@ -33,3 +33,28 @@ export interface WebcamError {
   message: string;
   constraint?: string;
 }
+
+// API Types for C# Backend Integration
+export interface ApiPlayer {
+  photo: string; // base64 encoded photo
+}
+
+export interface ApiSport {
+  type: string; // e.g., football, basketball, soccer
+}
+
+export interface ApiTeam {
+  name: string;
+  color: string;
+  logo: string; // base64 encoded logo
+}
+
+export interface GenerateCardRequest {
+  sport: ApiSport;
+  team: ApiTeam;
+  player: ApiPlayer;
+}
+
+export interface GenerateCardResponse {
+  image: string; // base64 encoded generated card image
+}
