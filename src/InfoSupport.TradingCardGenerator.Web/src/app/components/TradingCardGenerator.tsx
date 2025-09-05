@@ -164,14 +164,14 @@ export default function TradingCardGenerator() {
     <div>
       {/* Header */}
       <div className="text-base py-5">
-        <h1 className="text-2xl font-bold mb-5">Trading Card Generator</h1>
+        <h1 className="text-2xl font-bold mb-5 text-gray-900 dark:text-gray-100">Trading Card Generator</h1>
         <div className="flex justify-center gap-5 mb-5">
           <input
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             placeholder="First Name"
-            className="text-lg px-1 py-1 border border-gray-300 rounded"
+            className="text-lg px-1 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
             style={{ fontSize: '1.2em', margin: '0 10px', padding: '5px' }}
           />
           <input
@@ -179,13 +179,13 @@ export default function TradingCardGenerator() {
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             placeholder="Last Name"
-            className="text-lg px-1 py-1 border border-gray-300 rounded"
+            className="text-lg px-1 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
             style={{ fontSize: '1.2em', margin: '0 10px', padding: '5px' }}
           />
         </div>
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-5 py-3 rounded max-w-md mx-auto mb-5 text-sm">
+          <div className="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-200 px-5 py-3 rounded max-w-md mx-auto mb-5 text-sm">
             {error}
           </div>
         )}
@@ -196,26 +196,69 @@ export default function TradingCardGenerator() {
         <div 
           className="shadow-[0_4px_24px_rgba(0,0,0,0.15)] transition-all duration-700 ease-in-out"
           style={{
-            width: generatedCardImage ? 'auto' : '375px',
-            height: generatedCardImage ? 'auto' : '575px',
-            backgroundColor: generatedCardImage ? 'transparent' : (teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f'),
-            maxWidth: generatedCardImage ? '500px' : '375px'
+            width: '375px',
+            height: '575px',
+            backgroundColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f'
           }}
         >
           {/* Show generated card if available */}
           {generatedCardImage ? (
-            <Image
-              src={generatedCardImage}
-              alt="Generated Trading Card"
-              width={0}
-              height={0}
-              sizes="100vw"
-              className="w-full h-auto rounded-lg"
-              style={{
-                maxWidth: '500px',
-                height: 'auto'
-              }}
-            />
+            <div className="relative w-full h-full rounded-lg overflow-hidden">
+              <Image
+                src={generatedCardImage}
+                alt="Generated Trading Card"
+                fill
+                className="object-cover rounded-lg"
+              />
+              {/* Overlay player name and team logo on generated card */}
+              <div className="absolute bottom-0 left-0 right-0 p-4">
+                {/* Player Name */}
+                <div 
+                  className="text-center mb-2"
+                  style={{
+                    fontFamily: "'Bebas Neue', Arial, sans-serif",
+                    fontSize: '24px',
+                    color: '#f1e4ce',
+                    textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                  }}
+                >
+                  {playerName}
+                </div>
+                
+                {/* Team Logo */}
+                <div className="flex justify-center">
+                  <div className="relative">
+                    {teamLogo ? (
+                      <Image
+                        src={`/${teamLogo}`}
+                        alt="Team Logo"
+                        width={60}
+                        height={60}
+                        className="object-contain rounded-full border-2"
+                        style={{
+                          width: '60px',
+                          height: '60px',
+                          backgroundColor: '#f1e4ce',
+                          borderColor: '#eee'
+                        }}
+                      />
+                    ) : (
+                      <div
+                        className="rounded-full border-2 flex items-center justify-center"
+                        style={{
+                          width: '60px',
+                          height: '60px',
+                          backgroundColor: '#f1e4ce',
+                          borderColor: '#eee'
+                        }}
+                      >
+                        <div className="text-gray-400 text-xs">Logo</div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
           ) : (
             /* Show trading card preview */
             <>
