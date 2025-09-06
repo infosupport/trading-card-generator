@@ -201,77 +201,16 @@ export default function TradingCardGenerator() {
             backgroundColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f'
           }}
         >
-          {/* Show generated card if available */}
-          {generatedCardImage ? (
-            <div className="relative w-full h-full rounded-lg overflow-hidden">
-              <Image
-                src={generatedCardImage}
-                alt="Generated Trading Card"
-                fill
-                className="object-cover rounded-lg"
-              />
-              {/* Overlay player name and team logo on generated card */}
-              <div className="absolute bottom-0 left-0 right-0 p-4">
-                {/* Player Name */}
-                <div 
-                  className="text-center mb-2"
-                  style={{
-                    fontFamily: "'Bebas Neue', Arial, sans-serif",
-                    fontSize: '24px',
-                    color: '#f1e4ce',
-                    textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
-                  }}
-                >
-                  {playerName}
-                </div>
-                
-                {/* Team Logo */}
-                <div className="flex justify-center">
-                  <div className="relative">
-                    {teamLogo ? (
-                      <Image
-                        src={`/${teamLogo}`}
-                        alt="Team Logo"
-                        width={60}
-                        height={60}
-                        className="object-contain rounded-full border-2"
-                        style={{
-                          width: '60px',
-                          height: '60px',
-                          backgroundColor: '#f1e4ce',
-                          borderColor: '#eee'
-                        }}
-                      />
-                    ) : (
-                      <div
-                        className="rounded-full border-2 flex items-center justify-center"
-                        style={{
-                          width: '60px',
-                          height: '60px',
-                          backgroundColor: '#f1e4ce',
-                          borderColor: '#eee'
-                        }}
-                      >
-                        <div className="text-gray-400 text-xs">Logo</div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            /* Show trading card preview */
-            <>
-              {/* Card Frame */}
-              <div 
-                className="relative"
-                style={{
-                  backgroundColor: '#f1e4ce',
-                  borderRadius: '16px',
-                  margin: '8px 8px 0px 8px',
-                  height: '400px'
-                }}
-              >
+          {/* Card Frame */}
+          <div 
+            className="relative"
+            style={{
+              backgroundColor: '#f1e4ce',
+              borderRadius: '16px',
+              margin: '8px 8px 0px 8px',
+              height: '400px'
+            }}
+          >
                 {/* Video Canvas Area */}
                 <div className="flex justify-center">
                   <div
@@ -283,7 +222,21 @@ export default function TradingCardGenerator() {
                       marginTop: '8px'
                     }}
                   >
-                    {isGenerating && capturedPhoto ? (
+                    {generatedCardImage ? (
+                      /* Show generated card image */
+                      <Image
+                        src={generatedCardImage}
+                        alt="Generated Trading Card"
+                        width={340}
+                        height={340}
+                        className="object-cover"
+                        style={{
+                          width: '340px',
+                          height: '340px',
+                          borderRadius: '16px'
+                        }}
+                      />
+                    ) : isGenerating && capturedPhoto ? (
                       /* Show loading state with captured photo in background */
                       <>
                         <Image
@@ -393,95 +346,53 @@ export default function TradingCardGenerator() {
                 </div>
               </div>
 
-              {/* Generate Button */}
-              <div className="flex justify-center gap-3" style={{ marginTop: '12px' }}>
-                <button
-                  onClick={() => {
-                    if (generatedCardImage) {
-                      // Reset to capture new photo
-                      setGeneratedCardImage(null);
-                      setCapturedPhoto(null);
-                    } else {
-                      handleCapturePhoto();
-                    }
-                  }}
-                  disabled={!isStreaming || isCapturing || isGenerating}
-                  className="px-6 py-2 rounded-lg shadow-md transition-colors border-2 text-sm font-bold disabled:bg-gray-400 disabled:text-gray-600"
-                  style={{
-                    fontSize: '14px',
-                    fontWeight: 'bold',
-                    backgroundColor: '#f1e4ce',
-                    color: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
-                    borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f'
-                  }}
-                >
-                  {generatedCardImage 
-                    ? 'GENERATE NEW CARD' 
-                    : isGenerating 
-                      ? 'GENERATING...' 
-                      : isCapturing 
-                        ? 'CAPTURING...' 
-                        : 'GENERATE CARD'
-                  }
-                </button>
-                
-                {/* Download Button - only show when card is generated */}
-                {generatedCardImage && (
-                  <button
-                    onClick={() => {
-                      const a = document.createElement('a');
-                      a.href = generatedCardImage;
-                      a.download = `trading-card-${playerName.replace(/\s+/g, '-').toLowerCase()}.png`;
-                      document.body.appendChild(a);
-                      a.click();
-                      document.body.removeChild(a);
-                    }}
-                    className="px-6 py-2 rounded-lg shadow-md transition-colors border-2 text-sm font-bold"
-                    style={{
-                      fontSize: '14px',
-                      fontWeight: 'bold',
-                      backgroundColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
-                      color: '#f1e4ce',
-                      borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f'
-                    }}
-                  >
-                    DOWNLOAD
-                  </button>
-                )}
-              </div>
-            </>
-          )}
+
         </div>
       </div>
 
-      {/* Action Buttons when card is generated */}
-      {generatedCardImage && (
-        <div className="flex justify-center gap-3 mt-6">
-          <button
-            onClick={() => {
+      {/* Action Buttons */}
+      <div className="flex justify-center gap-3 mt-6">
+        <button
+          onClick={() => {
+            if (generatedCardImage) {
+              // Reset to capture new photo
               setGeneratedCardImage(null);
               setCapturedPhoto(null);
-            }}
-            className="px-6 py-2 rounded-lg shadow-md transition-colors border-2 text-sm font-bold"
-            style={{
-              fontSize: '14px',
-              fontWeight: 'bold',
-              backgroundColor: '#f1e4ce',
-              color: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
-              borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f'
-            }}
-          >
-            GENERATE NEW CARD
-          </button>
-          
+            } else {
+              handleCapturePhoto();
+            }
+          }}
+          disabled={!isStreaming || isCapturing || isGenerating}
+          className="px-6 py-2 rounded-lg shadow-md transition-colors border-2 text-sm font-bold disabled:bg-gray-400 disabled:text-gray-600"
+          style={{
+            fontSize: '14px',
+            fontWeight: 'bold',
+            backgroundColor: '#f1e4ce',
+            color: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
+            borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f'
+          }}
+        >
+          {generatedCardImage 
+            ? 'GENERATE NEW CARD' 
+            : isGenerating 
+              ? 'GENERATING...' 
+              : isCapturing 
+                ? 'CAPTURING...' 
+                : 'GENERATE CARD'
+          }
+        </button>
+        
+        {generatedCardImage && (
           <button
             onClick={() => {
-              const a = document.createElement('a');
-              a.href = generatedCardImage;
-              a.download = `trading-card-${playerName.replace(/\s+/g, '-').toLowerCase()}.png`;
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
+              if (generatedCardImage) {
+                const a = document.createElement('a');
+                a.href = generatedCardImage;
+                a.download = `trading-card-${playerName.replace(/\s+/g, '-').toLowerCase()}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+              }
             }}
             className="px-6 py-2 rounded-lg shadow-md transition-colors border-2 text-sm font-bold"
             style={{
@@ -494,8 +405,8 @@ export default function TradingCardGenerator() {
           >
             DOWNLOAD CARD
           </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

@@ -22,7 +22,8 @@ public class TradingCardPhotoGenerator(AzureOpenAIClient azureClient, IOptions<L
 
         var imageEditOptions = new ImageEditOptions
         {
-            Size = GeneratedImageSize.W1024xH1536
+            // Size = GeneratedImageSize.W1024xH1536
+            Size = GeneratedImageSize.W1024xH1024
         };
 
         var imageGenerationResult = await imageClient.GenerateImageEditAsync(
@@ -38,7 +39,7 @@ public class TradingCardPhotoGenerator(AzureOpenAIClient azureClient, IOptions<L
         };
     }
 
-    private static Stream DecodeBase64(string base64)
+    private static MemoryStream DecodeBase64(string base64)
     {
         var rawData = Convert.FromBase64String(base64);
         return new MemoryStream(rawData);
