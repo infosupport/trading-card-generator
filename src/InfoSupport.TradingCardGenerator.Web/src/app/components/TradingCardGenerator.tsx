@@ -7,11 +7,39 @@ import { GenerateCardRequest } from './types';
 import Image from 'next/image';
 
 
+// Display dimensions (what user sees)
 const CARD_WIDTH = 750;
 const CARD_HEIGHT = 1050;
 
+// Capture dimensions (what gets sent to API) - optimized for smaller file size
+const CAPTURE_WIDTH = 400;
+const CAPTURE_HEIGHT = 560;
+
+// Image quality settings
+const IMAGE_FORMAT = 'image/jpeg' as const;
+const IMAGE_QUALITY = 0.85; // 85% quality - good balance between size and quality
+
 // Available sports
 const SPORTS = ['basketball', 'football', 'baseball', 'ice hockey'];
+
+// Fun loading messages that combine tech and sports themes
+const LOADING_MESSAGES = [
+  "⚡ Compiling your legendary stats...",
+  "🏆 Deploying championship algorithms...",
+  "🚀 Loading your MVP profile...",
+  "⚽ Debugging your athletic prowess...",
+  "🏀 Merging code with pure talent...",
+  "🎯 Optimizing your game performance...",
+  "💻 Running victory simulations...",
+  "🔥 Executing championship queries...",
+  "⭐ Initializing hall of fame data...",
+  "🎪 Rendering your tech superpowers...",
+  "🏃‍♂️ Sprinting through the pipeline...",
+  "🎮 Calculating your skill coefficients...",
+  "🌟 Bootstrapping your stardom...",
+  "🚁 Elevating your profile status...",
+  "🎨 Painting your digital masterpiece..."
+];
 
 // Team configuration with logos and colors
 const TEAMS = {
@@ -66,6 +94,8 @@ export default function TradingCardGenerator() {
   const [teamLogo, setTeamLogo] = useState<string>();
   const [teamLogoBase64, setTeamLogoBase64] = useState<string>();
   const [sport, setSport] = useState<string>();
+  const [loadingMessage, setLoadingMessage] = useState(LOADING_MESSAGES[0]);
+  const [messageIndex, setMessageIndex] = useState(0);
 
   const {
     videoRef,
@@ -80,6 +110,25 @@ export default function TradingCardGenerator() {
   });
 
   const playerName = (firstName.trim() + ' ' + lastName.trim()).trim().toUpperCase() || 'PLAYER NAME';
+
+  // Rotate loading messages during generation
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isGenerating) {
+      interval = setInterval(() => {
+        setMessageIndex((prevIndex) => {
+          const newIndex = (prevIndex + 1) % LOADING_MESSAGES.length;
+          setLoadingMessage(LOADING_MESSAGES[newIndex]);
+          return newIndex;
+        });
+      }, 1500); // Change message every 1.5 seconds
+    }
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isGenerating]);
 
   // On mount: pick random color and logo, start webcam
   useEffect(() => {
@@ -119,10 +168,15 @@ export default function TradingCardGenerator() {
     setIsGenerating(true);
     setGeneratedCardImage(null); // Clear any previous result
     try {
-      const blob = await capturePhoto(CARD_WIDTH, CARD_HEIGHT);
+      // Capture at optimized resolution with JPEG compression to reduce API payload size
+      const blob = await capturePhoto(CAPTURE_WIDTH, CAPTURE_HEIGHT, IMAGE_FORMAT, IMAGE_QUALITY);
       if (blob) {
         // Convert blob to base64
         const base64Photo = await blobToBase64(blob);
+        
+        // Log the actual size for debugging
+        const sizeInKB = (base64Photo.length * 0.75 / 1024).toFixed(2);
+        console.log(`Captured photo: ${CAPTURE_WIDTH}x${CAPTURE_HEIGHT}, Base64 size: ${sizeInKB}KB`);
         
         // Store the captured photo for display
         const photoDataUrl = base64ToDataUrl(base64Photo);
@@ -164,23 +218,28 @@ export default function TradingCardGenerator() {
     <div>
       {/* Header */}
       <div className="text-base py-5">
-        <h1 className="text-2xl font-bold mb-5 text-gray-900 dark:text-gray-100">Trading Card Generator</h1>
+        <h1 className="text-4xl font-black mb-2 text-gray-900 dark:text-gray-100 tracking-wider" style={{ fontFamily: "'Bebas Neue', 'Arial Black', sans-serif" }}>
+          🏆 TECHORAMA SPORTS EDITION 🏆
+        </h1>
+        <h2 className="text-xl font-bold mb-6 text-gray-700 dark:text-gray-300 tracking-wide" style={{ fontFamily: "'Bebas Neue', Arial, sans-serif" }}>
+          ULTIMATE TECH TRADING CARD CREATOR
+        </h2>
         <div className="flex justify-center gap-5 mb-5">
           <input
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            placeholder="First Name"
-            className="text-lg px-1 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
-            style={{ fontSize: '1.2em', margin: '0 10px', padding: '5px' }}
+            placeholder="⚡ PLAYER FIRST NAME"
+            className="text-lg px-4 py-3 border-2 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 font-bold tracking-wide transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+            style={{ fontSize: '1.1em', fontFamily: "'Bebas Neue', Arial, sans-serif", borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f' }}
           />
           <input
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            placeholder="Last Name"
-            className="text-lg px-1 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
-            style={{ fontSize: '1.2em', margin: '0 10px', padding: '5px' }}
+            placeholder="🚀 PLAYER LAST NAME"
+            className="text-lg px-4 py-3 border-2 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 font-bold tracking-wide transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+            style={{ fontSize: '1.1em', fontFamily: "'Bebas Neue', Arial, sans-serif", borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f' }}
           />
         </div>
 
@@ -252,10 +311,29 @@ export default function TradingCardGenerator() {
                             transform: 'scaleX(-1)'
                           }}
                         />
-                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20">
-                          <div className="text-center text-white">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-2"></div>
-                            <div className="text-sm font-semibold">Generating Card...</div>
+                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
+                          <div className="text-center text-white p-6 rounded-xl bg-black bg-opacity-40">
+                            {/* Enhanced Spinner */}
+                            <div className="relative mb-4">
+                              <div className="animate-spin rounded-full h-16 w-16 border-4 border-white border-opacity-30 mx-auto"></div>
+                              <div className="animate-spin rounded-full h-16 w-16 border-4 border-t-white border-r-transparent border-b-transparent border-l-transparent mx-auto absolute inset-0" style={{ animationDuration: '0.8s' }}></div>
+                              <div className="animate-ping absolute inset-0 h-16 w-16 rounded-full bg-white bg-opacity-20 mx-auto" style={{ animationDuration: '2s' }}></div>
+                            </div>
+                            {/* Rotating Message */}
+                            <div 
+                              className="text-lg font-bold tracking-wide transition-all duration-500 ease-in-out transform"
+                              style={{ 
+                                fontFamily: "'Bebas Neue', Arial, sans-serif",
+                                textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                                minHeight: '28px'
+                              }}
+                              key={messageIndex} // Force re-render for animation
+                            >
+                              {loadingMessage}
+                            </div>
+                            <div className="text-sm mt-2 text-white text-opacity-80 font-medium">
+                              Creating your championship moment...
+                            </div>
                           </div>
                         </div>
                       </>
@@ -351,7 +429,7 @@ export default function TradingCardGenerator() {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex justify-center gap-3 mt-6">
+      <div className="flex justify-center gap-4 mt-8">
         <button
           onClick={() => {
             if (generatedCardImage) {
@@ -363,22 +441,25 @@ export default function TradingCardGenerator() {
             }
           }}
           disabled={!isStreaming || isCapturing || isGenerating}
-          className="px-6 py-2 rounded-lg shadow-md transition-colors border-2 text-sm font-bold disabled:bg-gray-400 disabled:text-gray-600"
+          className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105 disabled:bg-gray-400 disabled:text-gray-600 disabled:hover:scale-100 disabled:cursor-not-allowed"
           style={{
-            fontSize: '14px',
+            fontSize: '16px',
             fontWeight: 'bold',
+            fontFamily: "'Bebas Neue', Arial, sans-serif",
             backgroundColor: '#f1e4ce',
             color: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
-            borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f'
+            borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
+            borderWidth: '3px',
+            textShadow: '1px 1px 2px rgba(0,0,0,0.1)'
           }}
         >
           {generatedCardImage 
-            ? 'GENERATE NEW CARD' 
+            ? '🎯 GENERATE NEW CARD' 
             : isGenerating 
-              ? 'GENERATING...' 
+              ? '⚡ GENERATING MAGIC...' 
               : isCapturing 
-                ? 'CAPTURING...' 
-                : 'GENERATE CARD'
+                ? '📸 CAPTURING...' 
+                : '🚀 GENERATE MY CARD'
           }
         </button>
         
@@ -388,22 +469,25 @@ export default function TradingCardGenerator() {
               if (generatedCardImage) {
                 const a = document.createElement('a');
                 a.href = generatedCardImage;
-                a.download = `trading-card-${playerName.replace(/\s+/g, '-').toLowerCase()}.png`;
+                a.download = `techorama-trading-card-${playerName.replace(/\s+/g, '-').toLowerCase()}.png`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
               }
             }}
-            className="px-6 py-2 rounded-lg shadow-md transition-colors border-2 text-sm font-bold"
+            className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105"
             style={{
-              fontSize: '14px',
+              fontSize: '16px',
               fontWeight: 'bold',
+              fontFamily: "'Bebas Neue', Arial, sans-serif",
               backgroundColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
               color: '#f1e4ce',
-              borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f'
+              borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
+              borderWidth: '3px',
+              textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
             }}
           >
-            DOWNLOAD CARD
+            🏆 DOWNLOAD MY CARD
           </button>
         )}
       </div>

@@ -41,7 +41,16 @@ export function blobToBase64(blob: Blob): Promise<string> {
   });
 }
 
-// Utility function to convert base64 to data URL
-export function base64ToDataUrl(base64: string, mimeType: string = 'image/png'): string {
+// Utility function to convert base64 to data URL with dynamic mime type detection
+export function base64ToDataUrl(base64: string, mimeType?: string): string {
+  // If no mimeType provided, try to detect from base64 content
+  if (!mimeType) {
+    // Check for JPEG signature
+    if (base64.startsWith('/9j/')) {
+      mimeType = 'image/jpeg';
+    } else {
+      mimeType = 'image/png'; // Default fallback
+    }
+  }
   return `data:${mimeType};base64,${base64}`;
 }

@@ -59,7 +59,7 @@ export function useWebcam({ width = 640, height = 480, facingMode = 'user' }: Us
     setError(null);
   }, []);
 
-  const capturePhoto = useCallback((outputWidth?: number, outputHeight?: number): Promise<Blob | null> => {
+  const capturePhoto = useCallback((outputWidth?: number, outputHeight?: number, format: 'image/png' | 'image/jpeg' = 'image/jpeg', quality: number = 0.8): Promise<Blob | null> => {
     return new Promise((resolve) => {
       if (!videoRef.current || !isStreaming) {
         resolve(null);
@@ -78,10 +78,16 @@ export function useWebcam({ width = 640, height = 480, facingMode = 'user' }: Us
         // Draw video frame to canvas
         ctx.drawImage(videoRef.current, 0, 0, captureWidth, captureHeight);
         
-        // Convert to blob
-        canvas.toBlob((blob) => {
-          resolve(blob);
-        }, 'image/png');
+        // Convert to blob with specified format and quality
+        if (format === 'image/jpeg') {
+          canvas.toBlob((blob) => {
+            resolve(blob);
+          }, format, quality);
+        } else {
+          canvas.toBlob((blob) => {
+            resolve(blob);
+          }, format);
+        }
       } else {
         resolve(null);
       }
