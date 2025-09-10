@@ -59,7 +59,7 @@ export default function TradingCardGenerator() {
           setLoadingMessage(LOADING_MESSAGES[newIndex]);
           return newIndex;
         });
-      }, 1500); // Change message every 1.5 seconds
+      }, 3000); // Change message every 3 seconds
     }
     return () => {
       if (interval) {
@@ -187,6 +187,7 @@ export default function TradingCardGenerator() {
         isGenerating={isGenerating}
         generatedCardImage={generatedCardImage}
         teamColor={teamColor}
+        teamLogo={teamLogo}
         playerName={playerName}
         onCapturePhoto={handleCapturePhoto}
         onReset={handleReset}

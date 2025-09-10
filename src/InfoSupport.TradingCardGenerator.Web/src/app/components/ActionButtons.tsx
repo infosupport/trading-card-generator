@@ -1,4 +1,6 @@
+import { useRef } from 'react';
 import { TEAMS } from './constants';
+import TradingCardDownloader, { TradingCardDownloaderRef } from './TradingCardDownloader';
 
 interface ActionButtonsProps {
   isStreaming: boolean;
@@ -6,6 +8,7 @@ interface ActionButtonsProps {
   isGenerating: boolean;
   generatedCardImage: string | null;
   teamColor?: string;
+  teamLogo?: string;
   playerName: string;
   onCapturePhoto: () => void;
   onReset: () => void;
@@ -17,19 +20,26 @@ export default function ActionButtons({
   isGenerating,
   generatedCardImage,
   teamColor,
+  teamLogo,
   playerName,
   onCapturePhoto,
   onReset
 }: ActionButtonsProps) {
+  const downloaderRef = useRef<TradingCardDownloaderRef>(null);
+
   const handleDownload = () => {
-    if (generatedCardImage) {
-      const a = document.createElement('a');
-      a.href = generatedCardImage;
-      a.download = `techorama-trading-card-${playerName.replace(/\s+/g, '-').toLowerCase()}.png`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+    if (generatedCardImage && downloaderRef.current) {
+      downloaderRef.current.generateCardImage();
     }
+  };
+
+  const handleCardDownload = (dataUrl: string) => {
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = `techorama-trading-card-${playerName.replace(/\s+/g, '-').toLowerCase()}.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   const buttonBaseStyle = {
@@ -56,32 +66,44 @@ export default function ActionButtons({
   };
 
   return (
-    <div className="flex justify-center gap-4 mt-8">
-      <button
-        onClick={generatedCardImage ? onReset : onCapturePhoto}
-        disabled={!isStreaming || isCapturing || isGenerating}
-        className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105 disabled:bg-gray-400 disabled:text-gray-600 disabled:hover:scale-100 disabled:cursor-not-allowed"
-        style={primaryButtonStyle}
-      >
-        {generatedCardImage 
-          ? '🎯 GENERATE NEW CARD' 
-          : isGenerating 
-            ? '⚡ GENERATING MAGIC...' 
-            : isCapturing 
-              ? '📸 CAPTURING...' 
-              : '🚀 GENERATE MY CARD'
-        }
-      </button>
-      
-      {generatedCardImage && (
+    <>
+      <div className="flex justify-center gap-4 mt-8">
         <button
-          onClick={handleDownload}
-          className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105"
-          style={secondaryButtonStyle}
+          onClick={generatedCardImage ? onReset : onCapturePhoto}
+          disabled={!isStreaming || isCapturing || isGenerating}
+          className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105 disabled:bg-gray-400 disabled:text-gray-600 disabled:hover:scale-100 disabled:cursor-not-allowed"
+          style={primaryButtonStyle}
         >
-          🏆 DOWNLOAD MY CARD
+          {generatedCardImage 
+            ? '🎯 GENERATE NEW CARD' 
+            : isGenerating 
+              ? '⚡ GENERATING MAGIC...' 
+              : isCapturing 
+                ? '📸 CAPTURING...' 
+                : '🚀 GENERATE MY CARD'
+          }
         </button>
-      )}
-    </div>
+        
+        {generatedCardImage && (
+          <button
+            onClick={handleDownload}
+            className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105"
+            style={secondaryButtonStyle}
+          >
+            🏆 DOWNLOAD MY CARD
+          </button>
+        )}
+      </div>
+
+      {/* Hidden downloader component */}
+      <TradingCardDownloader
+        ref={downloaderRef}
+        generatedCardImage={generatedCardImage}
+        playerName={playerName}
+        teamColor={teamColor}
+        teamLogo={teamLogo}
+        onDownload={handleCardDownload}
+      />
+    </>
   );
 }
