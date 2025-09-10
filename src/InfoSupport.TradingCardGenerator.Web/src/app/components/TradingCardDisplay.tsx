@@ -31,33 +31,19 @@ export default function TradingCardDisplay({
   return (
     <div className="flex justify-center">
       <div 
-        className="shadow-[0_4px_24px_rgba(0,0,0,0.15)] transition-all duration-700 ease-in-out"
+        className="w-[375px] h-[575px] shadow-[0_4px_24px_rgba(0,0,0,0.15)] transition-all duration-700 ease-in-out flex flex-col justify-between p-2 rounded-xl"
         style={{
-          width: '375px',
-          height: '575px',
           backgroundColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f'
         }}
       >
         {/* Card Frame */}
         <div 
-          className="relative"
-          style={{
-            backgroundColor: '#f1e4ce',
-            borderRadius: '16px',
-            margin: '8px 8px 0px 8px',
-            height: '400px'
-          }}
+          className="relative bg-[#f1e4ce] rounded-2xl h-[400px]"
         >
           {/* Video Canvas Area */}
           <div className="flex justify-center">
             <div
-              className="relative overflow-hidden"
-              style={{
-                width: '340px',
-                height: '340px',
-                borderRadius: '16px',
-                marginTop: '8px'
-              }}
+              className="relative overflow-hidden w-[340px] h-[340px] rounded-2xl mt-2"
             >
               {generatedCardImage ? (
                 /* Show generated card image */
@@ -66,12 +52,7 @@ export default function TradingCardDisplay({
                   alt="Generated Trading Card"
                   width={340}
                   height={340}
-                  className="object-cover"
-                  style={{
-                    width: '340px',
-                    height: '340px',
-                    borderRadius: '16px'
-                  }}
+                  className="object-cover w-[340px] h-[340px] rounded-2xl"
                 />
               ) : isGenerating && capturedPhoto ? (
                 /* Show loading state with captured photo in background */
@@ -89,25 +70,13 @@ export default function TradingCardDisplay({
                     autoPlay
                     playsInline
                     muted
-                    style={{ 
-                      transform: 'scaleX(-1)',
-                      width: '340px',
-                      height: '340px',
-                      objectFit: 'cover',
-                      borderRadius: '16px',
-                      display: isStreaming ? 'block' : 'none'
-                    }}
+                    className={`scale-x-[-1] w-[340px] h-[340px] object-cover rounded-2xl ${isStreaming ? 'block' : 'hidden'}`}
                   />
                   
                   {/* Placeholder when no camera */}
                   {!isStreaming && (
                     <div 
-                      className="bg-gray-300 flex items-center justify-center text-gray-600 absolute inset-0"
-                      style={{
-                        width: '340px',
-                        height: '340px',
-                        borderRadius: '16px'
-                      }}
+                      className="bg-gray-300 flex items-center justify-center text-gray-600 absolute inset-0 w-[340px] h-[340px] rounded-2xl"
                     >
                       <div className="text-center">
                         <div className="text-6xl mb-2">📷</div>
@@ -122,11 +91,8 @@ export default function TradingCardDisplay({
 
           {/* Player Name */}
           <div 
-            className="text-center"
+            className="text-center font-['Bebas_Neue',Arial,sans-serif] mt-2 text-[32px]"
             style={{
-              fontFamily: "'Bebas Neue', Arial, sans-serif",
-              marginTop: '8px',
-              fontSize: '32px',
               color: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f'
             }}
           >
@@ -135,36 +101,22 @@ export default function TradingCardDisplay({
         </div>
 
         {/* Team Logo */}
-        <div className="flex justify-center" style={{ marginTop: '8px' }}>
-          <div className="relative">
+        <div className="flex justify-center items-center mt-2 grow">
             {teamLogo ? (
               <Image
                 src={`/${teamLogo}`}
                 alt="Team Logo"
                 width={100}
                 height={100}
-                className="object-contain rounded-full border-2"
-                style={{
-                  width: '100px',
-                  height: '100px',
-                  backgroundColor: '#f1e4ce',
-                  borderColor: '#eee'
-                }}
+                className="object-contain rounded-full border-2 w-[100px] h-[100px] bg-[#f1e4ce] border-[#eee]"
               />
             ) : (
               <div
-                className="rounded-full border-2 flex items-center justify-center"
-                style={{
-                  width: '100px',
-                  height: '100px',
-                  backgroundColor: '#f1e4ce',
-                  borderColor: '#eee'
-                }}
+                className="rounded-full border-2 flex items-center justify-center w-[100px] h-[100px] bg-[#f1e4ce] border-[#eee]"
               >
                 <div className="text-gray-400 text-xs">Loading...</div>
               </div>
             )}
-          </div>
         </div>
       </div>
     </div>
