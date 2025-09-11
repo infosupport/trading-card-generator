@@ -11,6 +11,7 @@ interface ActionButtonsProps {
   teamLogo?: string;
   playerName: string;
   onCapturePhoto: () => void;
+  onUploadPhoto: (file: File) => void;
   onReset: () => void;
 }
 
@@ -23,6 +24,7 @@ export default function ActionButtons({
   teamLogo,
   playerName,
   onCapturePhoto,
+  onUploadPhoto,
   onReset
 }: ActionButtonsProps) {
   const downloaderRef = useRef<TradingCardDownloaderRef>(null);
@@ -31,6 +33,15 @@ export default function ActionButtons({
     if (generatedCardImage && downloaderRef.current) {
       downloaderRef.current.generateCardImage();
     }
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      onUploadPhoto(file);
+    }
+    // Reset the input value so the same file can be selected again
+    event.target.value = '';
   };
 
   const handleCardDownload = (dataUrl: string) => {
@@ -68,30 +79,52 @@ export default function ActionButtons({
   return (
     <>
       <div className="flex justify-center gap-4 mt-8">
-        <button
-          onClick={generatedCardImage ? onReset : onCapturePhoto}
-          disabled={!isStreaming || isCapturing || isGenerating}
-          className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105 disabled:bg-gray-400 disabled:text-gray-600 disabled:hover:scale-100 disabled:cursor-not-allowed"
-          style={primaryButtonStyle}
-        >
-          {generatedCardImage 
-            ? '🎯 GENERATE NEW CARD' 
-            : isGenerating 
-              ? '⚡ GENERATING MAGIC...' 
-              : isCapturing 
-                ? '📸 CAPTURING...' 
-                : '🚀 GENERATE MY CARD'
-          }
-        </button>
-        
-        {generatedCardImage && (
-          <button
-            onClick={handleDownload}
-            className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105"
-            style={secondaryButtonStyle}
-          >
-            🏆 DOWNLOAD MY CARD
-          </button>
+        {!generatedCardImage ? (
+          <>
+            <button
+              onClick={onCapturePhoto}
+              disabled={!isStreaming || isCapturing || isGenerating}
+              className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105 disabled:bg-gray-400 disabled:text-gray-600 disabled:hover:scale-100 disabled:cursor-not-allowed"
+              style={primaryButtonStyle}
+            >
+              {isGenerating 
+                ? '⚡ GENERATING MAGIC...' 
+                : isCapturing 
+                  ? '📸 CAPTURING...' 
+                  : '📷 CAPTURE PHOTO'
+              }
+            </button>
+            
+            <label className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105 cursor-pointer inline-block"
+              style={secondaryButtonStyle}>
+              �️ UPLOAD PHOTO
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileUpload}
+                disabled={isGenerating || isCapturing}
+                className="hidden"
+              />
+            </label>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={onReset}
+              className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105"
+              style={primaryButtonStyle}
+            >
+              🎯 GENERATE NEW CARD
+            </button>
+            
+            <button
+              onClick={handleDownload}
+              className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105"
+              style={secondaryButtonStyle}
+            >
+              🏆 DOWNLOAD MY CARD
+            </button>
+          </>
         )}
       </div>
 

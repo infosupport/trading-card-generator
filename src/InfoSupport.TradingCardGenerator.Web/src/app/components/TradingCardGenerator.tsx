@@ -109,39 +109,7 @@ export default function TradingCardGenerator() {
       // Capture at optimized resolution with JPEG compression to reduce API payload size
       const blob = await capturePhoto(CAPTURE_WIDTH, CAPTURE_HEIGHT, IMAGE_FORMAT, IMAGE_QUALITY);
       if (blob) {
-        // Convert blob to base64
-        const base64Photo = await blobToBase64(blob);
-        
-        // Log the actual size for debugging
-        const sizeInKB = (base64Photo.length * 0.75 / 1024).toFixed(2);
-        console.log(`Captured photo: ${CAPTURE_WIDTH}x${CAPTURE_HEIGHT}, Base64 size: ${sizeInKB}KB`);
-        
-        // Store the captured photo for display
-        const photoDataUrl = base64ToDataUrl(base64Photo);
-        setCapturedPhoto(photoDataUrl);
-        
-        // Prepare request for C# backend
-
-        const request: GenerateCardRequest = {
-          sport: {
-            type: sport ?? 'football' // Use randomly selected sport with fallback
-          },
-          team: {
-            name: teamName ?? 'InfoSupport',
-            color: teamColor ?? 'blue',
-            logo: teamLogoBase64 ?? '', // Use base64 encoded logo
-          },
-          player: {
-            photo: base64Photo
-          }
-        };
-
-        // Call the C# backend API
-        const response = await TradingCardApi.generateCard(request);
-        
-        // Convert base64 response to data URL and display
-        const cardImageDataUrl = base64ToDataUrl(response.image);
-        setGeneratedCardImage(cardImageDataUrl);
+        await processPhoto(blob);
       }
     } catch (err) {
       console.error('Error generating trading card:', err);
@@ -150,6 +118,54 @@ export default function TradingCardGenerator() {
       setIsCapturing(false);
       setIsGenerating(false);
     }
+  };
+
+  const handleUploadPhoto = async (file: File) => {
+    setIsGenerating(true);
+    setGeneratedCardImage(null); // Clear any previous result
+    try {
+      await processPhoto(file);
+    } catch (err) {
+      console.error('Error generating trading card from uploaded image:', err);
+      // You might want to show an error message to the user here
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const processPhoto = async (imageSource: Blob | File) => {
+    // Convert blob/file to base64
+    const base64Photo = await blobToBase64(imageSource);
+    
+    // Log the actual size for debugging
+    const sizeInKB = (base64Photo.length * 0.75 / 1024).toFixed(2);
+    console.log(`Photo processed: Base64 size: ${sizeInKB}KB`);
+    
+    // Store the photo for display
+    const photoDataUrl = base64ToDataUrl(base64Photo);
+    setCapturedPhoto(photoDataUrl);
+    
+    // Prepare request for C# backend
+    const request: GenerateCardRequest = {
+      sport: {
+        type: sport ?? 'football' // Use randomly selected sport with fallback
+      },
+      team: {
+        name: teamName ?? 'InfoSupport',
+        color: teamColor ?? 'blue',
+        logo: teamLogoBase64 ?? '', // Use base64 encoded logo
+      },
+      player: {
+        photo: base64Photo
+      }
+    };
+
+    // Call the C# backend API
+    const response = await TradingCardApi.generateCard(request);
+    
+    // Convert base64 response to data URL and display
+    const cardImageDataUrl = base64ToDataUrl(response.image);
+    setGeneratedCardImage(cardImageDataUrl);
   };
 
   const handleReset = () => {
@@ -190,6 +206,7 @@ export default function TradingCardGenerator() {
         teamLogo={teamLogo}
         playerName={playerName}
         onCapturePhoto={handleCapturePhoto}
+        onUploadPhoto={handleUploadPhoto}
         onReset={handleReset}
       />
     </div>
