@@ -28,7 +28,7 @@ export default function LoadingSpinner({ capturedPhoto, loadingMessage, messageI
         <div 
           className="text-lg font-bold tracking-wide bg-black opacity-80 px-6 py-2 rounded-lg text-white text-center whitespace-nowrap"
           style={{ 
-            fontFamily: "'Bebas Neue', Arial, sans-serif",
+            fontFamily: "var(--font-bebas-neue), Arial, sans-serif",
             textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
           }}
           key={messageIndex}

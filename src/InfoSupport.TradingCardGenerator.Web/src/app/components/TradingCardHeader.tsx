@@ -19,10 +19,10 @@ export default function TradingCardHeader({
 }: TradingCardHeaderProps) {
   return (
     <div className="text-base py-5">
-      <h1 className="text-4xl font-black mb-2 text-gray-900 dark:text-gray-100 tracking-wider" style={{ fontFamily: "'Bebas Neue', 'Arial Black', sans-serif" }}>
+      <h1 className="text-4xl font-black mb-2 text-gray-900 dark:text-gray-100 tracking-wider" style={{ fontFamily: "var(--font-bebas-neue), 'Arial Black', sans-serif" }}>
         🏆 TECHORAMA SPORTS EDITION 🏆
       </h1>
-      <h2 className="text-xl font-bold mb-6 text-gray-700 dark:text-gray-300 tracking-wide" style={{ fontFamily: "'Bebas Neue', Arial, sans-serif" }}>
+      <h2 className="text-xl font-bold mb-6 text-gray-700 dark:text-gray-300 tracking-wide" style={{ fontFamily: "var(--font-bebas-neue), Arial, sans-serif" }}>
         ULTIMATE TECH TRADING CARD CREATOR
       </h2>
       <div className="flex justify-center gap-5 mb-5">
@@ -32,7 +32,7 @@ export default function TradingCardHeader({
           onChange={(e) => onFirstNameChange(e.target.value)}
           placeholder="⚡ PLAYER FIRST NAME"
           className="text-lg px-4 py-3 border-2 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 font-bold tracking-wide transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
-          style={{ fontSize: '1.1em', fontFamily: "'Bebas Neue', Arial, sans-serif", borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f' }}
+          style={{ fontSize: '1.1em', fontFamily: "var(--font-bebas-neue), Arial, sans-serif", borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f' }}
         />
         <input
           type="text"
@@ -40,7 +40,7 @@ export default function TradingCardHeader({
           onChange={(e) => onLastNameChange(e.target.value)}
           placeholder="🚀 PLAYER LAST NAME"
           className="text-lg px-4 py-3 border-2 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 font-bold tracking-wide transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
-          style={{ fontSize: '1.1em', fontFamily: "'Bebas Neue', Arial, sans-serif", borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f' }}
+          style={{ fontSize: '1.1em', fontFamily: "var(--font-bebas-neue), Arial, sans-serif", borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f' }}
         />
       </div>
 

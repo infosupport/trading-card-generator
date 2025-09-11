@@ -1,6 +1,6 @@
-import { useRef } from 'react';
+import { RefObject } from 'react';
+import { toPng } from 'html-to-image';
 import { TEAMS } from './constants';
-import TradingCardDownloader, { TradingCardDownloaderRef } from './TradingCardDownloader';
 
 interface ActionButtonsProps {
   isStreaming: boolean;
@@ -8,8 +8,8 @@ interface ActionButtonsProps {
   isGenerating: boolean;
   generatedCardImage: string | null;
   teamColor?: string;
-  teamLogo?: string;
   playerName: string;
+  cardDisplayRef: RefObject<HTMLDivElement | null>;
   onCapturePhoto: () => void;
   onUploadPhoto: (file: File) => void;
   onReset: () => void;
@@ -21,17 +21,47 @@ export default function ActionButtons({
   isGenerating,
   generatedCardImage,
   teamColor,
-  teamLogo,
   playerName,
+  cardDisplayRef,
   onCapturePhoto,
   onUploadPhoto,
   onReset
 }: ActionButtonsProps) {
-  const downloaderRef = useRef<TradingCardDownloaderRef>(null);
 
-  const handleDownload = () => {
-    if (generatedCardImage && downloaderRef.current) {
-      downloaderRef.current.generateCardImage();
+  const handleDownload = async () => {
+    if (!generatedCardImage || !cardDisplayRef.current) return;
+
+    try {
+      // Wait a moment for the component to fully render
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Ensure all images are loaded before converting
+      const images = cardDisplayRef.current.querySelectorAll('img');
+      await Promise.all(Array.from(images).map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+        });
+      }));
+
+      console.log('Converting card to image...');
+      
+      const dataUrl = await toPng(cardDisplayRef.current, {
+        quality: 1.0,
+        pixelRatio: 2
+      });
+      
+      // Download the image
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = `techorama-trading-card-${playerName.replace(/\s+/g, '-').toLowerCase()}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      
+    } catch (error) {
+      console.error('Error generating card image:', error);
     }
   };
 
@@ -44,19 +74,10 @@ export default function ActionButtons({
     event.target.value = '';
   };
 
-  const handleCardDownload = (dataUrl: string) => {
-    const a = document.createElement('a');
-    a.href = dataUrl;
-    a.download = `techorama-trading-card-${playerName.replace(/\s+/g, '-').toLowerCase()}.png`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
-
   const buttonBaseStyle = {
     fontSize: '16px',
     fontWeight: 'bold' as const,
-    fontFamily: "'Bebas Neue', Arial, sans-serif",
+    fontFamily: "var(--font-bebas-neue), Arial, sans-serif",
     borderWidth: '3px',
   };
 
@@ -127,16 +148,6 @@ export default function ActionButtons({
           </>
         )}
       </div>
-
-      {/* Hidden downloader component */}
-      <TradingCardDownloader
-        ref={downloaderRef}
-        generatedCardImage={generatedCardImage}
-        playerName={playerName}
-        teamColor={teamColor}
-        teamLogo={teamLogo}
-        onDownload={handleCardDownload}
-      />
     </>
   );
 }

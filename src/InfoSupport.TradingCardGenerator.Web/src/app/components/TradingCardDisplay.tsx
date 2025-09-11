@@ -1,4 +1,4 @@
-import { RefObject } from 'react';
+import { RefObject, forwardRef } from 'react';
 import Image from 'next/image';
 import { TEAMS } from './constants';
 import LoadingSpinner from './LoadingSpinner';
@@ -16,7 +16,7 @@ interface TradingCardDisplayProps {
   isStreaming: boolean;
 }
 
-export default function TradingCardDisplay({
+const TradingCardDisplay = forwardRef<HTMLDivElement, TradingCardDisplayProps>(({
   teamColor,
   playerName,
   teamLogo,
@@ -27,10 +27,11 @@ export default function TradingCardDisplay({
   messageIndex,
   videoRef,
   isStreaming
-}: TradingCardDisplayProps) {
+}, ref) => {
   return (
     <div className="flex justify-center">
       <div 
+        ref={ref}
         className="w-[375px] h-[575px] shadow-[0_4px_24px_rgba(0,0,0,0.15)] transition-all duration-700 ease-in-out flex flex-col justify-between p-2 rounded-xl"
         style={{
           backgroundColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f'
@@ -91,9 +92,10 @@ export default function TradingCardDisplay({
 
           {/* Player Name */}
           <div 
-            className="text-center font-['Bebas_Neue',Arial,sans-serif] mt-2 text-[32px]"
+            className="text-center mt-2 text-[32px]"
             style={{
-              color: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f'
+              color: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
+              fontFamily: "var(--font-bebas-neue), Arial, sans-serif"
             }}
           >
             {playerName}
@@ -121,4 +123,8 @@ export default function TradingCardDisplay({
       </div>
     </div>
   );
-}
+});
+
+TradingCardDisplay.displayName = 'TradingCardDisplay';
+
+export default TradingCardDisplay;

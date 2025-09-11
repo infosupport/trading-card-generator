@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useWebcam } from './useWebcam';
 import { TradingCardApi, blobToBase64, base64ToDataUrl } from './api';
 import { GenerateCardRequest } from './types';
@@ -29,6 +29,7 @@ export default function TradingCardGenerator() {
   const [capturedPhoto, setCapturedPhoto] = useState<string | null>(null);
   const [teamColor, setTeamColor] = useState<string>();
   const [teamName, setTeamName] = useState<string>();
+  const cardDisplayRef = useRef<HTMLDivElement>(null);
   const [teamLogo, setTeamLogo] = useState<string>();
   const [teamLogoBase64, setTeamLogoBase64] = useState<string>();
   const [sport, setSport] = useState<string>();
@@ -185,6 +186,7 @@ export default function TradingCardGenerator() {
       />
 
       <TradingCardDisplay 
+        ref={cardDisplayRef}
         teamColor={teamColor}
         playerName={playerName}
         teamLogo={teamLogo}
@@ -203,8 +205,8 @@ export default function TradingCardGenerator() {
         isGenerating={isGenerating}
         generatedCardImage={generatedCardImage}
         teamColor={teamColor}
-        teamLogo={teamLogo}
         playerName={playerName}
+        cardDisplayRef={cardDisplayRef}
         onCapturePhoto={handleCapturePhoto}
         onUploadPhoto={handleUploadPhoto}
         onReset={handleReset}
