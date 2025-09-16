@@ -1,6 +1,7 @@
 import { RefObject } from 'react';
 import { toPng } from 'html-to-image';
 import { TEAMS } from './constants';
+import { ArrowUpTrayIcon } from '@heroicons/react/16/solid';
 
 interface ActionButtonsProps {
   isStreaming: boolean;
@@ -109,16 +110,17 @@ export default function ActionButtons({
               style={primaryButtonStyle}
             >
               {isGenerating 
-                ? '⚡ GENERATING MAGIC...' 
+                ? '⚡ GENERATING CARD...' 
                 : isCapturing 
                   ? '📸 CAPTURING...' 
                   : '📷 CAPTURE PHOTO'
               }
             </button>
-            
-            <label className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105 cursor-pointer inline-block"
+
+            <label className={"px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105 cursor-pointer inline-block"}
               style={secondaryButtonStyle}>
-              �️ UPLOAD PHOTO
+              <ArrowUpTrayIcon className="h-6 w-6 inline-block mr-2" />
+              UPLOAD PHOTO
               <input
                 type="file"
                 accept="image/*"

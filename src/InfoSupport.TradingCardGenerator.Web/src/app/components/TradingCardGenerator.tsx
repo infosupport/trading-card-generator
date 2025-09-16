@@ -174,6 +174,39 @@ export default function TradingCardGenerator() {
     setCapturedPhoto(null);
   };
 
+  const handleLogoSelect = async (logoPath: string) => {
+    // Find the team and color that matches the selected logo
+    let selectedTeam = null;
+    let selectedColor = null;
+    
+    for (const [color, teamGroup] of Object.entries(TEAMS)) {
+      const team = teamGroup.teams.find(t => t.logo === logoPath);
+      if (team) {
+        selectedTeam = team;
+        selectedColor = color;
+        break;
+      }
+    }
+    
+    if (selectedTeam && selectedColor) {
+      // Update all team-related state
+      setTeamColor(selectedColor);
+      setTeamName(selectedTeam.name);
+      setTeamLogo(selectedTeam.logo);
+      
+      // Convert new logo to base64
+      try {
+        const response = await fetch(`/${selectedTeam.logo}`);
+        const blob = await response.blob();
+        const logoBase64 = await blobToBase64(blob);
+        setTeamLogoBase64(logoBase64);
+      } catch (error) {
+        console.error('Error converting logo to base64:', error);
+        setTeamLogoBase64('');
+      }
+    }
+  };
+
   return (
     <div>
       <TradingCardHeader 
@@ -197,6 +230,7 @@ export default function TradingCardGenerator() {
         messageIndex={messageIndex}
         videoRef={videoRef}
         isStreaming={isStreaming}
+        onLogoSelect={handleLogoSelect}
       />
 
       <ActionButtons 
