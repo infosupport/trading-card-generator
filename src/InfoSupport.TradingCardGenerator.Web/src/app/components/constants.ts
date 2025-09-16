@@ -13,6 +13,22 @@ export const IMAGE_QUALITY = 0.85; // 85% quality - good balance between size an
 // Available sports
 export const SPORTS = ['basketball', 'football', 'baseball', 'ice hockey'];
 
+// Special properties that can be applied to trading cards
+export const SPECIAL_PROPERTIES = {
+  none: {
+    id: 'none',
+    name: 'None',
+    icon: '🚫', // Circle with diagonal strike through
+    description: 'No special property'
+  },
+  mvp: {
+    id: 'mvp',
+    name: 'MVP',
+    icon: 'mvp.png', // MVP logo from public folder
+    description: 'Most Valuable Player'
+  }
+} as const;
+
 // Fun loading messages that combine tech and sports themes
 export const LOADING_MESSAGES = [
   "⚡ Compiling your legendary stats...",

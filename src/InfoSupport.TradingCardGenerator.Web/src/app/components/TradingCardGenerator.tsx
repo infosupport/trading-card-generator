@@ -16,7 +16,8 @@ import {
   IMAGE_QUALITY, 
   SPORTS, 
   LOADING_MESSAGES, 
-  TEAMS 
+  TEAMS,
+  SPECIAL_PROPERTIES 
 } from './constants';
 
 
@@ -35,6 +36,7 @@ export default function TradingCardGenerator() {
   const [sport, setSport] = useState<string>();
   const [loadingMessage, setLoadingMessage] = useState(LOADING_MESSAGES[0]);
   const [messageIndex, setMessageIndex] = useState(0);
+  const [specialProperty, setSpecialProperty] = useState<keyof typeof SPECIAL_PROPERTIES>('none');
 
   const {
     videoRef,
@@ -207,6 +209,10 @@ export default function TradingCardGenerator() {
     }
   };
 
+  const handleSpecialPropertySelect = (propertyId: keyof typeof SPECIAL_PROPERTIES) => {
+    setSpecialProperty(propertyId);
+  };
+
   return (
     <div>
       <TradingCardHeader 
@@ -231,6 +237,8 @@ export default function TradingCardGenerator() {
         videoRef={videoRef}
         isStreaming={isStreaming}
         onLogoSelect={handleLogoSelect}
+        specialProperty={specialProperty}
+        onSpecialPropertySelect={handleSpecialPropertySelect}
       />
 
       <ActionButtons 

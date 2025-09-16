@@ -1,7 +1,7 @@
 import { RefObject } from 'react';
 import { toPng } from 'html-to-image';
 import { TEAMS } from './constants';
-import { ArrowUpTrayIcon } from '@heroicons/react/16/solid';
+import { ArrowDownTrayIcon, ArrowUpTrayIcon } from '@heroicons/react/16/solid';
 
 interface ActionButtonsProps {
   isStreaming: boolean;
@@ -145,7 +145,8 @@ export default function ActionButtons({
               className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105"
               style={secondaryButtonStyle}
             >
-              🏆 DOWNLOAD MY CARD
+              <ArrowDownTrayIcon className="h-6 w-6 inline-block mr-2" />
+              DOWNLOAD MY CARD
             </button>
           </>
         )}

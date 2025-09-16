@@ -1,7 +1,8 @@
 import { RefObject, forwardRef } from 'react';
 import Image from 'next/image';
-import { TEAMS } from './constants';
+import { TEAMS, SPECIAL_PROPERTIES } from './constants';
 import LoadingSpinner from './LoadingSpinner';
+import SpecialPropertySelector from './SpecialPropertySelector';
 
 interface TradingCardDisplayProps {
   teamColor?: string;
@@ -15,6 +16,8 @@ interface TradingCardDisplayProps {
   videoRef: RefObject<HTMLVideoElement | null>;
   isStreaming: boolean;
   onLogoSelect?: (logoPath: string) => void;
+  specialProperty: keyof typeof SPECIAL_PROPERTIES;
+  onSpecialPropertySelect: (propertyId: keyof typeof SPECIAL_PROPERTIES) => void;
 }
 
 const TradingCardDisplay = forwardRef<HTMLDivElement, TradingCardDisplayProps>(({
@@ -28,12 +31,17 @@ const TradingCardDisplay = forwardRef<HTMLDivElement, TradingCardDisplayProps>((
   messageIndex,
   videoRef,
   isStreaming,
-  onLogoSelect
+  onLogoSelect,
+  specialProperty,
+  onSpecialPropertySelect
 }, ref) => {
   return (
     <div className="grid grid-cols-[1fr_375px_1fr] justify-center">
       <div className=''>
-
+        <SpecialPropertySelector
+          selectedProperty={specialProperty}
+          onPropertySelect={onSpecialPropertySelect}
+        />
       </div>
 
       <div
@@ -47,6 +55,26 @@ const TradingCardDisplay = forwardRef<HTMLDivElement, TradingCardDisplayProps>((
         <div 
           className="relative bg-[#f1e4ce] rounded-2xl h-[400px]"
         >
+          {/* Special Property Badge - Top Right Corner */}
+          {specialProperty !== 'none' && (
+            <div className="absolute top-4 right-4 z-10">
+              <div className="w-12 h-12 rounded-full bg-white border-2 border-yellow-400 shadow-lg flex items-center justify-center">
+                {SPECIAL_PROPERTIES[specialProperty].icon.endsWith('.png') ? (
+                  <Image
+                    src={`/${SPECIAL_PROPERTIES[specialProperty].icon}`}
+                    alt={SPECIAL_PROPERTIES[specialProperty].name}
+                    width={32}
+                    height={32}
+                    className="object-contain"
+                  />
+                ) : (
+                  <div className="text-lg">
+                    {SPECIAL_PROPERTIES[specialProperty].icon}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
           {/* Video Canvas Area */}
           <div className="flex justify-center">
             <div
