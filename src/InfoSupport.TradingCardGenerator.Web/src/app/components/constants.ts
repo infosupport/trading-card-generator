@@ -10,8 +10,13 @@ export const CAPTURE_HEIGHT = 560;
 export const IMAGE_FORMAT = 'image/jpeg' as const;
 export const IMAGE_QUALITY = 0.85; // 85% quality - good balance between size and quality
 
-// Available sports
-export const SPORTS = ['basketball', 'football', 'baseball', 'ice hockey'];
+// Available sports with icons
+export const SPORTS = {
+  basketball: '🏀',
+  football: '🏈', 
+  baseball: '⚾',
+  'ice hockey': '🏒'
+} as const;
 
 // Special properties that can be applied to trading cards
 export const SPECIAL_PROPERTIES = {
@@ -25,7 +30,7 @@ export const SPECIAL_PROPERTIES = {
     id: 'mvp',
     name: 'MVP',
     icon: 'mvp.png', // MVP logo from public folder
-    description: 'Most Valuable Player'
+    description: 'Most Valuable Player 😉'
   }
 } as const;
 

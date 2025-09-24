@@ -7,6 +7,7 @@ import { GenerateCardRequest } from './types';
 import TradingCardHeader from './TradingCardHeader';
 import TradingCardDisplay from './TradingCardDisplay';
 import ActionButtons from './ActionButtons';
+import { isVip } from './vipUtils';
 import { 
   CARD_WIDTH, 
   CARD_HEIGHT, 
@@ -37,6 +38,7 @@ export default function TradingCardGenerator() {
   const [loadingMessage, setLoadingMessage] = useState(LOADING_MESSAGES[0]);
   const [messageIndex, setMessageIndex] = useState(0);
   const [specialProperty, setSpecialProperty] = useState<keyof typeof SPECIAL_PROPERTIES>('none');
+  const [isVipMode, setIsVipMode] = useState(false);
 
   const {
     videoRef,
@@ -51,6 +53,17 @@ export default function TradingCardGenerator() {
   });
 
   const playerName = (firstName.trim() + ' ' + lastName.trim()).trim().toUpperCase() || 'PLAYER NAME';
+
+  // Check for VIP mode when names change
+  useEffect(() => {
+    const isVipUser = isVip(firstName, lastName);
+    setIsVipMode(isVipUser);
+    
+    // If VIP mode is activated, set special property to MVP
+    if (isVipUser && specialProperty === 'none') {
+      setSpecialProperty('mvp');
+    }
+  }, [firstName, lastName, specialProperty]);
 
   // Rotate loading messages during generation
   useEffect(() => {
@@ -81,7 +94,9 @@ export default function TradingCardGenerator() {
       const teams = TEAMS[color as keyof typeof TEAMS].teams;
       const team = teams[Math.floor(Math.random() * teams.length)];
       // Pick random sport
-      const randomSport = SPORTS[Math.floor(Math.random() * SPORTS.length)];
+      const sportKeys = Object.keys(SPORTS);
+      const randomSportKey = sportKeys[Math.floor(Math.random() * sportKeys.length)];
+      const randomSport = randomSportKey;
       
       setTeamColor(color);
       setTeamName(team.name);
@@ -151,7 +166,7 @@ export default function TradingCardGenerator() {
     // Prepare request for C# backend
     const request: GenerateCardRequest = {
       sport: {
-        type: sport ?? 'football' // Use randomly selected sport with fallback
+        type: sport ?? 'football' // Use selected sport with fallback
       },
       team: {
         name: teamName ?? 'InfoSupport',
@@ -213,6 +228,10 @@ export default function TradingCardGenerator() {
     setSpecialProperty(propertyId);
   };
 
+  const handleSportSelect = (sportKey: string) => {
+    setSport(sportKey);
+  };
+
   return (
     <div>
       <TradingCardHeader 
@@ -222,6 +241,7 @@ export default function TradingCardGenerator() {
         onLastNameChange={setLastName}
         teamColor={teamColor}
         error={error || undefined}
+        isVipMode={isVipMode}
       />
 
       <TradingCardDisplay 
@@ -239,6 +259,9 @@ export default function TradingCardGenerator() {
         onLogoSelect={handleLogoSelect}
         specialProperty={specialProperty}
         onSpecialPropertySelect={handleSpecialPropertySelect}
+        selectedSport={sport}
+        onSportSelect={handleSportSelect}
+        isVipMode={isVipMode}
       />
 
       <ActionButtons 

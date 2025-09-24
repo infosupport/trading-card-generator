@@ -7,6 +7,7 @@ interface TradingCardHeaderProps {
   onLastNameChange: (value: string) => void;
   teamColor?: string;
   error?: string;
+  isVipMode?: boolean;
 }
 
 export default function TradingCardHeader({ 
@@ -15,7 +16,8 @@ export default function TradingCardHeader({
   onFirstNameChange, 
   onLastNameChange, 
   teamColor, 
-  error 
+  error,
+  isVipMode = false
 }: TradingCardHeaderProps) {
   return (
     <div className="text-base py-5">
@@ -25,6 +27,14 @@ export default function TradingCardHeader({
       <h2 className="text-xl font-bold mb-6 text-gray-700 dark:text-gray-300 tracking-wide" style={{ fontFamily: "var(--font-bebas-neue), Arial, sans-serif" }}>
         ULTIMATE TECH TRADING CARD CREATOR
       </h2>
+      
+      {isVipMode && (
+        <div className="mb-4 inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black rounded-full font-bold text-sm shadow-lg animate-pulse">
+          <span>⭐</span>
+          <span>VIP MODE ACTIVATED</span>
+          <span>⭐</span>
+        </div>
+      )}
       <div className="flex justify-center gap-5 mb-5">
         <input
           type="text"
