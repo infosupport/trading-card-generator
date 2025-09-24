@@ -129,13 +129,13 @@ const TradingCard = forwardRef<HTMLDivElement, TradingCardProps>(({
             <Image
               src={`/${teamLogo}`}
               alt="Team Logo"
-              width={100}
-              height={100}
-              className="object-contain rounded-full border-2 w-[100px] h-[100px] bg-[#f1e4ce] border-[#eee]"
+              width={130}
+              height={130}
+              className="object-contain rounded-full border-2 bg-[#f1e4ce] border-[#eee]"
             />
           ) : (
             <div
-              className="rounded-full border-2 flex items-center justify-center w-[100px] h-[100px] bg-[#f1e4ce] border-[#eee]"
+              className="rounded-full border-2 flex items-center justify-center w-[130px] h-[130px] bg-[#f1e4ce] border-[#eee]"
             >
               <div className="text-gray-400 text-xs">Loading...</div>
             </div>
