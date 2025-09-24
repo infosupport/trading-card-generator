@@ -7,6 +7,17 @@ using Microsoft.SemanticKernel;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000", "https://localhost:3001")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.Configure<LanguageModelSettings>(
     builder.Configuration.GetSection("LanguageModel"));
 
@@ -20,6 +31,9 @@ builder.Services.AddSingleton(azureClient);
 builder.Services.AddSingleton<TradingCardPhotoGenerator>();
 
 var app = builder.Build();
+
+// Use CORS
+app.UseCors("AllowFrontend");
 
 app.UseStaticFiles();
 app.MapCardGenerationEndpoints();
