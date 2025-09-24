@@ -169,7 +169,21 @@ The application uses the following configuration keys:
 - XML documentation comments are used for public APIs
 - Follow standard C# naming conventions
 
-## 📝 License
+## Data Attribution
+
+### Microsoft MVP Data
+
+The VIP mode functionality uses Microsoft MVP (Most Valuable Professional) data sourced from the publicly available Microsoft MVP directory:
+
+- **Source**: [Microsoft MVP Search Portal](https://mvp.microsoft.com/en-US/search)
+- **File**: `src/InfoSupport.TradingCardGenerator.Web/src/app/mvps_17sep2025.json`
+- **Purpose**: Cached locally to avoid unnecessary API calls to Microsoft's services
+- **Usage**: Enables VIP mode for Microsoft MVPs with enhanced trading card customization features
+- **Data Rights**: This data is publicly available through Microsoft's official MVP portal
+
+The MVP data is used solely for enhancing the user experience by providing additional features to Microsoft MVPs and is not used for any commercial purposes beyond this application's functionality.
+
+## License
 
 This project is developed by InfoSupport.
 
