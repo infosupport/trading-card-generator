@@ -581,3 +581,6 @@ Thumbs.db
 # Logs
 logs
 *.log
+
+# Exclude MVP data files
+mvps_17sep2025.json
