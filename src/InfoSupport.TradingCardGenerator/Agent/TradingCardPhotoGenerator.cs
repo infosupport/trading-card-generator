@@ -22,7 +22,6 @@ public class TradingCardPhotoGenerator(AzureOpenAIClient azureClient, IOptions<L
 
         var imageEditOptions = new ImageEditOptions
         {
-            // Size = GeneratedImageSize.W1024xH1536
             Size = GeneratedImageSize.W1024xH1024
         };
 

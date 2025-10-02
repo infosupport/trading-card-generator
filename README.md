@@ -1,21 +1,15 @@
 # Trading Card Generator
 
-A .NET 9 web application that generates custom sports trading cards using OpenAI's DALL-E image generation model. Users can create personalized trading cards by uploading their photo and customizing team information and colors.
-
-## 🏆 Features
-
-- **AI-Powered Card Generation**: Uses OpenAI's DALL-E (GPT-image-1) model to generate high-quality trading card images
-- **Custom Player Photos**: Upload your own photo to appear on the trading card
-- **Team Customization**: Set team name, colors, and logo
-- **Multiple Sports Support**: Generate cards for various sports (football, basketball, soccer, etc.)
-- **RESTful API**: Simple HTTP API for generating cards programmatically
+A .NET 9 web application that generates custom sports trading cards using OpenAI's
+gpt-image-1 image generation model. Users can create personalized trading cards by
+uploading their photo and customizing team information and colors.
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
 - .NET 9.0 SDK
-- Azure OpenAI API access with DALL-E model deployment
+- Azure OpenAI API access with gpt-image-1 model deployment
 - Visual Studio 2022 or Visual Studio Code
 
 ### Installation
@@ -35,19 +29,7 @@ A .NET 9 web application that generates custom sports trading cards using OpenAI
    cd src/InfoSupport.TradingCardGenerator
    dotnet user-secrets set "LanguageModel:ApiKey" "your-openai-api-key"
    dotnet user-secrets set "LanguageModel:Endpoint" "your-azure-openai-endpoint"
-   dotnet user-secrets set "LanguageModel:ImageModel" "dall-e-3"
-   ```
-
-   Or configure via `appsettings.json`:
-
-   ```json
-   {
-     "LanguageModel": {
-       "ApiKey": "your-openai-api-key",
-       "Endpoint": "your-azure-openai-endpoint",
-       "ImageModel": "dall-e-3"
-     }
-   }
+   dotnet user-secrets set "LanguageModel:ImageModel" "gpt-image-1"
    ```
 
 3. **Restore dependencies**
@@ -64,64 +46,11 @@ A .NET 9 web application that generates custom sports trading cards using OpenAI
 
 The application will start on `https://localhost:5001` by default.
 
-## 📋 API Usage
-
-### Generate Trading Card
-
-**POST** `/generate`
-
-Generate a new trading card with custom player and team information.
-
-#### Request Body
-
-```json
-{
-  "sport": {
-    "type": "football"
-  },
-  "team": {
-    "name": "Lightning Bolts",
-    "color": "#FF6B35",
-    "logo": "base64-encoded-logo-image"
-  },
-  "player": {
-    "photo": "base64-encoded-player-photo"
-  }
-}
-```
-
-#### Request Fields
-
-| Field          | Type   | Description                                              |
-| -------------- | ------ | -------------------------------------------------------- |
-| `sport`        | object | Sport information for the trading card                   |
-| `sport.type`   | string | Type of sport (e.g., "football", "basketball", "soccer") |
-| `team`         | object | Team information for the trading card                    |
-| `team.name`    | string | Name of the team                                         |
-| `team.color`   | string | Primary team color (hex code or color name)              |
-| `team.logo`    | string | Team logo as base64 encoded image                        |
-| `player`       | object | Player information for the trading card                  |
-| `player.photo` | string | Player photo as base64 encoded image                     |
-
-#### Response
-
-```json
-{
-  "image": "base64-encoded-generated-trading-card-image"
-}
-```
-
-#### Response Fields
-
-| Field   | Type   | Description                                           |
-| ------- | ------ | ----------------------------------------------------- |
-| `image` | string | Generated trading card image as base64 encoded string |
-
 ## 🛠️ Technology Stack
 
 - **Framework**: ASP.NET Core 9.0
 - **AI Integration**: Microsoft Semantic Kernel
-- **Image Generation**: Azure OpenAI DALL-E
+- **Image Generation**: Azure OpenAI gpt-image-1
 - **Language**: C# with nullable reference types enabled
 - **Testing**: xUnit (test project included)
 
@@ -129,11 +58,17 @@ Generate a new trading card with custom player and team information.
 
 ```text
 ├── src/
-│   └── InfoSupport.TradingCardGenerator/
-│       ├── Endpoints/              # API endpoint definitions
-│       ├── Models/                 # Data models and DTOs
-│       ├── Properties/             # Launch settings
-│       └── Program.cs              # Application entry point
+│   ├── InfoSupport.TradingCardGenerator/        # Backend API
+│   │   ├── Agent/                               # AI agents for image generation
+│   │   ├── Configuration/                       # Application configuration
+│   │   ├── Endpoints/                           # API endpoint definitions
+│   │   ├── Models/                              # Data models and DTOs
+│   │   ├── Prompts/                             # AI prompt templates
+│   │   ├── Shared/                              # Shared utilities
+│   │   └── Program.cs                           # Application entry point
+│   └── InfoSupport.TradingCardGenerator.Web/    # Frontend Next.js application
+│       ├── public/                              # Static assets (team logos)
+│       └── src/app/                             # Next.js app directory
 ├── test/
 │   └── InfoSupport.TradingCardGenerator.Tests/  # Unit tests
 └── README.md
@@ -141,19 +76,27 @@ Generate a new trading card with custom player and team information.
 
 ## 🧪 Running Tests
 
-Execute the test suite:
+We have two test suites, one for the backend API which you can run using the following
+command:
 
 ```bash
 dotnet test
 ```
 
+The frontend tests can be run by running the following commands:
+
+```bash
+cd src/InfoSupport.TracingCardGenerator.Web
+npm test
+```
+
 ## 🔧 Configuration
 
-The application uses the following configuration keys:
+The backend API uses the following configuration keys:
 
 - `LanguageModel:ApiKey` - Your Azure OpenAI API key
 - `LanguageModel:Endpoint` - Your Azure OpenAI service endpoint
-- `LanguageModel:ImageModel` - The image generation model to use (e.g., "dall-e-3")
+- `LanguageModel:ImageModel` - The image generation model to use (e.g., "gpt-image-1")
 
 ## 🚦 Development
 
@@ -162,30 +105,6 @@ The application uses the following configuration keys:
 1. **Models**: Add new data models in `src/InfoSupport.TradingCardGenerator/Models/`
 2. **Endpoints**: Extend API functionality in `src/InfoSupport.TradingCardGenerator/Endpoints/`
 3. **Tests**: Add corresponding tests in `test/InfoSupport.TradingCardGenerator.Tests/`
-
-### Code Style
-
-- Nullable reference types are enabled
-- XML documentation comments are used for public APIs
-- Follow standard C# naming conventions
-
-## Data Attribution
-
-### Microsoft MVP Data
-
-The VIP mode functionality uses Microsoft MVP (Most Valuable Professional) data sourced from the publicly available Microsoft MVP directory:
-
-- **Source**: [Microsoft MVP Search Portal](https://mvp.microsoft.com/en-US/search)
-- **File**: `src/InfoSupport.TradingCardGenerator.Web/src/app/mvps_17sep2025.json`
-- **Purpose**: Cached locally to avoid unnecessary API calls to Microsoft's services
-- **Usage**: Enables VIP mode for Microsoft MVPs with enhanced trading card customization features
-- **Data Rights**: This data is publicly available through Microsoft's official MVP portal
-
-The MVP data is used solely for enhancing the user experience by providing additional features to Microsoft MVPs and is not used for any commercial purposes beyond this application's functionality.
-
-## License
-
-This project is developed by InfoSupport.
 
 ## 🤝 Contributing
 
