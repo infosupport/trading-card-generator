@@ -8,4 +8,4 @@ This section covers the context and scope of the system.
 - We communicate with Azure AI Foundry to generate images
 - No data is saved by the application
 
-![System context](system-context.png)
+![System context](images/system-context.png)

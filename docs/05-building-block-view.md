@@ -4,7 +4,7 @@ This section covers the static structure of the solution.
 
 ## System context
 
-![System context](system-context.png)
+![System context](images/system-context.png)
 
 ## Frontend
 
@@ -19,4 +19,4 @@ The Backend API uses ASP.NET Core minimal APIs to implement an image generation 
 We wrapped the logic to generate an image into an agent component to make the logic easier
 to reason about.
 
-![Backend API Structure](backend-building-blocks.png)
+![Backend API Structure](images/backend-building-blocks.png)

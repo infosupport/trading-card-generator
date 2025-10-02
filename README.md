@@ -114,6 +114,17 @@ The backend API uses the following configuration keys:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+## Documentation
+
+1. [Introduction and goals](./docs/01-introduction-and-goals.md)
+2. [Constraints](./docs/02-constraints.md)
+3. [Context and scope](./docs/03-context-and-scope.md)
+4. [Solution strategy](./docs/04-solution-strategy.md)
+5. [Building block view](./docs/05-building-block-view.md)
+6. [Runtime view](./docs/06-runtime-view.md)
+7. [Deployment view](./docs/07-deployment-view.md)
+8. [Quality](./docs/08-quality.md)
+
 ---
 
 **Note**: This application requires a valid Azure OpenAI subscription and API access to function properly.
