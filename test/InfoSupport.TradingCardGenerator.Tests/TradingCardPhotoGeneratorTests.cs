@@ -30,7 +30,8 @@ public class TradingCardPhotoGeneratorIntegrationTests
             new AzureOpenAIClientOptions(AzureOpenAIClientOptions.ServiceVersion.V2025_04_01_Preview));
 
         var settings = Options.Create(languageModelSettings);
-        var generator = new TradingCardPhotoGenerator(azureClient, settings);
+        var imageMetadataInjector = new ImageMetadataInjector();
+        var generator = new TradingCardPhotoGenerator(azureClient, settings, imageMetadataInjector);
 
         var request = new GenerateCardRequest
         {

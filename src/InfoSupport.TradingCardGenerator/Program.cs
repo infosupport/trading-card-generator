@@ -28,6 +28,7 @@ var azureClient = new AzureOpenAIClient(
 );
 
 builder.Services.AddSingleton(azureClient);
+builder.Services.AddSingleton<ImageMetadataInjector>();
 builder.Services.AddSingleton<TradingCardPhotoGenerator>();
 
 var app = builder.Build();
