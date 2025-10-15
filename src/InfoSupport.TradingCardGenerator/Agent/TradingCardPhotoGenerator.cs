@@ -8,7 +8,10 @@ using OpenAI.Images;
 
 namespace InfoSupport.TradingCardGenerator.Agent;
 
-public class TradingCardPhotoGenerator(AzureOpenAIClient azureClient, IOptions<LanguageModelSettings> settings)
+public class TradingCardPhotoGenerator(
+    AzureOpenAIClient azureClient,
+    IOptions<LanguageModelSettings> settings,
+    ImageMetadataInjector metadataInjector)
 {
     /// <summary>
     /// Transforms a portrait photo into a trading card image.
@@ -29,8 +32,10 @@ public class TradingCardPhotoGenerator(AzureOpenAIClient azureClient, IOptions<L
             imageStream, "player-photo.jpg", RenderPromptTemplate(request),
             imageEditOptions);
 
-        var responseData = Convert.ToBase64String(
-            imageGenerationResult.Value.ImageBytes.ToArray());
+        var imageBytes = imageGenerationResult.Value.ImageBytes.ToArray();
+        var imageBytesWithMetadata = metadataInjector.InjectMetadata(imageBytes);
+
+        var responseData = Convert.ToBase64String(imageBytesWithMetadata);
 
         return new GenerateCardResponse
         {
