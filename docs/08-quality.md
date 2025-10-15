@@ -24,7 +24,41 @@ invalid results were offensive though.
 
 ## Protection against offensive output with content filters
 
-Microsoft applies content filters to all their models. We apply these filters too to
-ensure that no offensive names or descriptions enter the prompt that's used to generate
-photos. We also made sure that the prompt has placeholders instead of a free input text.
-This further narrows what can be achieved with prompt injection.
+### Content Moderation with Azure Content Safety
+
+The application uses Azure Content Safety to moderate both input and output of the image
+generator. This provides comprehensive protection against harmful content throughout the
+generation pipeline.
+
+#### Moderation Categories
+
+We validate content across four harm categories:
+
+- Violence
+- Self-harm
+- Sexual explicit content
+- Hate and fairness
+
+#### Input Moderation
+
+**Prompt Validation**: The text prompt provided by users is analyzed for harmful content
+before being sent to the image generation model. We also made sure that the prompt has
+placeholders instead of a free input text. This further narrows what can be achieved with
+prompt injection.
+
+**Webcam Image Validation**: The input photo from the webcam is analyzed to ensure it
+doesn't contain harmful content before processing.
+
+#### Output Moderation
+
+**Generated Image Validation**: The image produced by the AI model is analyzed before
+being presented to users, ensuring the output meets safety standards.
+
+#### Blocking Threshold
+
+Content is blocked if it scores 3 or higher on Azure's severity scale (0-7). This
+threshold ensures that even moderately problematic content is prevented from entering
+or leaving the system.
+
+For more information about the harm categories and severity levels, see the
+[Azure Content Safety documentation](https://learn.microsoft.com/en-us/azure/ai-services/content-safety/concepts/harm-categories?tabs=warning).
