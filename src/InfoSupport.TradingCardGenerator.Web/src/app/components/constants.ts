@@ -1,10 +1,11 @@
-// Display dimensions (what user sees)
+// Display dimensions (what user sees) - CR80 card format (54mm x 86mm)
 export const CARD_WIDTH = 750;
-export const CARD_HEIGHT = 1050;
+export const CARD_HEIGHT = 1194; // 750 * (86/54) = 1194.44
 
 // Capture dimensions (what gets sent to API) - optimized for smaller file size
+// CR80 aspect ratio: 54:86
 export const CAPTURE_WIDTH = 400;
-export const CAPTURE_HEIGHT = 560;
+export const CAPTURE_HEIGHT = 637; // 400 * (86/54) = 636.67
 
 // Image quality settings
 export const IMAGE_FORMAT = 'image/jpeg' as const;

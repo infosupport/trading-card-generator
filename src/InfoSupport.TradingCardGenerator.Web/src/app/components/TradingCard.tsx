@@ -33,14 +33,14 @@ const TradingCard = forwardRef<HTMLDivElement, TradingCardProps>(({
   return (
     <div
       ref={ref}
-      className="w-[375px] h-[575px] shadow-[0_4px_24px_rgba(0,0,0,0.15)] transition-all duration-700 ease-in-out flex flex-col justify-between p-2 rounded-xl"
+      className="w-[375px] h-[597px] shadow-[0_4px_24px_rgba(0,0,0,0.15)] transition-all duration-700 ease-in-out flex flex-col justify-between p-2 rounded-xl"
       style={{
         backgroundColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f'
       }}
     >
       {/* Card Frame */}
       <div 
-        className="relative bg-[#f1e4ce] rounded-2xl h-[400px]"
+        className="relative bg-[#f1e4ce] rounded-2xl h-[420px]"
       >
         {/* Special Property Badge - Top Right Corner */}
         {specialProperty !== 'none' && (
@@ -65,7 +65,7 @@ const TradingCard = forwardRef<HTMLDivElement, TradingCardProps>(({
         {/* Video Canvas Area */}
         <div className="flex justify-center">
           <div
-            className="relative overflow-hidden w-[340px] h-[340px] rounded-2xl mt-2"
+            className="relative overflow-hidden w-[340px] h-[360px] rounded-2xl mt-2"
           >
             {generatedCardImage ? (
               /* Show generated card image */
@@ -73,8 +73,8 @@ const TradingCard = forwardRef<HTMLDivElement, TradingCardProps>(({
                 src={generatedCardImage}
                 alt="Generated Trading Card"
                 width={340}
-                height={340}
-                className="object-cover w-[340px] h-[340px] rounded-2xl"
+                height={360}
+                className="object-cover w-[340px] h-[360px] rounded-2xl"
               />
             ) : isGenerating && capturedPhoto ? (
               /* Show loading state with captured photo in background */
@@ -92,13 +92,13 @@ const TradingCard = forwardRef<HTMLDivElement, TradingCardProps>(({
                   autoPlay
                   playsInline
                   muted
-                  className={`scale-x-[-1] w-[340px] h-[340px] object-cover rounded-2xl ${isStreaming ? 'block' : 'hidden'}`}
+                  className={`scale-x-[-1] w-[340px] h-[360px] object-cover rounded-2xl ${isStreaming ? 'block' : 'hidden'}`}
                 />
                 
                 {/* Placeholder when no camera */}
                 {!isStreaming && (
                   <div 
-                    className="bg-gray-300 flex items-center justify-center text-gray-600 absolute inset-0 w-[340px] h-[340px] rounded-2xl"
+                    className="bg-gray-300 flex items-center justify-center text-gray-600 absolute inset-0 w-[340px] h-[360px] rounded-2xl"
                   >
                     <div className="text-center">
                       <div className="text-6xl mb-2">📷</div>

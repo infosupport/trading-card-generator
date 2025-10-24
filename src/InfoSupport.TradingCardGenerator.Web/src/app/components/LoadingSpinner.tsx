@@ -6,7 +6,7 @@ interface LoadingSpinnerProps {
 
 export default function LoadingSpinner({ capturedPhoto, loadingMessage, messageIndex }: LoadingSpinnerProps) {
   return (
-    <div className="relative w-[340px] h-[340px] rounded-2xl overflow-hidden">
+    <div className="relative w-[340px] h-[360px] rounded-2xl overflow-hidden">
       <img
         src={capturedPhoto}
         alt="Captured Photo"
