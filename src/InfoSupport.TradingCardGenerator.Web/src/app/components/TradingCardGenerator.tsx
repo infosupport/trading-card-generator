@@ -186,11 +186,6 @@ export default function TradingCardGenerator() {
     setGeneratedCardImage(cardImageDataUrl);
   };
 
-  const handleReset = () => {
-    setGeneratedCardImage(null);
-    setCapturedPhoto(null);
-  };
-
   const handleLogoSelect = async (logoPath: string) => {
     // Find the team and color that matches the selected logo
     let selectedTeam = null;
@@ -274,7 +269,6 @@ export default function TradingCardGenerator() {
         cardDisplayRef={cardDisplayRef}
         onCapturePhoto={handleCapturePhoto}
         onUploadPhoto={handleUploadPhoto}
-        onReset={handleReset}
       />
     </div>
   );

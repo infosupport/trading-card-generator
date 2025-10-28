@@ -14,7 +14,6 @@ interface ActionButtonsProps {
   cardDisplayRef: RefObject<HTMLDivElement | null>;
   onCapturePhoto: () => void;
   onUploadPhoto: (file: File) => void;
-  onReset: () => void;
 }
 
 export default function ActionButtons({
@@ -26,8 +25,7 @@ export default function ActionButtons({
   playerName,
   cardDisplayRef,
   onCapturePhoto,
-  onUploadPhoto,
-  onReset
+  onUploadPhoto
 }: ActionButtonsProps) {
 
   const handlePrint = async () => {
@@ -209,13 +207,13 @@ export default function ActionButtons({
 
   return (
     <>
-      <div className="flex justify-center gap-4 mt-8">
+      <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-3 sm:mt-4 px-2">
         {!generatedCardImage ? (
           <>
             <button
               onClick={onCapturePhoto}
               disabled={!isStreaming || isCapturing || isGenerating}
-              className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105 disabled:bg-gray-400 disabled:text-gray-600 disabled:hover:scale-100 disabled:cursor-not-allowed"
+              className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-base sm:text-lg tracking-wider hover:scale-105 disabled:bg-gray-400 disabled:text-gray-600 disabled:hover:scale-100 disabled:cursor-not-allowed w-full sm:w-auto"
               style={primaryButtonStyle}
             >
               {isGenerating 
@@ -226,9 +224,9 @@ export default function ActionButtons({
               }
             </button>
 
-            <label className={"px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105 cursor-pointer inline-block"}
+            <label className={"px-6 sm:px-8 py-3 sm:py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-base sm:text-lg tracking-wider hover:scale-105 cursor-pointer inline-block w-full sm:w-auto text-center"}
               style={secondaryButtonStyle}>
-              <ArrowUpTrayIcon className="h-6 w-6 inline-block mr-2" />
+              <ArrowUpTrayIcon className="h-5 w-5 sm:h-6 sm:w-6 inline-block mr-2" />
               UPLOAD PHOTO
               <input
                 type="file"
@@ -242,35 +240,29 @@ export default function ActionButtons({
         ) : (
           <>
             <button
-              onClick={onReset}
-              className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105"
+              onClick={() => window.location.reload()}
+              className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-base sm:text-lg tracking-wider hover:scale-105 w-full sm:w-auto"
               style={primaryButtonStyle}
             >
               🎯 GENERATE NEW CARD
             </button>
             
-            <div className="flex gap-4 items-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center w-full sm:w-auto">
               <button
                 onClick={handlePrint}
-                className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105 whitespace-nowrap"
-                style={{
-                  ...secondaryButtonStyle,
-                  width: '280px'
-                }}
+                className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-base sm:text-lg tracking-wider hover:scale-105 whitespace-nowrap w-full sm:w-[280px]"
+                style={secondaryButtonStyle}
               >
-                <PrinterIcon className="h-6 w-6 inline-block mr-2" />
+                <PrinterIcon className="h-5 w-5 sm:h-6 sm:w-6 inline-block mr-2" />
                 PRINT MY CARD
               </button>
               
               <button
                 onClick={handleDownload}
-                className="px-6 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105 whitespace-nowrap flex items-center justify-center"
-                style={{
-                  ...secondaryButtonStyle,
-                  minWidth: '80px'
-                }}
+                className="px-6 py-3 sm:py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-base sm:text-lg tracking-wider hover:scale-105 whitespace-nowrap flex items-center justify-center w-full sm:w-auto sm:min-w-[80px]"
+                style={secondaryButtonStyle}
               >
-                <ArrowDownTrayIcon className="h-6 w-6" />
+                <ArrowDownTrayIcon className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
             </div>
           </>
