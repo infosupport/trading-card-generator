@@ -124,11 +124,24 @@ export default function ActionButtons({
         printWindow.onload = () => {
           printWindow.focus();
           printWindow.print();
+          
+          // Close the window after printing dialog is closed
+          // Using both afterprint event and a fallback timeout
+          printWindow.addEventListener('afterprint', () => {
+            printWindow.close();
+            URL.revokeObjectURL(url);
+          });
+          
+          // Fallback: close after 1 second if afterprint doesn't fire
+          setTimeout(() => {
+            printWindow.close();
+            URL.revokeObjectURL(url);
+          }, 5000);
         };
+      } else {
+        // Clean up if window couldn't be opened
+        URL.revokeObjectURL(url);
       }
-
-      // Clean up the blob URL after a delay
-      setTimeout(() => URL.revokeObjectURL(url), 10000);
 
     } catch (error) {
       console.error('Error generating PDF for printing:', error);
