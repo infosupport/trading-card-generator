@@ -4,7 +4,7 @@ This is a full-stack trading card generator that uses OpenAI's DALL-E to transfo
 
 ## Architecture Overview
 
-**Backend**: ASP.NET Core 9.0 API (`src/InfoSupport.TradingCardGenerator/`)
+**Backend**: ASP.NET Core 10.0 API (`src/InfoSupport.TradingCardGenerator/`)
 - Single endpoint: `POST /generate` - generates trading cards from photos
 - Uses Azure OpenAI DALL-E for image transformation via Semantic Kernel
 - Configuration via user secrets: `LanguageModel:ApiKey`, `LanguageModel:Endpoint`, `LanguageModel:ImageModel`
@@ -18,6 +18,7 @@ This is a full-stack trading card generator that uses OpenAI's DALL-E to transfo
 ## Key Development Patterns
 
 ### Embedded Resources for Prompts
+
 Handlebars templates are embedded as resources in the C# project:
 ```xml
 <EmbeddedResource Include="Prompts\generate-photo.md" />
@@ -25,6 +26,7 @@ Handlebars templates are embedded as resources in the C# project:
 Access via `EmbeddedResource.Read("Prompts.generate-photo.md")` - note the dot notation.
 
 ### Configuration Management
+
 - **Never commit secrets** - use `dotnet user-secrets` for local development
 - Settings classes follow `LanguageModelSettings` pattern with Options binding
 - CORS configured for `http://localhost:3000` and `https://localhost:3001`
@@ -36,6 +38,7 @@ All models use nullable reference types (`<Nullable>enable</Nullable>`):
 - XML documentation comments required for all public APIs
 
 ### Frontend Constants System
+
 Team data, special properties, and UI constants are centralized in `components/constants.ts`:
 - `TEAMS` object organizes by color with nested team arrays
 - `SPECIAL_PROPERTIES` defines badge system with icons and descriptions
@@ -44,6 +47,7 @@ Team data, special properties, and UI constants are centralized in `components/c
 ## Development Workflows
 
 ### Running the Full Stack
+
 ```bash
 # Backend (from project root)
 cd src/InfoSupport.TradingCardGenerator
@@ -55,6 +59,7 @@ npm run dev  # Starts on http://localhost:3000
 ```
 
 ### Testing with Real API
+
 Integration tests require Azure OpenAI configuration:
 ```bash
 cd test/InfoSupport.TradingCardGenerator.Tests
@@ -70,36 +75,30 @@ dotnet test --filter "Category=Integration"
 ## Critical Integration Points
 
 ### Image Processing Pipeline
+
 1. Frontend captures via HTML5 Canvas → base64 JPEG (400x560px)
 2. Backend decodes base64 → MemoryStream for Azure OpenAI
 3. DALL-E image edit operation using Handlebars prompt template
 4. Response re-encoded to base64 for frontend display
 
-### Error Suppression
-Backend suppresses specific warnings for experimental APIs:
-```xml
-<NoWarn>SKEXP0010;SKEXP0001;OPENAI001</NoWarn>
-```
-
-### Dependency Versions
-- Uses beta Azure.AI.OpenAI (2.3.0-beta.2) for latest DALL-E features
-- Next.js 15 with Turbopack (`--turbopack` flag in scripts)
-- Tailwind CSS 4.0 (alpha) for styling
-
 ## Project-Specific Conventions
 
 ### File Organization
+
 - `Endpoints/` for minimal API definitions (static extension methods)
 - `Agent/` for AI-related services (not "Services" folder)
 - `Shared/` for cross-cutting utilities like `EmbeddedResource`
 - Frontend components are co-located in `src/app/components/`
 
 ### Naming Patterns
+
 - C# classes use full descriptive names: `TradingCardPhotoGenerator`
 - API methods follow REST conventions: `GenerateTradingCard`
 - Frontend uses descriptive props: `capturedPhoto`, `isGenerating`, `loadingMessage`
 
 ### Testing Strategy
+
 - Integration tests hit real Azure OpenAI (marked with `[Trait("Category", "Integration")]`)
+- Run only the unit-tests when making code changes, we'll run the integration tests manually
 - Test images embedded as `TestData/photo.png` manifest resources
 - Generated images saved to disk for manual verification

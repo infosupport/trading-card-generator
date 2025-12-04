@@ -8,7 +8,7 @@ uploading their photo and customizing team information and colors.
 
 ### Prerequisites
 
-- .NET 9.0 SDK
+- .NET 10.0 SDK
 - Azure OpenAI API access with gpt-image-1 model deployment
 - Visual Studio 2022 or Visual Studio Code
 
