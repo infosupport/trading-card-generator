@@ -1,7 +1,8 @@
 import { RefObject } from 'react';
 import { toPng } from 'html-to-image';
+import { PDFDocument } from 'pdf-lib';
 import { TEAMS } from './constants';
-import { ArrowDownTrayIcon, ArrowUpTrayIcon } from '@heroicons/react/16/solid';
+import { ArrowDownTrayIcon, ArrowUpTrayIcon, PrinterIcon } from '@heroicons/react/16/solid';
 
 interface ActionButtonsProps {
   isStreaming: boolean;
@@ -13,7 +14,6 @@ interface ActionButtonsProps {
   cardDisplayRef: RefObject<HTMLDivElement | null>;
   onCapturePhoto: () => void;
   onUploadPhoto: (file: File) => void;
-  onReset: () => void;
 }
 
 export default function ActionButtons({
@@ -25,9 +25,129 @@ export default function ActionButtons({
   playerName,
   cardDisplayRef,
   onCapturePhoto,
-  onUploadPhoto,
-  onReset
+  onUploadPhoto
 }: ActionButtonsProps) {
+
+  const handlePrint = async () => {
+    if (!generatedCardImage || !cardDisplayRef.current) return;
+
+    try {
+      // Wait for the component to fully render
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Ensure all images are loaded
+      const images = cardDisplayRef.current.querySelectorAll('img');
+      await Promise.all(Array.from(images).map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+        });
+      }));
+
+      console.log('Converting card front to PNG...');
+      
+      // Generate the front of the card as PNG
+      const frontPngDataUrl = await toPng(cardDisplayRef.current, {
+        quality: 1.0,
+        pixelRatio: 2
+      });
+
+      // Convert data URL to array buffer
+      const frontPngBytes = await fetch(frontPngDataUrl).then(res => res.arrayBuffer());
+
+      // Fetch the back PNG template
+      console.log('Fetching card back template...');
+      const backPngBytes = await fetch('/tradingcard-back.png').then(res => res.arrayBuffer());
+
+      // Create a new PDF document
+      console.log('Creating PDF document...');
+      const pdfDoc = await PDFDocument.create();
+
+      // CR80 standard card size: 2.125" × 3.375" (54mm × 85.6mm) - portrait orientation
+      // At 300 DPI for print quality: 638 × 1013 points
+      const cardWidthPoints = 638;
+      const cardHeightPoints = 1013;
+
+      // Add first page with the front of the card
+      const frontPage = pdfDoc.addPage([cardWidthPoints, cardHeightPoints]);
+      const frontPngImage = await pdfDoc.embedPng(frontPngBytes);
+      
+      // Scale the image to fill the entire page
+      const frontDims = frontPngImage.scale(1);
+      const frontScale = Math.min(
+        cardWidthPoints / frontDims.width,
+        cardHeightPoints / frontDims.height
+      );
+      
+      const frontWidth = frontDims.width * frontScale;
+      const frontHeight = frontDims.height * frontScale;
+      
+      frontPage.drawImage(frontPngImage, {
+        x: (cardWidthPoints - frontWidth) / 2,
+        y: (cardHeightPoints - frontHeight) / 2,
+        width: frontWidth,
+        height: frontHeight,
+      });
+
+      // Add second page with the back of the card
+      console.log('Adding card back...');
+      const backPage = pdfDoc.addPage([cardWidthPoints, cardHeightPoints]);
+      const backPngImage = await pdfDoc.embedPng(backPngBytes);
+      
+      // Scale the back image to fill the entire page
+      const backDims = backPngImage.scale(1);
+      const backScale = Math.min(
+        cardWidthPoints / backDims.width,
+        cardHeightPoints / backDims.height
+      );
+      
+      const backWidth = backDims.width * backScale;
+      const backHeight = backDims.height * backScale;
+      
+      backPage.drawImage(backPngImage, {
+        x: (cardWidthPoints - backWidth) / 2,
+        y: (cardHeightPoints - backHeight) / 2,
+        width: backWidth,
+        height: backHeight,
+      });
+
+      // Save the PDF
+      console.log('Generating final PDF...');
+      const pdfBytes = await pdfDoc.save();
+      const blob = new Blob([new Uint8Array(pdfBytes)], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+
+      // Open in new window for printing
+      const printWindow = window.open(url, '_blank');
+      if (printWindow) {
+        printWindow.onload = () => {
+          printWindow.focus();
+          printWindow.print();
+          
+          // Close the window after printing dialog is closed
+          // Using both afterprint event and a fallback timeout
+          printWindow.addEventListener('afterprint', () => {
+            printWindow.close();
+            URL.revokeObjectURL(url);
+          });
+          
+          // Fallback: close after 1 second if afterprint doesn't fire
+          setTimeout(() => {
+            printWindow.close();
+            URL.revokeObjectURL(url);
+          }, 5000);
+        };
+      } else {
+        // Clean up if window couldn't be opened
+        URL.revokeObjectURL(url);
+      }
+
+    } catch (error) {
+      console.error('Error generating PDF for printing:', error);
+      alert('Failed to generate PDF. Please try again.');
+    }
+  };
 
   const handleDownload = async () => {
     if (!generatedCardImage || !cardDisplayRef.current) return;
@@ -100,13 +220,13 @@ export default function ActionButtons({
 
   return (
     <>
-      <div className="flex justify-center gap-4 mt-8">
+      <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-3 sm:mt-4 px-2">
         {!generatedCardImage ? (
           <>
             <button
               onClick={onCapturePhoto}
               disabled={!isStreaming || isCapturing || isGenerating}
-              className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105 disabled:bg-gray-400 disabled:text-gray-600 disabled:hover:scale-100 disabled:cursor-not-allowed"
+              className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-base sm:text-lg tracking-wider hover:scale-105 disabled:bg-gray-400 disabled:text-gray-600 disabled:hover:scale-100 disabled:cursor-not-allowed w-full sm:w-auto"
               style={primaryButtonStyle}
             >
               {isGenerating 
@@ -117,9 +237,9 @@ export default function ActionButtons({
               }
             </button>
 
-            <label className={"px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105 cursor-pointer inline-block"}
+            <label className={"px-6 sm:px-8 py-3 sm:py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-base sm:text-lg tracking-wider hover:scale-105 cursor-pointer inline-block w-full sm:w-auto text-center"}
               style={secondaryButtonStyle}>
-              <ArrowUpTrayIcon className="h-6 w-6 inline-block mr-2" />
+              <ArrowUpTrayIcon className="h-5 w-5 sm:h-6 sm:w-6 inline-block mr-2" />
               UPLOAD PHOTO
               <input
                 type="file"
@@ -133,21 +253,31 @@ export default function ActionButtons({
         ) : (
           <>
             <button
-              onClick={onReset}
-              className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105"
+              onClick={() => window.location.reload()}
+              className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-base sm:text-lg tracking-wider hover:scale-105 w-full sm:w-auto"
               style={primaryButtonStyle}
             >
               🎯 GENERATE NEW CARD
             </button>
             
-            <button
-              onClick={handleDownload}
-              className="px-8 py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-lg tracking-wider hover:scale-105"
-              style={secondaryButtonStyle}
-            >
-              <ArrowDownTrayIcon className="h-6 w-6 inline-block mr-2" />
-              DOWNLOAD MY CARD
-            </button>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center w-full sm:w-auto">
+              <button
+                onClick={handlePrint}
+                className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-base sm:text-lg tracking-wider hover:scale-105 whitespace-nowrap w-full sm:w-[280px]"
+                style={secondaryButtonStyle}
+              >
+                <PrinterIcon className="h-5 w-5 sm:h-6 sm:w-6 inline-block mr-2" />
+                PRINT MY CARD
+              </button>
+              
+              <button
+                onClick={handleDownload}
+                className="px-6 py-3 sm:py-4 rounded-xl shadow-lg transition-all duration-200 border-3 font-black text-base sm:text-lg tracking-wider hover:scale-105 whitespace-nowrap flex items-center justify-center w-full sm:w-auto sm:min-w-[80px]"
+                style={secondaryButtonStyle}
+              >
+                <ArrowDownTrayIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+              </button>
+            </div>
           </>
         )}
       </div>
