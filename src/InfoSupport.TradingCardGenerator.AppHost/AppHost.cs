@@ -22,6 +22,8 @@ var backend = builder
 
 builder
     .AddNpmApp("frontend", "../InfoSupport.TradingCardGenerator.Web", "dev")
+    .WithHttpEndpoint(env: "PORT")
+    .WithExternalHttpEndpoints()
     .WithReference(backend);
 
 builder.Build().Run();
