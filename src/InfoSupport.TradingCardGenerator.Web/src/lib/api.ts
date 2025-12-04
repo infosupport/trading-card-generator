@@ -1,6 +1,6 @@
 import { GenerateCardRequest, GenerateCardResponse } from './types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5241';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || process.env.BACKEND_HTTP || 'http://localhost:5241';
 
 export class TradingCardApi {
   static async generateCard(request: GenerateCardRequest): Promise<GenerateCardResponse> {
@@ -17,8 +17,7 @@ export class TradingCardApi {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const result: GenerateCardResponse = await response.json();
-      return result;
+      return await response.json();
     } catch (error) {
       console.error('Error generating trading card:', error);
       throw error;

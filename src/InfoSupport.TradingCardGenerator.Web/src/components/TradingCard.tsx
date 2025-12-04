@@ -1,6 +1,6 @@
 import { RefObject, forwardRef } from 'react';
 import Image from 'next/image';
-import { TEAMS, SPECIAL_PROPERTIES } from './constants';
+import { TEAMS, SPECIAL_PROPERTIES } from '@/lib/constants';
 import LoadingSpinner from './LoadingSpinner';
 
 interface TradingCardProps {

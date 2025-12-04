@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { TEAMS } from './constants';
+import { TEAMS } from '@/lib/constants';
 
 interface TeamSelectorProps {
   teamLogo?: string;

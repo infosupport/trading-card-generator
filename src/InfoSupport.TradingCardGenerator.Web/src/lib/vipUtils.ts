@@ -1,4 +1,4 @@
-import mvpData from '../mvps_17sep2025.json';
+import mvpData from '@/data/mvps_17sep2025.json';
 
 interface MVPDataStructure {
   communityLeaderProfiles: Array<{

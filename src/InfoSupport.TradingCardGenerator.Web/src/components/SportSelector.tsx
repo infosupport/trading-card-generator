@@ -1,4 +1,4 @@
-import { SPORTS } from './constants';
+import { SPORTS } from '@/lib/constants';
 
 interface SportSelectorProps {
   selectedSport?: string;

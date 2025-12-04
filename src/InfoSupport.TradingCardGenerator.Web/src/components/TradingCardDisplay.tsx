@@ -1,5 +1,5 @@
 import { RefObject, forwardRef } from 'react';
-import { SPECIAL_PROPERTIES } from './constants';
+import { SPECIAL_PROPERTIES } from '@/lib/constants';
 import SpecialPropertySelector from './SpecialPropertySelector';
 import SportSelector from './SportSelector';
 import TradingCard from './TradingCard';

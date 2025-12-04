@@ -1,4 +1,4 @@
-import TradingCardGenerator from "./components/TradingCardGenerator";
+import TradingCardGenerator from "@/components/TradingCardGenerator";
 
 export default function Home() {
   return (

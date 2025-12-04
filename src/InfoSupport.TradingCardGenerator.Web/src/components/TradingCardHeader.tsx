@@ -1,4 +1,4 @@
-import { TEAMS } from './constants';
+import { TEAMS } from '@/lib/constants';
 
 interface TradingCardHeaderProps {
   firstName: string;

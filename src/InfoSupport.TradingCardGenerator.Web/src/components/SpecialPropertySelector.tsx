@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { SPECIAL_PROPERTIES } from './constants';
+import { SPECIAL_PROPERTIES } from '@/lib/constants';
 
 interface SpecialPropertySelectorProps {
   selectedProperty: keyof typeof SPECIAL_PROPERTIES;

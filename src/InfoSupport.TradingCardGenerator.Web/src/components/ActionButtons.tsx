@@ -1,7 +1,7 @@
 import { RefObject } from 'react';
 import { toPng } from 'html-to-image';
 import { PDFDocument } from 'pdf-lib';
-import { TEAMS } from './constants';
+import { TEAMS } from '@/lib/constants';
 import { ArrowDownTrayIcon, ArrowUpTrayIcon, PrinterIcon } from '@heroicons/react/16/solid';
 
 interface ActionButtonsProps {
