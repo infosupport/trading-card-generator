@@ -1,18 +1,12 @@
 using InfoSupport.TradingCardGenerator.Api.Shared;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
-using Xunit;
 
-namespace InfoSupport.TradingCardGenerator.Tests;
+namespace InfoSupport.TradingCardGenerator.Api.Tests.Shared;
 
 public class ImageMetadataInjectorTests
 {
-    private readonly ImageMetadataInjector _injector;
-
-    public ImageMetadataInjectorTests()
-    {
-        _injector = new ImageMetadataInjector();
-    }
+    private readonly ImageMetadataInjector _injector = new();
 
     [Fact]
     public void InjectMetadata_WithValidImage_ReturnsImageWithMetadata()
