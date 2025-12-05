@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: "22"
           cache: 'npm'
-          cache-dependency-path: src/InfoSupport.TradingCardGenerator.Web/package-lock.json
+          cache-dependency-path: '**/package-lock.json'
 
       - name: Restore backend dependencies
         run: dotnet restore --locked-mode 
