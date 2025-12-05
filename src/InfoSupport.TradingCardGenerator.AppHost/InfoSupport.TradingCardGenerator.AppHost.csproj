@@ -8,9 +8,10 @@
     <UserSecretsId>0b47cb1d-b81e-4e24-8e4d-539fea4f0170</UserSecretsId>
   </PropertyGroup>
 
-  <!-- Fix for NuGet NU1403 error -->
+  <!-- Restore with lock file -->
   <PropertyGroup>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   
   <ItemGroup>

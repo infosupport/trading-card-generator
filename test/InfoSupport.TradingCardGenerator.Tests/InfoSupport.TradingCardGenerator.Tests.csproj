@@ -8,9 +8,10 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
-  <!-- Fix for NuGet NU1403 error -->
+  <!-- Restore with lock file -->
   <PropertyGroup>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
 
   <ItemGroup>
