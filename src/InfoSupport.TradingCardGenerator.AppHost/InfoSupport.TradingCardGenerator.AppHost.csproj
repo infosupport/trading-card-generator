@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\InfoSupport.TradingCardGenerator\InfoSupport.TradingCardGenerator.csproj" />
+    <ProjectReference Include="..\InfoSupport.TradingCardGenerator.Api\InfoSupport.TradingCardGenerator.Api.csproj" />
   </ItemGroup>
 
 </Project>
