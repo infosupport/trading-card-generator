@@ -41,4 +41,4 @@ jobs:
         working-directory: src/InfoSupport.TradingCardGenerator.Web
         
       - name: Run tests
-        run: dotnet test InfoSupport.TradingCardGenerator.sln --no-build --configuration Release --verbosity normal --filter "Category!=Integration"
+        run: dotnet test InfoSupport.TradingCardGenerator.slnx --no-build --configuration Release --verbosity normal --filter "Category!=Integration"
