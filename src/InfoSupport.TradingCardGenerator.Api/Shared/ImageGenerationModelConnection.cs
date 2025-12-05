@@ -1,15 +1,15 @@
 namespace InfoSupport.TradingCardGenerator.Shared;
 
-public class ConnectionString
+public class ImageGenerationModelConnection
 {
     private Dictionary<string, string?> _elements;
 
-    private ConnectionString(Dictionary<string, string?> elements)
+    private ImageGenerationModelConnection(Dictionary<string, string?> elements)
     {
         _elements = elements;
     }
     
-    public static ConnectionString Parse(string rawValue)
+    public static ImageGenerationModelConnection Parse(string rawValue)
     {
         var elements = new Dictionary<string, string?>();
         var keyValuePairs = rawValue.Split(';');
@@ -26,8 +26,10 @@ public class ConnectionString
             elements.Add(values[0].Trim(), values[1].Trim());
         }
 
-        return new ConnectionString(elements);
+        return new ImageGenerationModelConnection(elements);
     }
 
-    public string? this[string key] => _elements.ContainsKey(key) ? _elements[key] : null;
+    public string Endpoint => _elements["Endpoint"]!;
+
+    public string DeploymentName => _elements["Deployment"]!;
 }

@@ -10,7 +10,7 @@ namespace InfoSupport.TradingCardGenerator.Agent;
 
 public class TradingCardPhotoGenerator(
     AzureOpenAIClient azureClient,
-    IOptions<LanguageModelSettings> settings,
+    IOptions<ImageModelSettings> modelSettings,
     ImageMetadataInjector metadataInjector)
 {
     /// <summary>
@@ -20,7 +20,7 @@ public class TradingCardPhotoGenerator(
     /// <returns>Returns the generated image.</returns>
     public async Task<GenerateCardResponse> TransformPhoto(GenerateCardRequest request)
     {
-        var imageClient = azureClient.GetImageClient(settings.Value.ImageModel);
+        var imageClient = azureClient.GetImageClient(modelSettings.Value.DeploymentName);
         var imageStream = DecodeBase64(request.Player.Photo);
 
         var imageEditOptions = new ImageEditOptions

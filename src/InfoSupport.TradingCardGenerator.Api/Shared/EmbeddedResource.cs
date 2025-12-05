@@ -6,7 +6,7 @@ public class EmbeddedResource
     {
         var assembly = typeof(EmbeddedResource).Assembly;
         var resourceStream = assembly.GetManifestResourceStream(
-            $"InfoSupport.TradingCardGenerator.{resourceName}");
+            $"InfoSupport.TradingCardGenerator.Api.{resourceName}");
 
         if (resourceStream == null)
         {

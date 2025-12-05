@@ -15,17 +15,21 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy.WithOrigins("http://localhost:3000", "https://localhost:3001")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
 
-var modelConnectionString = ConnectionString.Parse(
-    builder.Configuration.GetConnectionString("imageGenerationModel")!);
+builder.Services.Configure<ImageModelSettings>(builder.Configuration.GetSection("ImageGenerationModel"));
+var imageModelSettings = builder.Configuration.GetSection("ImageGenerationModel").Get<ImageModelSettings>();
 
 var azureClient = new AzureOpenAIClient(
-    new Uri(modelConnectionString["Endpoint"]!),
-    new ChainedTokenCredential(new AzureCliCredential(), new ManagedIdentityCredential()));
+    new Uri(imageModelSettings!.Endpoint),
+    new ChainedTokenCredential(
+        new AzureCliCredential(),
+        new ManagedIdentityCredential()
+    ),
+    new AzureOpenAIClientOptions(AzureOpenAIClientOptions.ServiceVersion.V2025_04_01_Preview));
 
 builder.Services.AddSingleton(azureClient);
 builder.Services.AddSingleton<ImageMetadataInjector>();

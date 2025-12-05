@@ -17,9 +17,9 @@ public class TradingCardPhotoGeneratorIntegrationTests
     {
         var configuration = GetConfiguration();
 
-        var languageModelSettings = new LanguageModelSettings
+        var languageModelSettings = new ImageModelSettings
         {
-            ImageModel = configuration["LanguageModel:ImageModel"]!,
+            DeploymentName = configuration["LanguageModel:ImageModel"]!,
             Endpoint = configuration["LanguageModel:Endpoint"]!,
             ApiKey = configuration["LanguageModel:ApiKey"]!,
         };
