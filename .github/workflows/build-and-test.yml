@@ -30,7 +30,7 @@ jobs:
         run: dotnet restore --locked-mode 
 
       - name: Build backend API
-        run: dotnet build InfoSupport.TradingCardGenerator.sln --no-restore --configuration Release
+        run: dotnet build InfoSupport.TradingCardGenerator.slnx --no-restore --configuration Release
 
       - name: Restore frontend dependencies
         run: npm ci --prefer-offline --no-audit --no-fund
