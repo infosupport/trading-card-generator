@@ -1,6 +1,6 @@
 import { RefObject, forwardRef } from 'react';
 import Image from 'next/image';
-import { TEAMS, SPECIAL_PROPERTIES } from './constants';
+import { TEAMS, SPECIAL_PROPERTIES } from '@/lib/constants';
 import LoadingSpinner from './LoadingSpinner';
 
 interface TradingCardProps {
@@ -33,29 +33,29 @@ const TradingCard = forwardRef<HTMLDivElement, TradingCardProps>(({
   return (
     <div
       ref={ref}
-      className="w-[375px] h-[575px] shadow-[0_4px_24px_rgba(0,0,0,0.15)] transition-all duration-700 ease-in-out flex flex-col justify-between p-2 rounded-xl"
+      className="w-[320px] h-[509px] sm:w-[375px] sm:h-[597px] shadow-[0_4px_24px_rgba(0,0,0,0.15)] transition-all duration-700 ease-in-out flex flex-col justify-between p-1.5 sm:p-2 rounded-xl mx-auto"
       style={{
         backgroundColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f'
       }}
     >
       {/* Card Frame */}
       <div 
-        className="relative bg-[#f1e4ce] rounded-2xl h-[400px]"
+        className="relative bg-[#f1e4ce] rounded-2xl h-[358px] sm:h-[420px]"
       >
         {/* Special Property Badge - Top Right Corner */}
         {specialProperty !== 'none' && (
-          <div className="absolute top-4 right-4 z-10">
-            <div className="w-12 h-12 rounded-full bg-white border-2 border-yellow-400 shadow-lg flex items-center justify-center">
+          <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border-2 border-yellow-400 shadow-lg flex items-center justify-center">
               {SPECIAL_PROPERTIES[specialProperty].icon.endsWith('.png') ? (
                 <Image
                   src={`/${SPECIAL_PROPERTIES[specialProperty].icon}`}
                   alt={SPECIAL_PROPERTIES[specialProperty].name}
-                  width={32}
-                  height={32}
-                  className="object-contain"
+                  width={28}
+                  height={28}
+                  className="object-contain sm:w-8 sm:h-8"
                 />
               ) : (
-                <div className="text-lg">
+                <div className="text-base sm:text-lg">
                   {SPECIAL_PROPERTIES[specialProperty].icon}
                 </div>
               )}
@@ -65,7 +65,7 @@ const TradingCard = forwardRef<HTMLDivElement, TradingCardProps>(({
         {/* Video Canvas Area */}
         <div className="flex justify-center">
           <div
-            className="relative overflow-hidden w-[340px] h-[340px] rounded-2xl mt-2"
+            className="relative overflow-hidden w-[290px] h-[307px] sm:w-[340px] sm:h-[360px] rounded-2xl mt-1.5 sm:mt-2"
           >
             {generatedCardImage ? (
               /* Show generated card image */
@@ -73,8 +73,8 @@ const TradingCard = forwardRef<HTMLDivElement, TradingCardProps>(({
                 src={generatedCardImage}
                 alt="Generated Trading Card"
                 width={340}
-                height={340}
-                className="object-cover w-[340px] h-[340px] rounded-2xl"
+                height={360}
+                className="object-cover w-[290px] h-[307px] sm:w-[340px] sm:h-[360px] rounded-2xl"
               />
             ) : isGenerating && capturedPhoto ? (
               /* Show loading state with captured photo in background */
@@ -92,17 +92,17 @@ const TradingCard = forwardRef<HTMLDivElement, TradingCardProps>(({
                   autoPlay
                   playsInline
                   muted
-                  className={`scale-x-[-1] w-[340px] h-[340px] object-cover rounded-2xl ${isStreaming ? 'block' : 'hidden'}`}
+                  className={`scale-x-[-1] w-[290px] h-[307px] sm:w-[340px] sm:h-[360px] object-cover rounded-2xl ${isStreaming ? 'block' : 'hidden'}`}
                 />
                 
                 {/* Placeholder when no camera */}
                 {!isStreaming && (
                   <div 
-                    className="bg-gray-300 flex items-center justify-center text-gray-600 absolute inset-0 w-[340px] h-[340px] rounded-2xl"
+                    className="bg-gray-300 flex items-center justify-center text-gray-600 absolute inset-0 w-[290px] h-[307px] sm:w-[340px] sm:h-[360px] rounded-2xl"
                   >
                     <div className="text-center">
-                      <div className="text-6xl mb-2">📷</div>
-                      <div className="text-base">Camera Preview</div>
+                      <div className="text-4xl sm:text-6xl mb-2">📷</div>
+                      <div className="text-sm sm:text-base">Camera Preview</div>
                     </div>
                   </div>
                 )}
@@ -113,7 +113,7 @@ const TradingCard = forwardRef<HTMLDivElement, TradingCardProps>(({
 
         {/* Player Name */}
         <div 
-          className="text-center mt-2 text-[32px]"
+          className="text-center mt-1.5 sm:mt-2 text-[27px] sm:text-[32px]"
           style={{
             color: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
             fontFamily: "var(--font-bebas-neue), Arial, sans-serif"
@@ -124,18 +124,18 @@ const TradingCard = forwardRef<HTMLDivElement, TradingCardProps>(({
       </div>
 
       {/* Team Logo */}
-      <div className="flex justify-center items-center mt-2 grow">
+      <div className="flex justify-center items-center mt-1.5 sm:mt-2 grow">
           {teamLogo ? (
             <Image
               src={`/${teamLogo}`}
               alt="Team Logo"
-              width={130}
-              height={130}
-              className="object-contain rounded-full border-2 bg-[#f1e4ce] border-[#eee]"
+              width={110}
+              height={110}
+              className="object-contain rounded-full border-2 bg-[#f1e4ce] border-[#eee] sm:w-[130px] sm:h-[130px]"
             />
           ) : (
             <div
-              className="rounded-full border-2 flex items-center justify-center w-[130px] h-[130px] bg-[#f1e4ce] border-[#eee]"
+              className="rounded-full border-2 flex items-center justify-center w-[110px] h-[110px] sm:w-[130px] sm:h-[130px] bg-[#f1e4ce] border-[#eee]"
             >
               <div className="text-gray-400 text-xs">Loading...</div>
             </div>

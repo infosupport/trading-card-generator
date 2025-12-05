@@ -1,6 +1,6 @@
 # Trading Card Generator
 
-A .NET 9 web application that generates custom sports trading cards using OpenAI's
+A .NET 10 web application that generates custom sports trading cards using OpenAI's
 gpt-image-1 image generation model. Users can create personalized trading cards by
 uploading their photo and customizing team information and colors.
 
@@ -9,50 +9,26 @@ uploading their photo and customizing team information and colors.
 ### Prerequisites
 
 - .NET 10.0 SDK
-- Azure OpenAI API access with gpt-image-1 model deployment
+- Azure OpenAI API access with access to gpt-image-1
 - Visual Studio 2022 or Visual Studio Code
+- [Aspire CLI](https://aspire.dev/get-started/install-cli/)
 
-### Installation
+### Running the application
 
-1. **Clone the repository**
+Make sure you have the following user-secrets configured for the `src/InfoSupport.TradingCardGenerator.AppHost` project:
 
-   ```bash
-   git clone https://github.com/infosupport/trading-card-generator.git
-   cd trading-card-generator
-   ```
+| Secret Name            | Description                                                 |
+|------------------------|-------------------------------------------------------------|
+| Azure:Location         | The location where to deploy resources (e.g. swedencentral) |
+| Azure:SubscriptionId   | The SubscriptionId of the subscription to deploy to         |
+| Azure:ResourceGroup    | The name of the resource group to deploy the resources to   |
+| Azure:CredentialSource | The source of the credentials (recommended: AzureCli)       |
 
-2. **Configure OpenAI Settings**
-   
-   Set up your Azure OpenAI configuration using user secrets:
+To run the full application execute the following command from the root of the repository:
 
-   ```bash
-   cd src/InfoSupport.TradingCardGenerator
-   dotnet user-secrets set "LanguageModel:ApiKey" "your-openai-api-key"
-   dotnet user-secrets set "LanguageModel:Endpoint" "your-azure-openai-endpoint"
-   dotnet user-secrets set "LanguageModel:ImageModel" "gpt-image-1"
-   ```
-
-3. **Restore dependencies**
-
-   ```bash
-   dotnet restore
-   ```
-
-4. **Run the application**
-
-   ```bash
-   dotnet run --project src/InfoSupport.TradingCardGenerator
-   ```
-
-The application will start on `https://localhost:5001` by default.
-
-## 🛠️ Technology Stack
-
-- **Framework**: ASP.NET Core 9.0
-- **AI Integration**: Microsoft Semantic Kernel
-- **Image Generation**: Azure OpenAI gpt-image-1
-- **Language**: C# with nullable reference types enabled
-- **Testing**: xUnit (test project included)
+```bash
+aspire run
+```
 
 ## 🏗️ Project Structure
 
