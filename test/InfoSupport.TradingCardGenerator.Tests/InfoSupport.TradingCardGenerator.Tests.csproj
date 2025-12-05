@@ -8,6 +8,11 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <!-- Fix for NuGet NU1403 error -->
+  <PropertyGroup>
+    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4">
       <PrivateAssets>all</PrivateAssets>
@@ -26,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\InfoSupport.TradingCardGenerator\InfoSupport.TradingCardGenerator.csproj" />
+    <ProjectReference Include="..\..\src\InfoSupport.TradingCardGenerator.Api\InfoSupport.TradingCardGenerator.Api.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -8,6 +8,11 @@
     <UserSecretsId>0b47cb1d-b81e-4e24-8e4d-539fea4f0170</UserSecretsId>
   </PropertyGroup>
 
+  <!-- Fix for NuGet NU1403 error -->
+  <PropertyGroup>
+    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.Azure.AIFoundry" Version="13.0.2-preview.1.25603.5" />
     <PackageReference Include="Aspire.Hosting.NodeJs" Version="9.5.2" />

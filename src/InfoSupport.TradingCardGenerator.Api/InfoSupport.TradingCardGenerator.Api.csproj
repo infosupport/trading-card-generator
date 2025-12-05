@@ -8,6 +8,11 @@
     <UserSecretsId>2b737a48-bf4d-42a3-91af-9ee1d65a4a12</UserSecretsId>
   </PropertyGroup>
 
+  <!-- Fix for NuGet NU1403 error -->
+  <PropertyGroup>
+    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Azure.AI.OpenAI" Version="2.7.0-beta.2" />
     <PackageReference Include="Azure.Identity" Version="1.17.0" />
