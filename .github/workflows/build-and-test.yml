@@ -17,6 +17,7 @@ jobs:
         with:
           dotnet-version: "10.0.x"
           cache: true
+          cache-dependency-path: '**/package-lock.json'
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -26,7 +27,7 @@ jobs:
           cache-dependency-path: src/InfoSupport.TradingCardGenerator.Web/package-lock.json
 
       - name: Restore backend dependencies
-        run: dotnet restore 
+        run: dotnet restore --locked-mode 
 
       - name: Build backend API
         run: dotnet build InfoSupport.TradingCardGenerator.sln --no-restore --configuration Release
