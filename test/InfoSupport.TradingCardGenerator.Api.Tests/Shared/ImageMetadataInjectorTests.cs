@@ -1,18 +1,12 @@
 using InfoSupport.TradingCardGenerator.Api.Shared;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
-using Xunit;
 
-namespace InfoSupport.TradingCardGenerator.Tests;
+namespace InfoSupport.TradingCardGenerator.Api.Tests.Shared;
 
 public class ImageMetadataInjectorTests
 {
-    private readonly ImageMetadataInjector _injector;
-
-    public ImageMetadataInjectorTests()
-    {
-        _injector = new ImageMetadataInjector();
-    }
+    private readonly ImageMetadataInjector _injector = new();
 
     [Fact]
     public void InjectMetadata_WithValidImage_ReturnsImageWithMetadata()
@@ -102,9 +96,9 @@ public class ImageMetadataInjectorTests
             throw new InvalidOperationException("Test image not found");
         }
 
-        var photoBytes = new byte[photoStream.Length];
-        photoStream.Read(photoBytes, 0, photoBytes.Length);
+        var ms = new MemoryStream();
+        photoStream.CopyTo(ms);
 
-        return photoBytes;
+        return ms.ToArray();
     }
 }
