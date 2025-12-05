@@ -1,4 +1,4 @@
-namespace InfoSupport.TradingCardGenerator.Configuration;
+namespace InfoSupport.TradingCardGenerator.Api.Shared;
 
 public class ImageModelSettings
 {

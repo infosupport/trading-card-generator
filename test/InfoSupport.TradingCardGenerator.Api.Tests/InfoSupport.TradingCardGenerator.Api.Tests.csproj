@@ -40,7 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="TestData\foto.png" />
     <EmbeddedResource Include="TestData\photo.png" />
   </ItemGroup>
 

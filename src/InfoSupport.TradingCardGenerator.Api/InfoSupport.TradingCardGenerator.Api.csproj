@@ -25,11 +25,14 @@
 
   <ItemGroup>
     <None Remove="Prompts\generate-photo.md" />
-    <EmbeddedResource Include="Prompts\generate-photo.md" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\InfoSupport.TradingCardGenerator.ServiceDefaults\InfoSupport.TradingCardGenerator.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Features\SportsCards\Prompts\GeneratePhoto.md" />
   </ItemGroup>
 
 </Project>

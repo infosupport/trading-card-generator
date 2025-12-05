@@ -1,12 +1,11 @@
-namespace InfoSupport.TradingCardGenerator.Shared;
+namespace InfoSupport.TradingCardGenerator.Api.Shared;
 
 public class EmbeddedResource
 {
     public static string Read(string resourceName)
     {
         var assembly = typeof(EmbeddedResource).Assembly;
-        var resourceStream = assembly.GetManifestResourceStream(
-            $"InfoSupport.TradingCardGenerator.Api.{resourceName}");
+        var resourceStream = assembly.GetManifestResourceStream(resourceName);
 
         if (resourceStream == null)
         {

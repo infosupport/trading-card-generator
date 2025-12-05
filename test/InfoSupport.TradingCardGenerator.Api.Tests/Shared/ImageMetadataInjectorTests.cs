@@ -1,4 +1,4 @@
-using InfoSupport.TradingCardGenerator.Agent;
+using InfoSupport.TradingCardGenerator.Api.Shared;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 using Xunit;
@@ -95,7 +95,7 @@ public class ImageMetadataInjectorTests
     {
         var assembly = typeof(ImageMetadataInjectorTests).Assembly;
         var photoStream = assembly.GetManifestResourceStream(
-            "InfoSupport.TradingCardGenerator.Tests.TestData.photo.png");
+            "InfoSupport.TradingCardGenerator.Api.Tests.TestData.photo.png");
 
         if (photoStream == null)
         {

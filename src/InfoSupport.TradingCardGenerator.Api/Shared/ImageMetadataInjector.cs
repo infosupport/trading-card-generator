@@ -2,7 +2,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 
-namespace InfoSupport.TradingCardGenerator.Agent;
+namespace InfoSupport.TradingCardGenerator.Api.Shared;
 
 /// <summary>
 /// Service for injecting EXIF metadata into images.

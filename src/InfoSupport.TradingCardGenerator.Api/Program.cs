@@ -1,30 +1,30 @@
 using System.ClientModel;
 using Azure.AI.OpenAI;
 using Azure.Identity;
-using InfoSupport.TradingCardGenerator.Agent;
-using InfoSupport.TradingCardGenerator.Configuration;
-using InfoSupport.TradingCardGenerator.Endpoints;
-using InfoSupport.TradingCardGenerator.Shared;
+using InfoSupport.TradingCardGenerator.Api.Features.SportsCards;
+using InfoSupport.TradingCardGenerator.Api.Features.SportsCards.Endpoints;
+using InfoSupport.TradingCardGenerator.Api.Shared;
 using Microsoft.SemanticKernel;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-// Add CORS services
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "https://localhost:3001")
+        policy.WithOrigins("http://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
 });
 
+// Bind the configuration for the image generation model
 builder.Services.Configure<ImageModelSettings>(builder.Configuration.GetSection("ImageGenerationModel"));
 var imageModelSettings = builder.Configuration.GetSection("ImageGenerationModel").Get<ImageModelSettings>();
 
+// Configure the azure client with a managed identity
 var azureClient = new AzureOpenAIClient(
     new Uri(imageModelSettings!.Endpoint),
     new ChainedTokenCredential(
