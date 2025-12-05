@@ -102,9 +102,9 @@ public class ImageMetadataInjectorTests
             throw new InvalidOperationException("Test image not found");
         }
 
-        var photoBytes = new byte[photoStream.Length];
-        photoStream.Read(photoBytes, 0, photoBytes.Length);
+        var ms = new MemoryStream();
+        photoStream.CopyTo(ms);
 
-        return photoBytes;
+        return ms.ToArray();
     }
 }
