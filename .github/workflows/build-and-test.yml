@@ -24,7 +24,6 @@ jobs:
         with:
           node-version: "22"
           cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
 
       - name: Restore backend dependencies
         run: dotnet restore --locked-mode 
