@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfoSupport.TradingCardGene
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfoSupport.TradingCardGenerator.Api", "src\InfoSupport.TradingCardGenerator.Api\InfoSupport.TradingCardGenerator.Api.csproj", "{251985FA-4B7A-49F1-B44D-E9695FD3DD99}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfoSupport.TradingCardGenerator.ServiceDefaults", "src\InfoSupport.TradingCardGenerator.ServiceDefaults\InfoSupport.TradingCardGenerator.ServiceDefaults.csproj", "{1CF25B75-8C86-43A6-83B8-6D1E16E1EF32}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,18 @@ Global
 		{251985FA-4B7A-49F1-B44D-E9695FD3DD99}.Release|x64.Build.0 = Release|Any CPU
 		{251985FA-4B7A-49F1-B44D-E9695FD3DD99}.Release|x86.ActiveCfg = Release|Any CPU
 		{251985FA-4B7A-49F1-B44D-E9695FD3DD99}.Release|x86.Build.0 = Release|Any CPU
+		{1CF25B75-8C86-43A6-83B8-6D1E16E1EF32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CF25B75-8C86-43A6-83B8-6D1E16E1EF32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CF25B75-8C86-43A6-83B8-6D1E16E1EF32}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1CF25B75-8C86-43A6-83B8-6D1E16E1EF32}.Debug|x64.Build.0 = Debug|Any CPU
+		{1CF25B75-8C86-43A6-83B8-6D1E16E1EF32}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1CF25B75-8C86-43A6-83B8-6D1E16E1EF32}.Debug|x86.Build.0 = Debug|Any CPU
+		{1CF25B75-8C86-43A6-83B8-6D1E16E1EF32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CF25B75-8C86-43A6-83B8-6D1E16E1EF32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CF25B75-8C86-43A6-83B8-6D1E16E1EF32}.Release|x64.ActiveCfg = Release|Any CPU
+		{1CF25B75-8C86-43A6-83B8-6D1E16E1EF32}.Release|x64.Build.0 = Release|Any CPU
+		{1CF25B75-8C86-43A6-83B8-6D1E16E1EF32}.Release|x86.ActiveCfg = Release|Any CPU
+		{1CF25B75-8C86-43A6-83B8-6D1E16E1EF32}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,5 +81,6 @@ Global
 		{F55691E7-F074-4780-BB17-153C88B17070} = {0C88DD14-F956-CE84-757C-A364CCF449FC}
 		{65482AC8-1790-4C04-9AB2-D42F9FFBAA56} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{251985FA-4B7A-49F1-B44D-E9695FD3DD99} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{1CF25B75-8C86-43A6-83B8-6D1E16E1EF32} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal

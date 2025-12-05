@@ -28,4 +28,8 @@
     <EmbeddedResource Include="Prompts\generate-photo.md" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\InfoSupport.TradingCardGenerator.ServiceDefaults\InfoSupport.TradingCardGenerator.ServiceDefaults.csproj" />
+  </ItemGroup>
+
 </Project>

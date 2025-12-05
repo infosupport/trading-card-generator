@@ -9,6 +9,8 @@ using Microsoft.SemanticKernel;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 // Add CORS services
 builder.Services.AddCors(options =>
 {
