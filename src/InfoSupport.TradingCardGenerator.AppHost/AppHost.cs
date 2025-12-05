@@ -13,7 +13,7 @@ var imageModel = foundry
     })
     .WithProperties(resource =>
     {
-        resource.SkuCapacity = 9;
+        resource.SkuCapacity = 6;
     });
 
 var backend = builder
