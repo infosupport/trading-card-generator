@@ -1,8 +1,8 @@
 using System.ClientModel;
 using Azure.AI.OpenAI;
 using Azure.Identity;
-using InfoSupport.TradingCardGenerator.Api.Features.SportsCards;
-using InfoSupport.TradingCardGenerator.Api.Features.SportsCards.Endpoints;
+using InfoSupport.TradingCardGenerator.Api.Features.Sports;
+using InfoSupport.TradingCardGenerator.Api.Features.Sports.Endpoints;
 using InfoSupport.TradingCardGenerator.Api.Shared;
 using Microsoft.SemanticKernel;
 
@@ -35,7 +35,7 @@ var azureClient = new AzureOpenAIClient(
 
 builder.Services.AddSingleton(azureClient);
 builder.Services.AddSingleton<ImageMetadataInjector>();
-builder.Services.AddSingleton<TradingCardPhotoGenerator>();
+builder.Services.AddSingleton<SportsCardPhotoGenerator>();
 
 var app = builder.Build();
 

@@ -1,4 +1,4 @@
-namespace InfoSupport.TradingCardGenerator.Api.Features.SportsCards.Models;
+namespace InfoSupport.TradingCardGenerator.Api.Features.Sports.Models;
 
 /// <summary>
 /// Request model for generating a new trading card

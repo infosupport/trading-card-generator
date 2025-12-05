@@ -1,0 +1,51 @@
+using Azure.AI.OpenAI;
+using HandlebarsDotNet;
+using InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Models;
+using InfoSupport.TradingCardGenerator.Api.Shared;
+using Microsoft.Extensions.Options;
+
+namespace InfoSupport.TradingCardGenerator.Api.Features.Jurassic;
+
+/// <summary>
+/// Generates jurassic themed trading card images.
+/// </summary>
+/// <param name="azureClient">The client to talk to the Azure hosted image generation model</param>
+/// <param name="modelSettings">The settings needed to find the deployment of the image generation model</param>
+/// <param name="metadataInjector">The metadata injector used to watermark the images</param>
+public class JurassicCardPhotoGenerator(
+    AzureOpenAIClient azureClient,
+    IOptions<ImageModelSettings> modelSettings,
+    ImageMetadataInjector metadataInjector) : CardPhotoGeneratorBase(azureClient, modelSettings, metadataInjector)
+{
+    private const string GeneratePhotoPrompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.GeneratePhoto.md";
+    private const string Scene01Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.Scene01.md";
+    
+    /// <summary>
+    /// Transforms a portrait photo into a trading card image.
+    /// </summary>
+    /// <param name="request">Request data to use for generating the image.</param>
+    /// <returns>Returns the generated image.</returns>
+    public async Task<GenerateCardResponse> TransformPhoto(GenerateCardRequest request)
+    {
+        var imageStream = DecodeBase64(request.Photo);
+        var renderedPromptTemplate = RenderPromptTemplate(request);
+        var imageGenerationResult = await InternalTransformPhoto(imageStream, renderedPromptTemplate);
+        
+        return new GenerateCardResponse
+        {
+            Image = Convert.ToBase64String(imageGenerationResult),
+        };
+    }
+
+    private string RenderPromptTemplate(GenerateCardRequest request)
+    {
+        var promptTemplate = Handlebars.Compile(EmbeddedResource.Read(GeneratePhotoPrompt));
+
+        // TODO: Determine the scene from the request data
+        
+        return promptTemplate.Invoke(new
+        {
+            SceneDescription = EmbeddedResource.Read(Scene01Prompt)
+        });
+    }
+}

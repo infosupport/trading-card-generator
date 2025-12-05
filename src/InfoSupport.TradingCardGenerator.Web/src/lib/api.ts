@@ -3,9 +3,9 @@ import { GenerateCardRequest, GenerateCardResponse } from './types';
 const API_BASE_URL = process.env.BACKEND_HTTP || 'http://localhost:5000';
 
 export class TradingCardApi {
-  static async generateCard(request: GenerateCardRequest): Promise<GenerateCardResponse> {
+  static async generateSportsCard(request: GenerateCardRequest): Promise<GenerateCardResponse> {
     try {
-      const response = await fetch(`${API_BASE_URL}/generate`, {
+      const response = await fetch(`${API_BASE_URL}/cards/sports`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
