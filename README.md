@@ -33,19 +33,26 @@ aspire run
 
 ```text
 ├── src/
-│   ├── InfoSupport.TradingCardGenerator/        # Backend API
-│   │   ├── Agent/                               # AI agents for image generation
-│   │   ├── Configuration/                       # Application configuration
-│   │   ├── Endpoints/                           # API endpoint definitions
-│   │   ├── Models/                              # Data models and DTOs
-│   │   ├── Prompts/                             # AI prompt templates
-│   │   ├── Shared/                              # Shared utilities
-│   │   └── Program.cs                           # Application entry point
-│   └── InfoSupport.TradingCardGenerator.Web/    # Frontend Next.js application
-│       ├── public/                              # Static assets (team logos)
-│       └── src/app/                             # Next.js app directory
+│   ├── InfoSupport.TradingCardGenerator.Api/           # Backend API
+│   │   ├── Features/                                   # Feature modules
+│   │   │   └── <FeatureName>/                          # Each feature follows this structure
+│   │   │       ├── Endpoints/                          # API endpoint definitions
+│   │   │       ├── Models/                             # Data models and DTOs
+│   │   │       └── Prompts/                            # AI prompt templates
+│   │   └── Shared/                                     # Shared utilities
+│   ├── InfoSupport.TradingCardGenerator.AppHost/       # Aspire AppHost for orchestration
+│   ├── InfoSupport.TradingCardGenerator.ServiceDefaults/ # Aspire service defaults
+│   └── InfoSupport.TradingCardGenerator.Web/           # Frontend Next.js application
+│       ├── public/                                     # Static assets (team logos)
+│       └── src/
+│           ├── app/                                    # Next.js app directory
+│           ├── components/                             # React components
+│           ├── hooks/                                  # Custom React hooks
+│           └── lib/                                    # Utilities and constants
 ├── test/
-│   └── InfoSupport.TradingCardGenerator.Tests/  # Unit tests
+│   ├── InfoSupport.TradingCardGenerator.Api.Tests/     # API unit tests
+│   └── InfoSupport.TradingCardGenerator.ServiceDefaults.Tests/
+├── docs/                                               # Architecture documentation
 └── README.md
 ```
 
@@ -61,7 +68,7 @@ dotnet test
 The frontend tests can be run by running the following commands:
 
 ```bash
-cd src/InfoSupport.TracingCardGenerator.Web
+cd src/InfoSupport.TradingCardGenerator.Web
 npm test
 ```
 
@@ -77,9 +84,11 @@ The backend API uses the following configuration keys:
 
 ### Adding New Features
 
-1. **Models**: Add new data models in `src/InfoSupport.TradingCardGenerator/Models/`
-2. **Endpoints**: Extend API functionality in `src/InfoSupport.TradingCardGenerator/Endpoints/`
-3. **Tests**: Add corresponding tests in `test/InfoSupport.TradingCardGenerator.Tests/`
+1. **Feature Module**: Create a new folder under `src/InfoSupport.TradingCardGenerator.Api/Features/`
+2. **Models**: Add data models in your feature's `Models/` folder
+3. **Endpoints**: Define API endpoints in your feature's `Endpoints/` folder
+4. **Prompts**: Add AI prompt templates in your feature's `Prompts/` folder
+5. **Tests**: Add corresponding tests in `test/InfoSupport.TradingCardGenerator.Api.Tests/Features/`
 
 ## 🤝 Contributing
 
