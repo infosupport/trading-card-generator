@@ -178,7 +178,7 @@ export default function TradingCardGenerator() {
     };
 
     // Call the C# backend API
-    const response = await TradingCardApi.generateCard(request);
+    const response = await TradingCardApi.generateSportsCard(request);
     
     // Convert base64 response to data URL and display
     const cardImageDataUrl = base64ToDataUrl(response.image);
