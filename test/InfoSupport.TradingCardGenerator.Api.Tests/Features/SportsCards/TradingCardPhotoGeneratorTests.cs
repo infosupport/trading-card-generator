@@ -2,9 +2,9 @@ using System;
 using System.ClientModel;
 using System.Threading.Tasks;
 using Azure.AI.OpenAI;
-using InfoSupport.TradingCardGenerator.Agent;
-using InfoSupport.TradingCardGenerator.Configuration;
-using InfoSupport.TradingCardGenerator.Models;
+using InfoSupport.TradingCardGenerator.Api.Features.SportsCards;
+using InfoSupport.TradingCardGenerator.Api.Features.SportsCards.Models;
+using InfoSupport.TradingCardGenerator.Api.Shared;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Xunit;
@@ -17,16 +17,16 @@ public class TradingCardPhotoGeneratorIntegrationTests
     {
         var configuration = GetConfiguration();
 
-        var languageModelSettings = new LanguageModelSettings
+        var languageModelSettings = new ImageModelSettings
         {
-            ImageModel = configuration["LanguageModel:ImageModel"]!,
-            Endpoint = configuration["LanguageModel:Endpoint"]!,
-            ApiKey = configuration["LanguageModel:ApiKey"]!,
+            DeploymentName = configuration["ImageGenerationModel:DeploymentName"]!,
+            Endpoint = configuration["ImageGenerationModel:Endpoint"]!,
+            ApiKey = configuration["ImageGenerationModel:ApiKey"]!,
         };
 
         var azureClient = new AzureOpenAIClient(
-            new Uri(configuration["LanguageModel:Endpoint"]!),
-            new ApiKeyCredential(configuration["LanguageModel:ApiKey"]!),
+            new Uri(configuration["ImageGenerationModel:Endpoint"]!),
+            new ApiKeyCredential(configuration["ImageGenerationModel:ApiKey"]!),
             new AzureOpenAIClientOptions(AzureOpenAIClientOptions.ServiceVersion.V2025_04_01_Preview));
 
         var settings = Options.Create(languageModelSettings);
@@ -76,7 +76,7 @@ public class TradingCardPhotoGeneratorIntegrationTests
         var assembly = typeof(TradingCardPhotoGeneratorIntegrationTests).Assembly;
 
         var photoStream = assembly.GetManifestResourceStream(
-            "InfoSupport.TradingCardGenerator.Tests.TestData.photo.png");
+            "InfoSupport.TradingCardGenerator.Api.Tests.TestData.photo.png");
 
         var photoBytes = new byte[photoStream!.Length];
         photoStream.Read(photoBytes, 0, photoBytes.Length);

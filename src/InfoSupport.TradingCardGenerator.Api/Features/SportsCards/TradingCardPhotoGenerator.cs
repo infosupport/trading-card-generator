@@ -1,18 +1,19 @@
 using Azure.AI.OpenAI;
 using HandlebarsDotNet;
-using InfoSupport.TradingCardGenerator.Configuration;
-using InfoSupport.TradingCardGenerator.Models;
-using InfoSupport.TradingCardGenerator.Shared;
+using InfoSupport.TradingCardGenerator.Api.Features.SportsCards.Models;
+using InfoSupport.TradingCardGenerator.Api.Shared;
 using Microsoft.Extensions.Options;
 using OpenAI.Images;
 
-namespace InfoSupport.TradingCardGenerator.Agent;
+namespace InfoSupport.TradingCardGenerator.Api.Features.SportsCards;
 
 public class TradingCardPhotoGenerator(
     AzureOpenAIClient azureClient,
-    IOptions<LanguageModelSettings> settings,
+    IOptions<ImageModelSettings> modelSettings,
     ImageMetadataInjector metadataInjector)
 {
+    const string SportsCardPrompt = "InfoSupport.TradingCardGenerator.Api.Features.SportsCards.Prompts.GeneratePhoto.md";
+    
     /// <summary>
     /// Transforms a portrait photo into a trading card image.
     /// </summary>
@@ -20,7 +21,7 @@ public class TradingCardPhotoGenerator(
     /// <returns>Returns the generated image.</returns>
     public async Task<GenerateCardResponse> TransformPhoto(GenerateCardRequest request)
     {
-        var imageClient = azureClient.GetImageClient(settings.Value.ImageModel);
+        var imageClient = azureClient.GetImageClient(modelSettings.Value.DeploymentName);
         var imageStream = DecodeBase64(request.Player.Photo);
 
         var imageEditOptions = new ImageEditOptions
@@ -51,8 +52,7 @@ public class TradingCardPhotoGenerator(
 
     private static string RenderPromptTemplate(GenerateCardRequest request)
     {
-        var promptTemplate = Handlebars.Compile(
-            EmbeddedResource.Read("Prompts.generate-photo.md"));
+        var promptTemplate = Handlebars.Compile( EmbeddedResource.Read(SportsCardPrompt));
 
         var promptTemplateData = new
         {

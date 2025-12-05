@@ -1,4 +1,4 @@
-namespace InfoSupport.TradingCardGenerator.Models;
+namespace InfoSupport.TradingCardGenerator.Api.Features.SportsCards.Models;
 
 /// <summary>
 /// Response model for trading card generation

@@ -1,8 +1,7 @@
-using InfoSupport.TradingCardGenerator.Agent;
-using InfoSupport.TradingCardGenerator.Models;
+using InfoSupport.TradingCardGenerator.Api.Features.SportsCards.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace InfoSupport.TradingCardGenerator.Endpoints;
+namespace InfoSupport.TradingCardGenerator.Api.Features.SportsCards.Endpoints;
 
 /// <summary>
 /// Endpoints used to generate trading card photos.
