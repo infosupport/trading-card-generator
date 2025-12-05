@@ -1,6 +1,6 @@
 # Trading Card Generator
 
-A .NET 9 web application that generates custom sports trading cards using OpenAI's
+A .NET 10 web application that generates custom sports trading cards using OpenAI's
 gpt-image-1 image generation model. Users can create personalized trading cards by
 uploading their photo and customizing team information and colors.
 
