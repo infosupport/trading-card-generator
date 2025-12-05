@@ -1,12 +1,12 @@
 using System.ClientModel;
 using Azure.AI.OpenAI;
-using InfoSupport.TradingCardGenerator.Api.Features.SportsCards;
-using InfoSupport.TradingCardGenerator.Api.Features.SportsCards.Models;
+using InfoSupport.TradingCardGenerator.Api.Features.Sports;
+using InfoSupport.TradingCardGenerator.Api.Features.Sports.Models;
 using InfoSupport.TradingCardGenerator.Api.Shared;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
-namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.SportsCards
+namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.Sports
 {
     public class TradingCardPhotoGeneratorIntegrationTests
     {
@@ -30,7 +30,7 @@ namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.SportsCards
 
             var settings = Options.Create(languageModelSettings);
             var imageMetadataInjector = new ImageMetadataInjector();
-            var generator = new TradingCardPhotoGenerator(azureClient, settings, imageMetadataInjector);
+            var generator = new SportsCardPhotoGenerator(azureClient, settings, imageMetadataInjector);
 
             var request = new GenerateCardRequest
             {
@@ -57,7 +57,7 @@ namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.SportsCards
         private void SaveGeneratedImage(string resultImage)
         {
             var imageBytes = Convert.FromBase64String(resultImage);
-            File.WriteAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "generated.jpg"), imageBytes);
+            File.WriteAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "generated-sports.jpg"), imageBytes);
         }
 
         private IConfiguration GetConfiguration()

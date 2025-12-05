@@ -32,7 +32,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Features\SportsCards\Prompts\GeneratePhoto.md" />
+    <EmbeddedResource Include="Features\Sports\Prompts\GeneratePhoto.md" />
+    <None Remove="Features\Jurassic\Prompts\GeneratePhoto.md" />
+    <EmbeddedResource Include="Features\Jurassic\Prompts\GeneratePhoto.md" />
+    <None Remove="Features\Jurassic\Prompts\Scene01.md" />
+    <EmbeddedResource Include="Features\Jurassic\Prompts\Scene01.md" />
   </ItemGroup>
 
 </Project>

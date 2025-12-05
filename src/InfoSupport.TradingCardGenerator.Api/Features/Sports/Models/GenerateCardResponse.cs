@@ -1,4 +1,4 @@
-namespace InfoSupport.TradingCardGenerator.Api.Features.SportsCards.Models;
+namespace InfoSupport.TradingCardGenerator.Api.Features.Sports.Models;
 
 /// <summary>
 /// Response model for trading card generation
@@ -8,5 +8,5 @@ public class GenerateCardResponse
     /// <summary>
     /// Generated trading card image as base64 encoded string
     /// </summary>
-    public string Image { get; set; } = null!;
+    public required string Image { get; set; }
 }
