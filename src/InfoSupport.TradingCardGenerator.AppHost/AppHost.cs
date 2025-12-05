@@ -17,7 +17,7 @@ var imageModel = foundry
     });
 
 var backend = builder
-    .AddProject<Projects.InfoSupport_TradingCardGenerator>("backend")
+    .AddProject<Projects.InfoSupport_TradingCardGenerator_Api>("backend")
     .WithReference(imageModel);
 
 builder
