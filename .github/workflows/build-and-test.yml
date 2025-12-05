@@ -26,7 +26,7 @@ jobs:
           cache-dependency-path: src/InfoSupport.TradingCardGenerator.Web/package-lock.json
 
       - name: Restore backend dependencies
-        run: dotnet restore --locked-mode
+        run: dotnet restore 
 
       - name: Build backend API
         run: dotnet build InfoSupport.TradingCardGenerator.sln --no-restore --configuration Release
