@@ -1,0 +1,16 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/InfoSupport.TradingCardGenerator.Api/InfoSupport.TradingCardGenerator.Api.csproj" />
+    <Project Path="src/InfoSupport.TradingCardGenerator.AppHost/InfoSupport.TradingCardGenerator.AppHost.csproj" />
+    <Project Path="src/InfoSupport.TradingCardGenerator.ServiceDefaults/InfoSupport.TradingCardGenerator.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/InfoSupport.TradingCardGenerator.Api.Tests/InfoSupport.TradingCardGenerator.Api.Tests.csproj" />
+    <Project Path="test/InfoSupport.TradingCardGenerator.ServiceDefaults.Tests/InfoSupport.TradingCardGenerator.ServiceDefaults.Tests.csproj" />
+  </Folder>
+</Solution>
