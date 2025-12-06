@@ -19,6 +19,17 @@ public class JurassicCardPhotoGenerator(
 {
     private const string GeneratePhotoPrompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.GeneratePhoto.md";
     private const string Scene01Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.Scene01.md";
+    private const string Scene02Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.Scene02.md";
+    private const string Scene03Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.Scene03.md";
+    private const string Scene04Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.Scene04.md";
+    private const string Scene05Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.Scene05.md";
+    private const string Scene06Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.Scene06.md";
+    private const string Scene07Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.Scene07.md";
+    private const string Scene08Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.Scene08.md";
+    private const string Scene09Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.Scene09.md";
+    private const string Scene10Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.Scene10.md";
+    private const string Scene11Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.Scene11.md";
+    private const string Scene12Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.Scene12.md";
     
     /// <summary>
     /// Transforms a portrait photo into a trading card image.
@@ -45,7 +56,7 @@ public class JurassicCardPhotoGenerator(
         
         return promptTemplate.Invoke(new
         {
-            SceneDescription = EmbeddedResource.Read(Scene01Prompt)
+            SceneDescription = EmbeddedResource.Read(Scene12Prompt)
         });
     }
 }

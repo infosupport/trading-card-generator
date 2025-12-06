@@ -50,7 +50,7 @@ namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.Jurassic
         private void SaveGeneratedImage(string resultImage)
         {
             var imageBytes = Convert.FromBase64String(resultImage);
-            File.WriteAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "generated-jurassic.jpg"), imageBytes);
+            File.WriteAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "generated-jurassic.png"), imageBytes);
         }
 
         private IConfiguration GetConfiguration()

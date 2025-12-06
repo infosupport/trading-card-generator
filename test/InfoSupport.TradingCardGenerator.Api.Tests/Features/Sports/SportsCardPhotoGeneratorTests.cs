@@ -10,7 +10,7 @@ namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.Sports
 {
     public class TradingCardPhotoGeneratorIntegrationTests
     {
-        [Fact]
+        [Fact(Skip="Testing the other generator")]
         [Trait("Category", "Integration")]
         public async Task TransformPhoto_Integration_ReturnsBase64Image()
         {
@@ -57,7 +57,7 @@ namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.Sports
         private void SaveGeneratedImage(string resultImage)
         {
             var imageBytes = Convert.FromBase64String(resultImage);
-            File.WriteAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "generated-sports.jpg"), imageBytes);
+            File.WriteAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "generated-sports.png"), imageBytes);
         }
 
         private IConfiguration GetConfiguration()

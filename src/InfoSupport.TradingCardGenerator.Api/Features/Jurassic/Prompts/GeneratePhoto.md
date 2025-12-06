@@ -1,4 +1,5 @@
-Generate a Jurrasic Themed Comic Book Style Illustration from the provided scene description and style instructions.
+Generate a Dramatic Jurrasic Themed Comic Book Style Illustration from the provided scene description and style
+instructions.
 
 ## Scene description
 
