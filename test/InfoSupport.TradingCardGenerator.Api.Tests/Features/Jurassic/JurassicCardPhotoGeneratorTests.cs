@@ -35,7 +35,8 @@ namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.Jurassic
 
             var request = new GenerateCardRequest
             {
-                Photo = GetSamplePhoto()
+                Photo = GetSamplePhoto(),
+                Scene = "scene12"
             };
 
             var result = await generator.TransformPhoto(request);
