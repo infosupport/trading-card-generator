@@ -8,15 +8,20 @@ This section covers the static structure of the solution.
 
 ## Frontend
 
-The Frontend uses NextJS to provide a nice interface to configure the settings for the
-photo. It communicates with the Backend API to generate the photo for trading card.
-The frontend composes the final trading card by combining the generated photo with
-the static elements required for the photo.
+The Frontend uses NextJS to provide a nice interface to configure the settings
+for the photo. It communicates with the Backend API to generate the photo for
+trading card. The frontend composes the final trading card by combining the
+generated photo with the static elements required for the photo.
 
 ## Backend API
 
-The Backend API uses ASP.NET Core minimal APIs to implement an image generation endpoint.
-We wrapped the logic to generate an image into an agent component to make the logic easier
-to reason about.
+The Backend API uses ASP.NET Core minimal APIs to implement an image generation
+endpoint. We wrapped the logic to generate an image into an generator component
+to make the logic easier to reason about.
 
 ![Backend API Structure](images/backend-building-blocks.png)
+
+We use separate generators for the various themes we support. When you build a
+new generator make sure you inherit from `CardPhotoGeneratorBase`. It accepts
+a prompt and a photo and will include automatic water marking and error
+handling.

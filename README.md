@@ -72,14 +72,6 @@ cd src/InfoSupport.TradingCardGenerator.Web
 npm test
 ```
 
-## 🔧 Configuration
-
-The backend API uses the following configuration keys:
-
-- `LanguageModel:ApiKey` - Your Azure OpenAI API key
-- `LanguageModel:Endpoint` - Your Azure OpenAI service endpoint
-- `LanguageModel:ImageModel` - The image generation model to use (e.g., "gpt-image-1")
-
 ## 🚦 Development
 
 ### Adding New Features
