@@ -51,12 +51,28 @@ public class JurassicCardPhotoGenerator(
     private string RenderPromptTemplate(GenerateCardRequest request)
     {
         var promptTemplate = Handlebars.Compile(EmbeddedResource.Read(GeneratePhotoPrompt));
+        var scenePrompt = GetScenePrompt(request.Scene);
 
-        // TODO: Determine the scene from the request data
-        
         return promptTemplate.Invoke(new
         {
-            SceneDescription = EmbeddedResource.Read(Scene12Prompt)
+            SceneDescription = EmbeddedResource.Read(scenePrompt)
         });
     }
+
+    private static string GetScenePrompt(string scene) => scene?.ToLowerInvariant() switch
+    {
+        "scene01" => Scene01Prompt,
+        "scene02" => Scene02Prompt,
+        "scene03" => Scene03Prompt,
+        "scene04" => Scene04Prompt,
+        "scene05" => Scene05Prompt,
+        "scene06" => Scene06Prompt,
+        "scene07" => Scene07Prompt,
+        "scene08" => Scene08Prompt,
+        "scene09" => Scene09Prompt,
+        "scene10" => Scene10Prompt,
+        "scene11" => Scene11Prompt,
+        "scene12" => Scene12Prompt,
+        _ => Scene01Prompt
+    };
 }
