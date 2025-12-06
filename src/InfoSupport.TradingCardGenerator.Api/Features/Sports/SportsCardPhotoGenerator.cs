@@ -20,7 +20,7 @@ public class SportsCardPhotoGenerator(
     ImageMetadataInjector metadataInjector)
     : CardPhotoGeneratorBase(azureClient, modelSettings, metadataInjector)
 {
-    const string SportsCardPrompt = "InfoSupport.TradingCardGenerator.Api.Features.SportsCards.Prompts.GeneratePhoto.md";
+    const string SportsCardPrompt = "InfoSupport.TradingCardGenerator.Api.Features.Sports.Prompts.GeneratePhoto.md";
 
     /// <summary>
     /// Transforms a portrait photo into a trading card image.
