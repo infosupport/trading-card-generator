@@ -6,6 +6,10 @@ interface TradingCardHeaderProps {
   teamColor?: string;
   error?: string;
   isVipMode?: boolean;
+  headerTitle?: string;
+  headerSubtitle?: string;
+  firstNamePlaceholder?: string;
+  lastNamePlaceholder?: string;
 }
 
 export default function TradingCardHeader({ 
@@ -15,15 +19,19 @@ export default function TradingCardHeader({
   onLastNameChange, 
   teamColor, 
   error,
-  isVipMode = false
+  isVipMode = false,
+  headerTitle = '🏆 TECHORAMA SPORTS EDITION 🏆',
+  headerSubtitle = 'ULTIMATE TECH TRADING CARD CREATOR',
+  firstNamePlaceholder = '⚡ PLAYER FIRST NAME',
+  lastNamePlaceholder = '🚀 PLAYER LAST NAME'
 }: TradingCardHeaderProps) {
   return (
     <div className="text-base">
-      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-0.5 sm:mb-1 text-gray-900 dark:text-gray-100 tracking-wider px-2" style={{ fontFamily: "var(--font-bebas-neue), 'Arial Black', sans-serif" }}>
-        🏆 TECHORAMA SPORTS EDITION 🏆
+      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-0.5 sm:mb-1 text-gray-100 tracking-wider px-2" style={{ fontFamily: "var(--font-bebas-neue), 'Arial Black', sans-serif" }}>
+        {headerTitle}
       </h1>
-      <h2 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-gray-700 dark:text-gray-300 tracking-wide px-2" style={{ fontFamily: "var(--font-bebas-neue), Arial, sans-serif" }}>
-        ULTIMATE TECH TRADING CARD CREATOR
+      <h2 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-gray-200 tracking-wide px-2" style={{ fontFamily: "var(--font-bebas-neue), Arial, sans-serif" }}>
+        {headerSubtitle}
       </h2>
       
       {isVipMode && (
@@ -38,7 +46,7 @@ export default function TradingCardHeader({
           type="text"
           value={firstName}
           onChange={(e) => onFirstNameChange(e.target.value)}
-          placeholder="⚡ PLAYER FIRST NAME"
+          placeholder={firstNamePlaceholder}
           className="text-base sm:text-lg px-3 sm:px-4 py-2 sm:py-3 border-2 border-theme-primary rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 font-bold tracking-wide transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none w-full sm:w-auto"
           style={{ fontSize: '1.1em', fontFamily: "var(--font-bebas-neue), Arial, sans-serif" }}
         />
@@ -46,7 +54,7 @@ export default function TradingCardHeader({
           type="text"
           value={lastName}
           onChange={(e) => onLastNameChange(e.target.value)}
-          placeholder="🚀 PLAYER LAST NAME"
+          placeholder={lastNamePlaceholder}
           className="text-base sm:text-lg px-3 sm:px-4 py-2 sm:py-3 border-2 border-theme-primary rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 font-bold tracking-wide transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none w-full sm:w-auto"
           style={{ fontSize: '1.1em', fontFamily: "var(--font-bebas-neue), Arial, sans-serif" }}
         />

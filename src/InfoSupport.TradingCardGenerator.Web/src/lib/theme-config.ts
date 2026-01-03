@@ -16,6 +16,11 @@ export interface ThemeConfig {
   name: string;
   title: string;
   subtitle: string;
+  headerTitle: string;
+  headerSubtitle: string;
+  firstNamePlaceholder: string;
+  lastNamePlaceholder: string;
+  playerNameFallback: string;
   colors: ThemeColors;
   loadingMessages: string[];
 }
@@ -26,6 +31,11 @@ export const sportsTheme: ThemeConfig = {
   name: 'Sports Trading Cards',
   title: 'Trading Card Generator',
   subtitle: 'Transform your photo into a professional sports trading card',
+  headerTitle: '🏆 TECHORAMA SPORTS EDITION 🏆',
+  headerSubtitle: 'ULTIMATE TECH TRADING CARD CREATOR',
+  firstNamePlaceholder: '⚡ PLAYER FIRST NAME',
+  lastNamePlaceholder: '🚀 PLAYER LAST NAME',
+  playerNameFallback: 'PLAYER NAME',
   colors: {
     primary: '#174a6f',
     cardBackground: '#f1e4ce',
@@ -58,6 +68,11 @@ export const jurassicTheme: ThemeConfig = {
   name: 'Jurassic Cards',
   title: 'Jurassic Card Generator',
   subtitle: 'Journey back in time and become a prehistoric legend',
+  headerTitle: '🦖 JURASSIC EDITION 🦕',
+  headerSubtitle: 'PREHISTORIC ADVENTURE CARD CREATOR',
+  firstNamePlaceholder: '🦴 GUEST FIRST NAME',
+  lastNamePlaceholder: '🌿 GUEST LAST NAME',
+  playerNameFallback: 'GUEST NAME',
   colors: {
     primary: '#2d5016', // forest green
     cardBackground: '#3a2d1f', // dark brown/tan

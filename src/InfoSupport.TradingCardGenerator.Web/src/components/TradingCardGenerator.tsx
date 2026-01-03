@@ -55,7 +55,7 @@ export default function TradingCardGenerator({ theme = sportsTheme }: TradingCar
     facingMode: 'user'
   });
 
-  const playerName = (firstName.trim() + ' ' + lastName.trim()).trim().toUpperCase() || 'PLAYER NAME';
+  const playerName = (firstName.trim() + ' ' + lastName.trim()).trim().toUpperCase() || theme.playerNameFallback;
 
   // Check for VIP mode when names change
   useEffect(() => {
@@ -240,6 +240,10 @@ export default function TradingCardGenerator({ theme = sportsTheme }: TradingCar
         teamColor={teamColor}
         error={error || undefined}
         isVipMode={isVipMode}
+        headerTitle={theme.headerTitle}
+        headerSubtitle={theme.headerSubtitle}
+        firstNamePlaceholder={theme.firstNamePlaceholder}
+        lastNamePlaceholder={theme.lastNamePlaceholder}
       />
 
       <TradingCardDisplay 

@@ -44,7 +44,7 @@ export default function JurassicCardGenerator() {
     facingMode: 'user'
   });
 
-  const playerName = (firstName.trim() + ' ' + lastName.trim()).trim().toUpperCase() || 'PLAYER NAME';
+  const playerName = (firstName.trim() + ' ' + lastName.trim()).trim().toUpperCase() || jurassicTheme.playerNameFallback;
 
   // Rotate loading messages during generation
   useEffect(() => {
@@ -131,20 +131,29 @@ export default function JurassicCardGenerator() {
         teamColor={jurassicTheme.colors.primary}
         error={error || undefined}
         isVipMode={false}
+        headerTitle={jurassicTheme.headerTitle}
+        headerSubtitle={jurassicTheme.headerSubtitle}
+        firstNamePlaceholder={jurassicTheme.firstNamePlaceholder}
+        lastNamePlaceholder={jurassicTheme.lastNamePlaceholder}
       />
 
-      <SceneSelector
-        scenes={JURASSIC_SCENES}
-        selectedScene={selectedScene}
-        onSceneSelect={setSelectedScene}
-      />
+      {/* Jurassic Card Display with Scene Selector */}
+      <div className="flex flex-col lg:grid lg:grid-cols-[1fr_375px_1fr] gap-4 lg:gap-0 justify-center items-start lg:items-center my-6">
+        {/* Left side - Scene Selector */}
+        <div className='flex flex-col w-full lg:w-auto'>
+          <SceneSelector
+            scenes={JURASSIC_SCENES}
+            selectedScene={selectedScene}
+            onSceneSelect={setSelectedScene}
+          />
+        </div>
 
-      {/* Jurassic Card Display */}
-      <div className="flex justify-center w-full my-6">
-        <div
-          ref={cardDisplayRef}
-          className="w-[320px] h-[509px] sm:w-[375px] sm:h-[597px] shadow-[0_4px_24px_rgba(0,0,0,0.15)] transition-all duration-700 ease-in-out flex flex-col justify-between p-1.5 sm:p-2 rounded-xl mx-auto bg-theme-primary"
-        >
+        {/* Center - Jurassic Card */}
+        <div className="flex justify-center w-full lg:w-auto">
+          <div
+            ref={cardDisplayRef}
+            className="w-[320px] h-[509px] sm:w-[375px] sm:h-[597px] shadow-[0_4px_24px_rgba(0,0,0,0.15)] transition-all duration-700 ease-in-out flex flex-col justify-between p-1.5 sm:p-2 rounded-xl mx-auto bg-theme-primary"
+          >
           {/* Card Frame */}
           <div className="relative bg-theme-card-bg rounded-2xl h-[358px] sm:h-[420px]">
             {/* Video Canvas Area */}
@@ -210,6 +219,12 @@ export default function JurassicCardGenerator() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+        {/* Right side - Empty for symmetry */}
+        <div className='flex flex-col w-full lg:w-auto'>
+          {/* Could add additional options here in the future */}
         </div>
       </div>
 

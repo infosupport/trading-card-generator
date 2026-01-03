@@ -22,9 +22,9 @@
 
 [data-theme="jurassic"] {
   --theme-primary: #2d5016;
-  --theme-card-bg: #3a2d1f;
-  --theme-border: #4a3f2f;
-  --theme-border-hover: #6b5f4f;
+  --theme-card-bg: #d4c5a9;
+  --theme-border: #6b5f4f;
+  --theme-border-hover: #8b7355;
   --theme-border-active: #d4af37;
 }
 
