@@ -33,15 +33,10 @@ const TradingCard = forwardRef<HTMLDivElement, TradingCardProps>(({
   return (
     <div
       ref={ref}
-      className="w-[320px] h-[509px] sm:w-[375px] sm:h-[597px] shadow-[0_4px_24px_rgba(0,0,0,0.15)] transition-all duration-700 ease-in-out flex flex-col justify-between p-1.5 sm:p-2 rounded-xl mx-auto"
-      style={{
-        backgroundColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f'
-      }}
+      className="w-[320px] h-[509px] sm:w-[375px] sm:h-[597px] shadow-[0_4px_24px_rgba(0,0,0,0.15)] transition-all duration-700 ease-in-out flex flex-col justify-between p-1.5 sm:p-2 rounded-xl mx-auto bg-theme-primary"
     >
       {/* Card Frame */}
-      <div 
-        className="relative bg-[#f1e4ce] rounded-2xl h-[358px] sm:h-[420px]"
-      >
+      <div className="relative bg-theme-card-bg rounded-2xl h-[358px] sm:h-[420px]">
         {/* Special Property Badge - Top Right Corner */}
         {specialProperty !== 'none' && (
           <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10">
@@ -113,9 +108,8 @@ const TradingCard = forwardRef<HTMLDivElement, TradingCardProps>(({
 
         {/* Player Name */}
         <div 
-          className="text-center mt-1.5 sm:mt-2 text-[27px] sm:text-[32px]"
+          className="text-center mt-1.5 sm:mt-2 text-[27px] sm:text-[32px] text-theme-primary"
           style={{
-            color: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
             fontFamily: "var(--font-bebas-neue), Arial, sans-serif"
           }}
         >
@@ -131,12 +125,10 @@ const TradingCard = forwardRef<HTMLDivElement, TradingCardProps>(({
               alt="Team Logo"
               width={110}
               height={110}
-              className="object-contain rounded-full border-2 bg-[#f1e4ce] border-[#eee] sm:w-[130px] sm:h-[130px]"
+              className="object-contain rounded-full border-2 bg-theme-card-bg border-theme-border sm:w-[130px] sm:h-[130px]"
             />
           ) : (
-            <div
-              className="rounded-full border-2 flex items-center justify-center w-[110px] h-[110px] sm:w-[130px] sm:h-[130px] bg-[#f1e4ce] border-[#eee]"
-            >
+            <div className="rounded-full border-2 flex items-center justify-center w-[110px] h-[110px] sm:w-[130px] sm:h-[130px] bg-theme-card-bg border-theme-border">
               <div className="text-gray-400 text-xs">Loading...</div>
             </div>
           )}

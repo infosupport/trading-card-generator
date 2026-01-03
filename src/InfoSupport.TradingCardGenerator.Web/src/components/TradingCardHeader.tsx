@@ -1,5 +1,3 @@
-import { TEAMS } from '@/lib/constants';
-
 interface TradingCardHeaderProps {
   firstName: string;
   lastName: string;
@@ -41,16 +39,16 @@ export default function TradingCardHeader({
           value={firstName}
           onChange={(e) => onFirstNameChange(e.target.value)}
           placeholder="⚡ PLAYER FIRST NAME"
-          className="text-base sm:text-lg px-3 sm:px-4 py-2 sm:py-3 border-2 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 font-bold tracking-wide transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none w-full sm:w-auto"
-          style={{ fontSize: '1.1em', fontFamily: "var(--font-bebas-neue), Arial, sans-serif", borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f' }}
+          className="text-base sm:text-lg px-3 sm:px-4 py-2 sm:py-3 border-2 border-theme-primary rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 font-bold tracking-wide transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none w-full sm:w-auto"
+          style={{ fontSize: '1.1em', fontFamily: "var(--font-bebas-neue), Arial, sans-serif" }}
         />
         <input
           type="text"
           value={lastName}
           onChange={(e) => onLastNameChange(e.target.value)}
           placeholder="🚀 PLAYER LAST NAME"
-          className="text-base sm:text-lg px-3 sm:px-4 py-2 sm:py-3 border-2 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 font-bold tracking-wide transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none w-full sm:w-auto"
-          style={{ fontSize: '1.1em', fontFamily: "var(--font-bebas-neue), Arial, sans-serif", borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f' }}
+          className="text-base sm:text-lg px-3 sm:px-4 py-2 sm:py-3 border-2 border-theme-primary rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 font-bold tracking-wide transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none w-full sm:w-auto"
+          style={{ fontSize: '1.1em', fontFamily: "var(--font-bebas-neue), Arial, sans-serif" }}
         />
       </div>
 

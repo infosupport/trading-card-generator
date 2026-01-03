@@ -1,7 +1,6 @@
 import { RefObject } from 'react';
 import { toPng } from 'html-to-image';
 import { PDFDocument } from 'pdf-lib';
-import { TEAMS } from '@/lib/constants';
 import { ArrowDownTrayIcon, ArrowUpTrayIcon, PrinterIcon } from '@heroicons/react/16/solid';
 
 interface ActionButtonsProps {
@@ -204,17 +203,17 @@ export default function ActionButtons({
 
   const primaryButtonStyle = {
     ...buttonBaseStyle,
-    backgroundColor: '#f1e4ce',
-    color: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
-    borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
+    backgroundColor: 'var(--theme-card-bg)',
+    color: 'var(--theme-primary)',
+    borderColor: 'var(--theme-primary)',
     textShadow: '1px 1px 2px rgba(0,0,0,0.1)'
   };
 
   const secondaryButtonStyle = {
     ...buttonBaseStyle,
-    backgroundColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
-    color: '#f1e4ce',
-    borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
+    backgroundColor: 'var(--theme-primary)',
+    color: 'var(--theme-card-bg)',
+    borderColor: 'var(--theme-primary)',
     textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
   };
 

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useWebcam } from '@/hooks/useWebcam';
 import { TradingCardApi, blobToBase64, base64ToDataUrl } from '@/lib/api';
 import { GenerateCardRequest } from '@/lib/types';
+import { ThemeConfig, sportsTheme } from '@/lib/theme-config';
 import TradingCardHeader from './TradingCardHeader';
 import TradingCardDisplay from './TradingCardDisplay';
 import ActionButtons from './ActionButtons';
@@ -16,12 +17,15 @@ import {
   IMAGE_FORMAT, 
   IMAGE_QUALITY, 
   SPORTS, 
-  LOADING_MESSAGES, 
   TEAMS,
   SPECIAL_PROPERTIES 
 } from '@/lib/constants';
 
-export default function TradingCardGenerator() {
+interface TradingCardGeneratorProps {
+  theme?: ThemeConfig;
+}
+
+export default function TradingCardGenerator({ theme = sportsTheme }: TradingCardGeneratorProps) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [isCapturing, setIsCapturing] = useState(false);
@@ -34,7 +38,7 @@ export default function TradingCardGenerator() {
   const [teamLogo, setTeamLogo] = useState<string>();
   const [teamLogoBase64, setTeamLogoBase64] = useState<string>();
   const [sport, setSport] = useState<string>();
-  const [loadingMessage, setLoadingMessage] = useState(LOADING_MESSAGES[0]);
+  const [loadingMessage, setLoadingMessage] = useState(theme.loadingMessages[0]);
   const [messageIndex, setMessageIndex] = useState(0);
   const [specialProperty, setSpecialProperty] = useState<keyof typeof SPECIAL_PROPERTIES>('none');
   const [isVipMode, setIsVipMode] = useState(false);
@@ -70,8 +74,8 @@ export default function TradingCardGenerator() {
     if (isGenerating) {
       interval = setInterval(() => {
         setMessageIndex((prevIndex) => {
-          const newIndex = (prevIndex + 1) % LOADING_MESSAGES.length;
-          setLoadingMessage(LOADING_MESSAGES[newIndex]);
+          const newIndex = (prevIndex + 1) % theme.loadingMessages.length;
+          setLoadingMessage(theme.loadingMessages[newIndex]);
           return newIndex;
         });
       }, 3000); // Change message every 3 seconds
@@ -81,7 +85,7 @@ export default function TradingCardGenerator() {
         clearInterval(interval);
       }
     };
-  }, [isGenerating]);
+  }, [isGenerating, theme.loadingMessages]);
 
   // On mount: pick random color and logo, start webcam
   useEffect(() => {

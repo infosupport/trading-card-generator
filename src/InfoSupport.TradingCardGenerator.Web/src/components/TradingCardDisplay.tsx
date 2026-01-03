@@ -40,7 +40,11 @@ const TradingCardDisplay = forwardRef<HTMLDivElement, TradingCardDisplayProps>((
   onSpecialPropertySelect,
   selectedSport,
   onSportSelect,
-  isVipMode = false
+  isVipMode = false,
+  cardBackground,
+  border,
+  borderHover,
+  borderActive
 }, ref) => {
   return (
     <div className="flex flex-col lg:grid lg:grid-cols-[1fr_375px_1fr] gap-4 lg:gap-0 justify-center items-start lg:items-center">
@@ -50,10 +54,18 @@ const TradingCardDisplay = forwardRef<HTMLDivElement, TradingCardDisplayProps>((
             <SportSelector
               selectedSport={selectedSport}
               onSportSelect={onSportSelect}
+              cardBackground={cardBackground}
+              border={border}
+              borderHover={borderHover}
+              borderActive={borderActive}
             />
             <SpecialPropertySelector
               selectedProperty={specialProperty}
               onPropertySelect={onSpecialPropertySelect}
+              cardBackground={cardBackground}
+              border={border}
+              borderHover={borderHover}
+              borderActive={borderActive}
             />
           </>
         )}
@@ -73,6 +85,8 @@ const TradingCardDisplay = forwardRef<HTMLDivElement, TradingCardDisplayProps>((
           videoRef={videoRef}
           isStreaming={isStreaming}
           specialProperty={specialProperty}
+          cardBackground={cardBackground}
+          border={border}
         />
       </div>
 
@@ -81,6 +95,10 @@ const TradingCardDisplay = forwardRef<HTMLDivElement, TradingCardDisplayProps>((
           <TeamSelector
             teamLogo={teamLogo}
             onLogoSelect={onLogoSelect}
+            cardBackground={cardBackground}
+            border={border}
+            borderHover={borderHover}
+            borderActive={borderActive}
           />
         )}
       </div>
