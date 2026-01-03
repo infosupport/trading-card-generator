@@ -1,15 +1,10 @@
-using Azure.AI.OpenAI;
-using Microsoft.Extensions.Options;
-using OpenAI.Images;
-
 namespace InfoSupport.TradingCardGenerator.Api.Shared;
 
 /// <summary>
 /// Provides base functionality to turn a regular photo into a themed trading card photo.
 /// </summary>
 public abstract class CardPhotoGeneratorBase(
-    AzureOpenAIClient azureClient,
-    IOptions<ImageModelSettings> modelSettings,
+    IImageGenerator imageGenerator,
     ImageMetadataInjector metadataInjector)
 {
     /// <summary>
@@ -21,20 +16,8 @@ public abstract class CardPhotoGeneratorBase(
     /// <remarks>The output image is watermarked so we can recognize it as AI generated</remarks>
     protected async Task<byte[]> InternalTransformPhoto(MemoryStream imageStream, string prompt)
     {
-        var imageClient = azureClient.GetImageClient(modelSettings.Value.DeploymentName);
-
-        var imageEditOptions = new ImageEditOptions
-        {
-            Size = GeneratedImageSize.W1024xH1024
-        };
-
-        var imageGenerationResult = await imageClient.GenerateImageEditAsync(
-            imageStream, "player-photo.jpg", prompt,
-            imageEditOptions);
-
-        var imageBytes = imageGenerationResult.Value.ImageBytes.ToArray();
+        var imageBytes = await imageGenerator.GenerateImageEditAsync(imageStream, prompt);
         var imageBytesWithMetadata = metadataInjector.InjectMetadata(imageBytes);
-
         return imageBytesWithMetadata;
     }
 

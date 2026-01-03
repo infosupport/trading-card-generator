@@ -1,6 +1,7 @@
 using System.ClientModel;
 using Azure.AI.OpenAI;
 using Azure.Identity;
+using InfoSupport.TradingCardGenerator.Api.Features.Jurassic;
 using InfoSupport.TradingCardGenerator.Api.Features.Sports;
 using InfoSupport.TradingCardGenerator.Api.Features.Sports.Endpoints;
 using InfoSupport.TradingCardGenerator.Api.Shared;
@@ -24,18 +25,28 @@ builder.Services.AddCors(options =>
 builder.Services.Configure<ImageModelSettings>(builder.Configuration.GetSection("ImageGenerationModel"));
 var imageModelSettings = builder.Configuration.GetSection("ImageGenerationModel").Get<ImageModelSettings>();
 
-// Configure the azure client with a managed identity
-var azureClient = new AzureOpenAIClient(
-    new Uri(imageModelSettings!.Endpoint),
-    new ChainedTokenCredential(
-        new AzureCliCredential(),
-        new ManagedIdentityCredential()
-    ),
-    new AzureOpenAIClientOptions(AzureOpenAIClientOptions.ServiceVersion.V2025_04_01_Preview));
+// Configure either mock or real image generator based on settings
+if (imageModelSettings?.UseMock == true)
+{
+    builder.Services.AddSingleton<IImageGenerator, MockImageGenerator>();
+}
+else
+{
+    var azureClient = new AzureOpenAIClient(
+        new Uri(imageModelSettings!.Endpoint!),
+        new ChainedTokenCredential(
+            new AzureCliCredential(),
+            new ManagedIdentityCredential()
+        ),
+        new AzureOpenAIClientOptions(AzureOpenAIClientOptions.ServiceVersion.V2025_04_01_Preview));
 
-builder.Services.AddSingleton(azureClient);
+    builder.Services.AddSingleton(azureClient);
+    builder.Services.AddSingleton<IImageGenerator, RealImageGenerator>();
+}
+
 builder.Services.AddSingleton<ImageMetadataInjector>();
 builder.Services.AddSingleton<SportsCardPhotoGenerator>();
+builder.Services.AddSingleton<JurassicCardPhotoGenerator>();
 
 var app = builder.Build();
 
