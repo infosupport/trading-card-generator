@@ -3,10 +3,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useWebcam } from '@/hooks/useWebcam';
 import { TradingCardApi, blobToBase64, base64ToDataUrl } from '@/lib/api';
-import { GenerateDinoCardRequest, SceneDescription } from '@/lib/types';
+import { GenerateDinoCardRequest } from '@/lib/types';
 import { jurassicTheme } from '@/lib/theme-config';
 
-import TradingCardHeader from './TradingCardHeader';
 import ActionButtons from './ActionButtons';
 import SceneSelector from './SceneSelector';
 import LoadingSpinner from './LoadingSpinner';
@@ -30,7 +29,10 @@ const GREETING_PHRASES = [
   'I survived',
   'Wish you were at',
   'Having fun at',
-  'Escaped from'
+  'Escaped from',
+  'Only at',
+  'Roaming around',
+  'Unlocked new skills at'
 ];
 
 export default function JurassicCardGenerator() {
@@ -216,10 +218,10 @@ export default function JurassicCardGenerator() {
         <div className="flex justify-center w-full lg:w-auto">
           <div
             ref={cardDisplayRef}
-            className="w-[320px] h-[509px] sm:w-[375px] sm:h-[597px] shadow-[0_4px_24px_rgba(0,0,0,0.15)] transition-all duration-700 ease-in-out flex flex-col justify-between rounded-xl mx-auto overflow-hidden"
+            className="w-[320px] h-[509px] sm:w-[375px] sm:h-[597px] shadow-[0_4px_24px_rgba(0,0,0,0.15)] transition-all duration-700 ease-in-out rounded-xl mx-auto overflow-hidden"
           >
             {/* Video Canvas Area - Full Height */}
-            <div className="relative flex-1 overflow-hidden rounded-xl">
+            <div className="relative w-full h-full overflow-hidden rounded-xl">
               {generatedCardImage ? (
                 <Image
                   src={generatedCardImage}
@@ -256,9 +258,17 @@ export default function JurassicCardGenerator() {
                 </>
               )}
 
+              {/* Overlay Image */}
+              <Image 
+                src="/overlay.png" 
+                alt="Overlay" 
+                fill
+                className="object-cover pointer-events-none z-10"
+              />
+
               {/* Greeting Overlay */}
               <div 
-                className={`absolute bottom-1 left-4 right-4 flex flex-col items-end gap-1 ${caveat.className}`}
+                className={`absolute bottom-1 left-4 right-4 flex flex-col items-end gap-1 ${caveat.className} z-20`}
                 style={{
                   transform: "rotate(-8deg) skewY(-2deg)",
                 }}
@@ -279,15 +289,6 @@ export default function JurassicCardGenerator() {
                   height={100}
                   className="drop-shadow-lg"
                 />
-              </div>
-            </div>
-
-            {/* Scene Icon */}
-            <div className="flex justify-center items-center mt-1.5 sm:mt-2 px-1.5 sm:px-2 pb-1.5 sm:pb-2">
-              <div className="rounded-full border-2 flex items-center justify-center w-[110px] h-[110px] sm:w-[130px] sm:h-[130px] bg-theme-primary border-theme-border">
-                <div className="text-5xl sm:text-6xl">
-                  {scenes.find(s => s.id === selectedScene)?.icon || '🦖'}
-                </div>
               </div>
             </div>
           </div>
