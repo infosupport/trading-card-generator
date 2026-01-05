@@ -66,6 +66,6 @@ export interface GenerateDinoCardRequest {
 }
 
 export interface SceneDescription {
-  id: string;
+  identifier: string;
   description: string;
 }

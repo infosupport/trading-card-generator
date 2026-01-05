@@ -3,9 +3,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useWebcam } from '@/hooks/useWebcam';
 import { TradingCardApi, blobToBase64, base64ToDataUrl } from '@/lib/api';
-import { GenerateDinoCardRequest } from '@/lib/types';
+import { GenerateDinoCardRequest, SceneDescription } from '@/lib/types';
 import { jurassicTheme } from '@/lib/theme-config';
-import { JURASSIC_SCENES } from '@/lib/jurassic-scenes';
+
 import TradingCardHeader from './TradingCardHeader';
 import ActionButtons from './ActionButtons';
 import SceneSelector from './SceneSelector';
@@ -33,7 +33,8 @@ export default function JurassicCardGenerator() {
   const cardDisplayRef = useRef<HTMLDivElement>(null);
   const [loadingMessage, setLoadingMessage] = useState(jurassicTheme.loadingMessages[0]);
   const [messageIndex, setMessageIndex] = useState(0);
-  const [selectedScene, setSelectedScene] = useState(JURASSIC_SCENES[0].id);
+  const [scenes, setScenes] = useState<Array<{id: string; name: string; description: string; icon: string}>>([]);
+  const [selectedScene, setSelectedScene] = useState('scene01');
 
   const {
     videoRef,
@@ -68,9 +69,56 @@ export default function JurassicCardGenerator() {
     };
   }, [isGenerating]);
 
-  // On mount: start webcam
+  // On mount: start webcam and fetch scenes
   useEffect(() => {
     startWebcam();
+    
+    // Icon mapping for scenes
+    const sceneIcons: Record<string, string> = {
+      'scene01': '🦖',
+      'scene02': '🦏',
+      'scene03': '🦕',
+      'scene04': '🌄',
+      'scene05': '🚁',
+      'scene06': '🦎',
+      'scene07': '🦴',
+      'scene08': '🔪',
+      'scene09': '🥚',
+      'scene10': '🧬',
+      'scene11': '🪞',
+      'scene12': '⚡',
+    };
+    
+    // Fetch available scenes from API
+    const fetchScenes = async () => {
+      try {
+        const fetchedScenes = await TradingCardApi.getAvailableScenes();
+        // Map backend scenes to frontend format with icons
+        const mappedScenes = fetchedScenes.map(scene => {
+          // Parse "Name - Description" format
+          const parts = scene.description.split(' - ');
+          const name = parts[0] || scene.description;
+          const description = parts[1] || scene.description;
+          
+          return {
+            id: scene.identifier,
+            name,
+            description,
+            icon: sceneIcons[scene.identifier] || '🦖'
+          };
+        });
+        
+        setScenes(mappedScenes);
+        if (mappedScenes.length > 0) {
+          setSelectedScene(mappedScenes[0].id);
+        }
+      } catch (error) {
+        console.error('Error fetching scenes:', error);
+        // Fallback to default scene ID if fetch fails
+      }
+    };
+    
+    fetchScenes();
   }, [startWebcam]);
 
   const handleCapturePhoto = async () => {
@@ -145,7 +193,7 @@ export default function JurassicCardGenerator() {
         {/* Left side - Scene Selector */}
         <div className='flex flex-col w-full lg:w-auto'>
           <SceneSelector
-            scenes={JURASSIC_SCENES}
+            scenes={scenes}
             selectedScene={selectedScene}
             onSceneSelect={setSelectedScene}
           />
@@ -197,14 +245,39 @@ export default function JurassicCardGenerator() {
 
               {/* Guest Name Handwritten Overlay */}
               <div 
-                className={`absolute bottom-4 sm:bottom-6 left-4 right-4 text-[28px] sm:text-[36px] text-white drop-shadow-lg ${caveat.className}`}
+                className={`absolute bottom-1 left-4 right-4 flex flex-col items-end gap-1 ${caveat.className}`}
                 style={{
                   transform: "rotate(-8deg) skewY(-2deg)",
-                  textShadow: "2px 2px 8px rgba(0,0,0,0.8)",
-                  letterSpacing: "0.02em"
                 }}
               >
-                {(firstName.trim() && lastName.trim()) ? `${firstName.trim()} ${lastName.trim()} was here` : 'Guest Name was here'}
+                {(firstName.trim() || lastName.trim()) && (
+                  <span 
+                    className="text-[28px] sm:text-[36px] text-white drop-shadow-lg"
+                    style={{
+                      textShadow: "2px 2px 8px rgba(0,0,0,0.8)",
+                      letterSpacing: "0.02em",
+                      marginRight: "20px"
+                    }}
+                  >
+                    {`${firstName.trim()} ${lastName.trim()}`}
+                  </span>
+                )}
+                <span 
+                  className="text-[28px] sm:text-[36px] text-white drop-shadow-lg"
+                  style={{
+                    textShadow: "2px 2px 8px rgba(0,0,0,0.8)",
+                    letterSpacing: "0.02em"
+                  }}
+                >
+                  I was at
+                </span>
+                <Image 
+                  src="/bitbash.png" 
+                  alt="BitBash" 
+                  width={100} 
+                  height={100}
+                  className="drop-shadow-lg"
+                />
               </div>
             </div>
 
@@ -212,7 +285,7 @@ export default function JurassicCardGenerator() {
             <div className="flex justify-center items-center mt-1.5 sm:mt-2 px-1.5 sm:px-2 pb-1.5 sm:pb-2">
               <div className="rounded-full border-2 flex items-center justify-center w-[110px] h-[110px] sm:w-[130px] sm:h-[130px] bg-theme-primary border-theme-border">
                 <div className="text-5xl sm:text-6xl">
-                  {JURASSIC_SCENES.find(s => s.id === selectedScene)?.icon || '🦖'}
+                  {scenes.find(s => s.id === selectedScene)?.icon || '🦖'}
                 </div>
               </div>
             </div>

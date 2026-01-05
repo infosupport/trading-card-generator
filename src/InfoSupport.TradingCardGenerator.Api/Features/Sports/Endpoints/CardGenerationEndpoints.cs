@@ -9,10 +9,10 @@ namespace InfoSupport.TradingCardGenerator.Api.Features.Sports.Endpoints;
 public static class CardGenerationEndpoints
 {
     /// <summary>
-    /// Maps the endpoints for card generation
+    /// Maps the endpoints for sports card generation
     /// </summary>
     /// <param name="app">Web application instance to map the endpoints on.</param>
-    public static void MapCardGenerationEndpoints(this WebApplication app)
+    public static void MapSportsCardEndpoints(this WebApplication app)
     {
         app.MapPost("/cards/sports", GenerateTradingCard);
     }
