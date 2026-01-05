@@ -23,9 +23,17 @@ import {
 
 const caveat = Caveat({ subsets: ['latin'], weight: '700' });
 
+const GREETING_PHRASES = [
+  'I was at',
+  'Greetings from',
+  'See you at',
+  'I survived',
+  'Wish you were at',
+  'Having fun at',
+  'Escaped from'
+];
+
 export default function JurassicCardGenerator() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [isCapturing, setIsCapturing] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedCardImage, setGeneratedCardImage] = useState<string | null>(null);
@@ -35,6 +43,9 @@ export default function JurassicCardGenerator() {
   const [messageIndex, setMessageIndex] = useState(0);
   const [scenes, setScenes] = useState<Array<{id: string; name: string; description: string; icon: string}>>([]);
   const [selectedScene, setSelectedScene] = useState('scene01');
+  const [greetingPhrase, setGreetingPhrase] = useState(() => 
+    GREETING_PHRASES[Math.floor(Math.random() * GREETING_PHRASES.length)]
+  );
 
   const {
     videoRef,
@@ -48,7 +59,7 @@ export default function JurassicCardGenerator() {
     facingMode: 'user'
   });
 
-  const playerName = (firstName.trim() + ' ' + lastName.trim()).trim().toUpperCase() || jurassicTheme.playerNameFallback;
+  const playerName = jurassicTheme.playerNameFallback;
 
   // Rotate loading messages during generation
   useEffect(() => {
@@ -125,6 +136,9 @@ export default function JurassicCardGenerator() {
     setIsCapturing(true);
     setIsGenerating(true);
     setGeneratedCardImage(null);
+    // Pick a random greeting phrase
+    const randomPhrase = GREETING_PHRASES[Math.floor(Math.random() * GREETING_PHRASES.length)];
+    setGreetingPhrase(randomPhrase);
     try {
       const blob = await capturePhoto(CAPTURE_WIDTH, CAPTURE_HEIGHT, IMAGE_FORMAT, IMAGE_QUALITY);
       if (blob) {
@@ -174,19 +188,18 @@ export default function JurassicCardGenerator() {
 
   return (
     <div>
-      <TradingCardHeader 
-        firstName={firstName}
-        lastName={lastName}
-        onFirstNameChange={setFirstName}
-        onLastNameChange={setLastName}
-        teamColor={jurassicTheme.colors.primary}
-        error={error || undefined}
-        isVipMode={false}
-        headerTitle={jurassicTheme.headerTitle}
-        headerSubtitle={jurassicTheme.headerSubtitle}
-        firstNamePlaceholder={jurassicTheme.firstNamePlaceholder}
-        lastNamePlaceholder={jurassicTheme.lastNamePlaceholder}
-      />
+      {/* Header */}
+      <div className="text-center mb-6">
+        <h1 className="text-4xl font-bold mb-2" style={{ color: jurassicTheme.colors.primary }}>
+          {jurassicTheme.headerTitle}
+        </h1>
+        <p className="text-lg text-gray-600">{jurassicTheme.headerSubtitle}</p>
+        {error && (
+          <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            {error}
+          </div>
+        )}
+      </div>
 
       {/* Jurassic Card Display with Scene Selector */}
       <div className="flex flex-col lg:grid lg:grid-cols-[1fr_375px_1fr] gap-4 lg:gap-0 justify-center items-start lg:items-center my-6">
@@ -243,25 +256,13 @@ export default function JurassicCardGenerator() {
                 </>
               )}
 
-              {/* Guest Name Handwritten Overlay */}
+              {/* Greeting Overlay */}
               <div 
                 className={`absolute bottom-1 left-4 right-4 flex flex-col items-end gap-1 ${caveat.className}`}
                 style={{
                   transform: "rotate(-8deg) skewY(-2deg)",
                 }}
               >
-                {(firstName.trim() || lastName.trim()) && (
-                  <span 
-                    className="text-[28px] sm:text-[36px] text-white drop-shadow-lg"
-                    style={{
-                      textShadow: "2px 2px 8px rgba(0,0,0,0.8)",
-                      letterSpacing: "0.02em",
-                      marginRight: "20px"
-                    }}
-                  >
-                    {`${firstName.trim()} ${lastName.trim()}`}
-                  </span>
-                )}
                 <span 
                   className="text-[28px] sm:text-[36px] text-white drop-shadow-lg"
                   style={{
@@ -269,7 +270,7 @@ export default function JurassicCardGenerator() {
                     letterSpacing: "0.02em"
                   }}
                 >
-                  I was at
+                  {greetingPhrase}
                 </span>
                 <Image 
                   src="/bitbash.png" 
