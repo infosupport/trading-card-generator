@@ -2,8 +2,7 @@ namespace InfoSupport.TradingCardGenerator.Api.Shared;
 
 public class ImageModelSettings
 {
-    public string? Endpoint { get; set; }
-    public string? ApiKey { get; set; }
-    public string? DeploymentName { get; set; }
-    public bool UseMock { get; set; } = false;
+    public required string Endpoint { get; set; }
+    public required string ApiKey { get; set; }
+    public required string DeploymentName { get; set; }
 }
