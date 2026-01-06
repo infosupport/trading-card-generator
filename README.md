@@ -18,10 +18,12 @@ uploading their photo and customizing team information and colors.
 Make sure you have the following user-secrets configured for the `src/InfoSupport.TradingCardGenerator.Api` project:
 
 | Secret Name                         | Description                                        |
-|-------------------------------------|----------------------------------------------------|
+| ----------------------------------- | -------------------------------------------------- |
 | ImageGenerationModel:Endpoint       | The endpoint URL for the Azure OpenAI service      |
 | ImageGenerationModel:ApiKey         | The API key for accessing the Azure OpenAI service |
 | ImageGenerationModel:DeploymentName | The deployment name for the gpt-image-1 model      |
+
+> **Note**: The deployment name **must** be `gpt-image-1` due to an issue in the Azure AI client library implementation by Microsoft.
 
 To run the full application execute the following command from the root of the repository:
 

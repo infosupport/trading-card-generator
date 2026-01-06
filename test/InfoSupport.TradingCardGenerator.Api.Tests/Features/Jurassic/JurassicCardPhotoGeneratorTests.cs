@@ -1,5 +1,6 @@
 using System.ClientModel;
 using Azure.AI.OpenAI;
+using Azure.Identity;
 using InfoSupport.TradingCardGenerator.Api.Features.Jurassic;
 using InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Models;
 using InfoSupport.TradingCardGenerator.Api.Shared;
@@ -26,7 +27,7 @@ namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.Jurassic
 
             var azureClient = new AzureOpenAIClient(
                 new Uri(configuration["ImageGenerationModel:Endpoint"]!),
-                new ApiKeyCredential(configuration["ImageGenerationModel:ApiKey"]!),
+                new AzureCliCredential(),
                 new AzureOpenAIClientOptions(AzureOpenAIClientOptions.ServiceVersion.V2025_04_01_Preview));
 
             var settings = Options.Create(languageModelSettings);
