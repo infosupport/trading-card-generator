@@ -8,7 +8,6 @@ import { jurassicTheme } from '@/lib/theme-config';
 
 import ActionButtons from './ActionButtons';
 import SceneSelector from './SceneSelector';
-import LoadingSpinner from './LoadingSpinner';
 import Image from 'next/image';
 import { Caveat } from 'next/font/google';
 import { 
@@ -19,6 +18,7 @@ import {
   IMAGE_FORMAT, 
   IMAGE_QUALITY
 } from '@/lib/constants';
+import LoadingSpinner from './LoadingSpinner';
 
 const caveat = Caveat({ subsets: ['latin'], weight: '700' });
 
@@ -45,9 +45,12 @@ export default function JurassicCardGenerator() {
   const [messageIndex, setMessageIndex] = useState(0);
   const [scenes, setScenes] = useState<Array<{id: string; name: string; description: string; icon: string}>>([]);
   const [selectedScene, setSelectedScene] = useState('scene01');
-  const [greetingPhrase, setGreetingPhrase] = useState(() => 
-    GREETING_PHRASES[Math.floor(Math.random() * GREETING_PHRASES.length)]
-  );
+  const [greetingPhrase, setGreetingPhrase] = useState(GREETING_PHRASES[0]);
+
+  // Set random greeting phrase on client mount to avoid hydration mismatch
+  useEffect(() => {
+    setGreetingPhrase(GREETING_PHRASES[Math.floor(Math.random() * GREETING_PHRASES.length)]);
+  }, []);
 
   const {
     videoRef,
@@ -259,12 +262,14 @@ export default function JurassicCardGenerator() {
               )}
 
               {/* Overlay Image */}
-              <Image 
-                src="/overlay.png" 
-                alt="Overlay" 
-                fill
-                className="object-cover pointer-events-none z-10"
-              />
+              {!generatedCardImage && (
+                <Image 
+                  src="/overlay.png" 
+                  alt="Overlay" 
+                  fill
+                  className="object-cover pointer-events-none z-10"
+                />
+              )}
 
               {/* Greeting Overlay */}
               <div 
