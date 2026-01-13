@@ -39,6 +39,10 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-bebas-neue: var(--font-bebas-neue);
+  --font-rye: var(--font-rye);
+  --font-creepster: var(--font-creepster);
+  --font-metal-mania: var(--font-metal-mania);
+  --font-nosifer: var(--font-nosifer);
 }
 
 @media (prefers-color-scheme: dark) {

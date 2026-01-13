@@ -18,6 +18,7 @@ import {
   IMAGE_FORMAT, 
   IMAGE_QUALITY
 } from '@/lib/constants';
+import LoadingDinosaur from './LoadingDinosaur';
 import LoadingSpinner from './LoadingSpinner';
 
 const caveat = Caveat({ subsets: ['latin'], weight: '700' });
@@ -233,7 +234,7 @@ export default function JurassicCardGenerator() {
                   className="object-cover"
                 />
               ) : isGenerating && capturedPhoto ? (
-                <LoadingSpinner 
+                <LoadingDinosaur 
                   capturedPhoto={capturedPhoto}
                   loadingMessage={loadingMessage}
                   messageIndex={messageIndex}

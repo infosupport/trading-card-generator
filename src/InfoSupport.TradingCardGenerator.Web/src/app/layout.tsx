@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Bebas_Neue } from "next/font/google";
+import { Geist, Geist_Mono, Bebas_Neue, Rye, Creepster, Metal_Mania, Nosifer } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,6 +18,30 @@ const bebasNeue = Bebas_Neue({
   weight: "400",
 });
 
+const rye = Rye({
+  variable: "--font-rye",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const creepster = Creepster({
+  variable: "--font-creepster",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const metalMania = Metal_Mania({
+  variable: "--font-metal-mania",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const nosifer = Nosifer({
+  variable: "--font-nosifer",
+  subsets: ["latin"],
+  weight: "400",
+});
+
 export const metadata: Metadata = {
   title: "Trading Card Generator",
   description: "Create custom trading cards with webcam photos",
@@ -31,7 +55,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} ${rye.variable} ${creepster.variable} ${metalMania.variable} ${nosifer.variable} antialiased`}
       >
         {children}
       </body>
