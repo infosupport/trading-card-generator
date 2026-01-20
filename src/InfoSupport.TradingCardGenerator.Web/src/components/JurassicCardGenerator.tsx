@@ -6,7 +6,7 @@ import { TradingCardApi, blobToBase64, base64ToDataUrl } from '@/lib/api';
 import { GenerateDinoCardRequest } from '@/lib/types';
 import { jurassicTheme } from '@/lib/theme-config';
 
-import ActionButtons from './ActionButtons';
+import JurassicActionButtons from './JurassicActionButtons';
 import SceneSelector from './SceneSelector';
 import Image from 'next/image';
 import { Caveat } from 'next/font/google';
@@ -19,7 +19,6 @@ import {
   IMAGE_QUALITY
 } from '@/lib/constants';
 import LoadingDinosaur from './LoadingDinosaur';
-import LoadingSpinner from './LoadingSpinner';
 
 const caveat = Caveat({ subsets: ['latin'], weight: '700' });
 
@@ -230,8 +229,9 @@ export default function JurassicCardGenerator() {
                 <Image
                   src={generatedCardImage}
                   alt="Generated Jurassic Card"
-                  fill
-                  className="object-cover"
+                  width={375}
+                  height={597}
+                  className="w-full h-full object-cover"
                 />
               ) : isGenerating && capturedPhoto ? (
                 <LoadingDinosaur 
@@ -267,8 +267,9 @@ export default function JurassicCardGenerator() {
                 <Image 
                   src="/overlay.png" 
                   alt="Overlay" 
-                  fill
-                  className="object-cover pointer-events-none z-10"
+                  width={375}
+                  height={597}
+                  className="absolute inset-0 w-full h-full object-cover pointer-events-none z-10"
                 />
               )}
 
@@ -306,13 +307,11 @@ export default function JurassicCardGenerator() {
         </div>
       </div>
 
-      <ActionButtons 
+      <JurassicActionButtons 
         isStreaming={isStreaming}
         isCapturing={isCapturing}
         isGenerating={isGenerating}
         generatedCardImage={generatedCardImage}
-        teamColor={jurassicTheme.colors.primary}
-        playerName={playerName}
         cardDisplayRef={cardDisplayRef}
         onCapturePhoto={handleCapturePhoto}
         onUploadPhoto={handleUploadPhoto}

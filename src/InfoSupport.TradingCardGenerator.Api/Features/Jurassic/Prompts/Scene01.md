@@ -1,5 +1,1 @@
-[Subject from reference photo] running in terror toward the camera,
-looking back over their shoulder. Behind them, a massive Tyrannosaurus rex mid-roar, jaws open, chasing them through
-the rain. In the background: the iconic Jurassic Park electric fence with sparking wires and a mud-splattered Ford
-Explorer jeep with the red/yellow Jurassic Park logo. Night scene with rain, headlights cutting through darkness,
-lightning flash.
+[Subject from reference photo] running toward the viewer in sheer panic, glancing back over their shoulder. Close behind them, an enormous carnivorous dinosaur charges forward mid-roar, mouth wide open, pursuing them through heavy rain. In the distance, a tall electrified security fence throws off sparks, and a mud-covered off-road vehicle sits nearby with its headlights shining through the darkness. The scene takes place at night during a storm, rain pouring down as a flash of lightning briefly lights up the surroundings.

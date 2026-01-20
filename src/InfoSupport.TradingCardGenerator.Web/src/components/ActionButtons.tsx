@@ -152,27 +152,8 @@ export default function ActionButtons({
     if (!generatedCardImage || !cardDisplayRef.current) return;
 
     try {
-      // Wait a moment for the component to fully render
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // Ensure all images are loaded before converting
-      const images = cardDisplayRef.current.querySelectorAll('img');
-      await Promise.all(Array.from(images).map(img => {
-        if (img.complete) return Promise.resolve();
-        return new Promise((resolve, reject) => {
-          img.onload = resolve;
-          img.onerror = reject;
-        });
-      }));
-
-      console.log('Converting card to image...');
+      const dataUrl = await toPng(cardDisplayRef.current, { quality: 1.0, pixelRatio: 2 });
       
-      const dataUrl = await toPng(cardDisplayRef.current, {
-        quality: 1.0,
-        pixelRatio: 2
-      });
-      
-      // Download the image
       const a = document.createElement('a');
       a.href = dataUrl;
       a.download = `techorama-trading-card-${playerName.replace(/\s+/g, '-').toLowerCase()}.png`;
