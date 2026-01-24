@@ -1,3 +1,1 @@
-[Subject from reference photo] standing in awe, hand outstretched, as a sick Triceratops lies on its side breathing
-heavily. Veterinary equipment scattered nearby. In the background: rolling hills, the electric fence perimeter, a
-Jurassic Park jeep. Warm daylight filtering through trees.
+[Subject from reference photo] standing in quiet awe, one hand extended, as a large three-horned herbivorous dinosaur lies on its side, breathing heavily and clearly unwell. Assorted medical and veterinary tools are scattered on the ground nearby. In the background, gentle rolling hills stretch into the distance, with a tall perimeter fence visible along the landscape and a mud-marked off-road vehicle parked nearby. Warm daylight filters through the surrounding trees, illuminating the scene.

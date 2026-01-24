@@ -1,6 +1,5 @@
 import { RefObject } from 'react';
 import { toPng } from 'html-to-image';
-import { PDFDocument } from 'pdf-lib';
 import { ArrowDownTrayIcon, ArrowUpTrayIcon, PrinterIcon } from '@heroicons/react/16/solid';
 
 interface JurassicActionButtonsProps {
@@ -23,98 +22,12 @@ export default function JurassicActionButtons({
   onUploadPhoto
 }: JurassicActionButtonsProps) {
 
-  const handlePrint = async () => {
-    if (!generatedCardImage || !cardDisplayRef.current) return;
-
-    try {
-      // Wait for the component to fully render
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // Ensure all images are loaded
-      const images = cardDisplayRef.current.querySelectorAll('img');
-      await Promise.all(Array.from(images).map(img => {
-        if (img.complete) return Promise.resolve();
-        return new Promise((resolve, reject) => {
-          img.onload = resolve;
-          img.onerror = reject;
-        });
-      }));
-
-      console.log('Converting Jurassic card to PNG...');
-      
-      // Generate the card as PNG
-      const cardPngDataUrl = await toPng(cardDisplayRef.current, {
-        quality: 1.0,
-        pixelRatio: 2
-      });
-
-      // Convert data URL to array buffer
-      const cardPngBytes = await fetch(cardPngDataUrl).then(res => res.arrayBuffer());
-
-      // Create a new PDF document
-      console.log('Creating PDF document for A6 printing...');
-      const pdfDoc = await PDFDocument.create();
-
-      // A6 size: 105mm × 148mm (portrait orientation)
-      // PDF uses 72 points per inch: 105mm = 297.64pt, 148mm = 419.53pt
-      const a6WidthPoints = 298;
-      const a6HeightPoints = 420;
-
-      // Add page with the card (one-sided)
-      const page = pdfDoc.addPage([a6WidthPoints, a6HeightPoints]);
-      const cardPngImage = await pdfDoc.embedPng(cardPngBytes);
-      
-      // Scale the image to fill the entire A6 page
-      const cardDims = cardPngImage.scale(1);
-      const scale = Math.min(
-        a6WidthPoints / cardDims.width,
-        a6HeightPoints / cardDims.height
-      );
-      
-      const cardWidth = cardDims.width * scale;
-      const cardHeight = cardDims.height * scale;
-      
-      page.drawImage(cardPngImage, {
-        x: (a6WidthPoints - cardWidth) / 2,
-        y: (a6HeightPoints - cardHeight) / 2,
-        width: cardWidth,
-        height: cardHeight,
-      });
-
-      // Save the PDF
-      console.log('Generating final PDF...');
-      const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([new Uint8Array(pdfBytes)], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-
-      // Open in new window for printing
-      const printWindow = window.open(url, '_blank');
-      if (printWindow) {
-        printWindow.onload = () => {
-          printWindow.focus();
-          printWindow.print();
-          
-          // Close the window after printing dialog is closed
-          printWindow.addEventListener('afterprint', () => {
-            printWindow.close();
-            URL.revokeObjectURL(url);
-          });
-          
-          // Fallback: close after 5 seconds if afterprint doesn't fire
-          setTimeout(() => {
-            printWindow.close();
-            URL.revokeObjectURL(url);
-          }, 5000);
-        };
-      } else {
-        // Clean up if window couldn't be opened
-        URL.revokeObjectURL(url);
-      }
-
-    } catch (error) {
-      console.error('Error generating PDF for printing:', error);
-      alert('Failed to generate PDF. Please try again.');
-    }
+  const handlePrint = () => {
+    if (!generatedCardImage) return;
+    
+    // Simply trigger the browser's print dialog
+    // CSS @media print rules will handle showing only the card
+    window.print();
   };
 
   const handleDownload = async () => {

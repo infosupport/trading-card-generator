@@ -11,14 +11,15 @@ import SceneSelector from './SceneSelector';
 import Image from 'next/image';
 import { Caveat } from 'next/font/google';
 import { 
-  CARD_WIDTH, 
-  CARD_HEIGHT, 
-  CAPTURE_WIDTH, 
-  CAPTURE_HEIGHT, 
   IMAGE_FORMAT, 
   IMAGE_QUALITY
 } from '@/lib/constants';
 import LoadingDinosaur from './LoadingDinosaur';
+
+// A6 dimensions (105mm × 148mm) - portrait orientation
+// For display, we use pixels that maintain the A6 ratio
+const A6_DISPLAY_WIDTH = 420;
+const A6_DISPLAY_HEIGHT = 594; // 420 * (148/105) = 594
 
 const caveat = Caveat({ subsets: ['latin'], weight: '700' });
 
@@ -59,8 +60,6 @@ export default function JurassicCardGenerator() {
     startWebcam,
     capturePhoto
   } = useWebcam({
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
     facingMode: 'user'
   });
 
@@ -145,7 +144,8 @@ export default function JurassicCardGenerator() {
     const randomPhrase = GREETING_PHRASES[Math.floor(Math.random() * GREETING_PHRASES.length)];
     setGreetingPhrase(randomPhrase);
     try {
-      const blob = await capturePhoto(CAPTURE_WIDTH, CAPTURE_HEIGHT, IMAGE_FORMAT, IMAGE_QUALITY);
+      // Capture at native webcam resolution without forcing dimensions
+      const blob = await capturePhoto(undefined, undefined, IMAGE_FORMAT, IMAGE_QUALITY);
       if (blob) {
         await processPhoto(blob);
       }
@@ -193,6 +193,59 @@ export default function JurassicCardGenerator() {
 
   return (
     <div>
+      {/* Print-only styles */}
+      <style jsx global>{`
+        @media print {
+          html, body {
+            height: 148mm;
+            width: 105mm;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+          }
+          
+          body > * {
+            display: none !important;
+          }
+          
+          body > div:has(#jurassic-card-print-container) {
+            display: block !important;
+          }
+          
+          body * {
+            visibility: hidden;
+          }
+          
+          #jurassic-card-print-container,
+          #jurassic-card-print-container * {
+            visibility: visible;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+          }
+          
+          #jurassic-card-print-container {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 105mm !important;
+            height: 148mm !important;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            page-break-after: avoid;
+            page-break-inside: avoid;
+            break-after: avoid;
+            break-inside: avoid;
+          }
+          
+          @page {
+            size: A6 portrait;
+            margin: 0;
+          }
+        }
+      `}</style>
+
       {/* Header */}
       <div className="text-center mb-6">
         <h1 className="text-4xl font-bold mb-2" style={{ color: jurassicTheme.colors.primary }}>
@@ -207,7 +260,7 @@ export default function JurassicCardGenerator() {
       </div>
 
       {/* Jurassic Card Display with Scene Selector */}
-      <div className="flex flex-col lg:grid lg:grid-cols-[1fr_375px_1fr] gap-4 lg:gap-0 justify-center items-start lg:items-center my-6">
+      <div className="flex flex-col lg:grid lg:grid-cols-[1fr_420px_1fr] gap-4 lg:gap-0 justify-center items-start lg:items-center my-6">
         {/* Left side - Scene Selector */}
         <div className='flex flex-col w-full lg:w-auto'>
           <SceneSelector
@@ -220,17 +273,18 @@ export default function JurassicCardGenerator() {
         {/* Center - Jurassic Card */}
         <div className="flex justify-center w-full lg:w-auto">
           <div
+            id="jurassic-card-print-container"
             ref={cardDisplayRef}
-            className="w-[320px] h-[509px] sm:w-[375px] sm:h-[597px] shadow-[0_4px_24px_rgba(0,0,0,0.15)] transition-all duration-700 ease-in-out rounded-xl mx-auto overflow-hidden"
+            className="w-[420px] h-[594px] shadow-[0_4px_24px_rgba(0,0,0,0.15)] transition-all duration-700 ease-in-out mx-auto overflow-hidden"
           >
             {/* Video Canvas Area - Full Height */}
-            <div className="relative w-full h-full overflow-hidden rounded-xl">
+            <div className="relative w-full h-full overflow-hidden">
               {generatedCardImage ? (
                 <Image
                   src={generatedCardImage}
                   alt="Generated Jurassic Card"
-                  width={375}
-                  height={597}
+                  width={420}
+                  height={594}
                   className="w-full h-full object-cover"
                 />
               ) : isGenerating && capturedPhoto ? (
@@ -267,8 +321,8 @@ export default function JurassicCardGenerator() {
                 <Image 
                   src="/overlay.png" 
                   alt="Overlay" 
-                  width={375}
-                  height={597}
+                  width={420}
+                  height={594}
                   className="absolute inset-0 w-full h-full object-cover pointer-events-none z-10"
                 />
               )}
