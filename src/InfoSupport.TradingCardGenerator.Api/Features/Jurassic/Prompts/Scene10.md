@@ -1,4 +1,1 @@
-[Subject from reference photo] standing in the Jurassic Park genetics lab, amazed, watching robotic arms rotate
-dinosaur eggs in glass incubators. Mr. DNA cartoon visible on a screen in the background. Scientists working at
-stations, microscopes, amber specimens, DNA sequencing displays. Clean white futuristic laboratory aesthetic.
-Bright clinical lighting. Science wonder composition, playing god.
+[Subject from reference photo] standing inside a genetics laboratory, watching in amazement as robotic arms carefully rotate large reptilian eggs inside transparent incubation chambers. In the background, a stylized animated educational character appears on a display screen. Scientists work at nearby stations surrounded by microscopes, preserved amber samples, and active DNA sequencing monitors. The laboratory is clean and modern, dominated by white surfaces and advanced technology. Bright, clinical lighting fills the space, capturing a moment of scientific wonder and the sense of humans pushing the boundaries of creation.

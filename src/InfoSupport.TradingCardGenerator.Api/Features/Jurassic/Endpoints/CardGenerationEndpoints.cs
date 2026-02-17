@@ -9,10 +9,10 @@ namespace InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Endpoints;
 public static class CardGenerationEndpoints
 {
     /// <summary>
-    /// Maps the endpoints for card generation
+    /// Maps the endpoints for Jurassic card generation
     /// </summary>
     /// <param name="app">Web application instance to map the endpoints on.</param>
-    public static void MapCardGenerationEndpoints(this WebApplication app)
+    public static void MapJurassicCardEndpoints(this WebApplication app)
     {
         app.MapPost("/cards/jurassic", GenerateTradingCard);
         app.MapGet("/cards/jurassic/scenes", GetAvailableScenes);

@@ -1,6 +1,8 @@
 using System.ClientModel;
 using Azure.AI.OpenAI;
 using Azure.Identity;
+using InfoSupport.TradingCardGenerator.Api.Features.Jurassic;
+using InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Endpoints;
 using InfoSupport.TradingCardGenerator.Api.Features.Sports;
 using InfoSupport.TradingCardGenerator.Api.Features.Sports.Endpoints;
 using InfoSupport.TradingCardGenerator.Api.Shared;
@@ -36,12 +38,14 @@ var azureClient = new AzureOpenAIClient(
 builder.Services.AddSingleton(azureClient);
 builder.Services.AddSingleton<ImageMetadataInjector>();
 builder.Services.AddSingleton<SportsCardPhotoGenerator>();
+builder.Services.AddSingleton<JurassicCardPhotoGenerator>();
 
 var app = builder.Build();
 
 app.UseCors("AllowFrontend");
 
 app.UseStaticFiles();
-app.MapCardGenerationEndpoints();
+app.MapSportsCardEndpoints();
+app.MapJurassicCardEndpoints();
 
 app.Run();

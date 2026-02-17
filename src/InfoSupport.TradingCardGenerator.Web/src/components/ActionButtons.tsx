@@ -1,7 +1,6 @@
 import { RefObject } from 'react';
 import { toPng } from 'html-to-image';
 import { PDFDocument } from 'pdf-lib';
-import { TEAMS } from '@/lib/constants';
 import { ArrowDownTrayIcon, ArrowUpTrayIcon, PrinterIcon } from '@heroicons/react/16/solid';
 
 interface ActionButtonsProps {
@@ -153,27 +152,8 @@ export default function ActionButtons({
     if (!generatedCardImage || !cardDisplayRef.current) return;
 
     try {
-      // Wait a moment for the component to fully render
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // Ensure all images are loaded before converting
-      const images = cardDisplayRef.current.querySelectorAll('img');
-      await Promise.all(Array.from(images).map(img => {
-        if (img.complete) return Promise.resolve();
-        return new Promise((resolve, reject) => {
-          img.onload = resolve;
-          img.onerror = reject;
-        });
-      }));
-
-      console.log('Converting card to image...');
+      const dataUrl = await toPng(cardDisplayRef.current, { quality: 1.0, pixelRatio: 2 });
       
-      const dataUrl = await toPng(cardDisplayRef.current, {
-        quality: 1.0,
-        pixelRatio: 2
-      });
-      
-      // Download the image
       const a = document.createElement('a');
       a.href = dataUrl;
       a.download = `techorama-trading-card-${playerName.replace(/\s+/g, '-').toLowerCase()}.png`;
@@ -204,17 +184,17 @@ export default function ActionButtons({
 
   const primaryButtonStyle = {
     ...buttonBaseStyle,
-    backgroundColor: '#f1e4ce',
-    color: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
-    borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
+    backgroundColor: 'var(--theme-card-bg)',
+    color: 'var(--theme-primary)',
+    borderColor: 'var(--theme-primary)',
     textShadow: '1px 1px 2px rgba(0,0,0,0.1)'
   };
 
   const secondaryButtonStyle = {
     ...buttonBaseStyle,
-    backgroundColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
-    color: '#f1e4ce',
-    borderColor: teamColor ? TEAMS[teamColor as keyof typeof TEAMS].color : '#174a6f',
+    backgroundColor: 'var(--theme-primary)',
+    color: 'var(--theme-card-bg)',
+    borderColor: 'var(--theme-primary)',
     textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
   };
 

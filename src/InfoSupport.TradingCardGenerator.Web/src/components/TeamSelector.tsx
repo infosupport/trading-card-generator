@@ -27,10 +27,10 @@ export default function TeamSelector({
                     alt={team.name}
                     width={60}
                     height={60}
-                    className={`object-contain rounded-full border-4 w-[60px] h-[60px] sm:w-[70px] sm:h-[70px] bg-[#f1e4ce] hover:scale-110 transition-all duration-200 cursor-pointer ${
+                    className={`object-contain rounded-full border-4 w-[60px] h-[60px] sm:w-[70px] sm:h-[70px] bg-theme-card-bg hover:scale-110 transition-all duration-200 cursor-pointer ${
                       isSelected 
-                        ? 'border-blue-500 shadow-lg shadow-blue-500/50' 
-                        : 'border-[#eee] hover:border-gray-300'
+                        ? 'border-theme-border-active shadow-lg' 
+                        : 'border-theme-border hover:border-theme-border-hover'
                     }`}
                     title={team.name}
                   />

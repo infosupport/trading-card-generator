@@ -40,7 +40,7 @@ const TradingCardDisplay = forwardRef<HTMLDivElement, TradingCardDisplayProps>((
   onSpecialPropertySelect,
   selectedSport,
   onSportSelect,
-  isVipMode = false
+  isVipMode = false,
 }, ref) => {
   return (
     <div className="flex flex-col lg:grid lg:grid-cols-[1fr_375px_1fr] gap-4 lg:gap-0 justify-center items-start lg:items-center">

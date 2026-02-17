@@ -58,3 +58,14 @@ export interface GenerateCardRequest {
 export interface GenerateCardResponse {
   image: string; // base64 encoded generated card image
 }
+
+// Jurassic Card Types
+export interface GenerateDinoCardRequest {
+  photo: string; // base64 encoded photo
+  scene: string; // scene identifier (e.g., "scene01", "scene02")
+}
+
+export interface SceneDescription {
+  identifier: string;
+  description: string;
+}

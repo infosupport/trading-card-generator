@@ -3,14 +3,46 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* Default theme colors (sports) */
+  --theme-primary: #174a6f;
+  --theme-card-bg: #f1e4ce;
+  --theme-border: #eee;
+  --theme-border-hover: #d1d5db;
+  --theme-border-active: #fbbf24;
+}
+
+[data-theme="sports"] {
+  --theme-primary: #174a6f;
+  --theme-card-bg: #f1e4ce;
+  --theme-border: #eee;
+  --theme-border-hover: #d1d5db;
+  --theme-border-active: #fbbf24;
+}
+
+[data-theme="jurassic"] {
+  --theme-primary: #2d5016;
+  --theme-card-bg: #d4c5a9;
+  --theme-border: #6b5f4f;
+  --theme-border-hover: #8b7355;
+  --theme-border-active: #d4af37;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-theme-primary: var(--theme-primary);
+  --color-theme-card-bg: var(--theme-card-bg);
+  --color-theme-border: var(--theme-border);
+  --color-theme-border-hover: var(--theme-border-hover);
+  --color-theme-border-active: var(--theme-border-active);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-bebas-neue: var(--font-bebas-neue);
+  --font-rye: var(--font-rye);
+  --font-creepster: var(--font-creepster);
+  --font-metal-mania: var(--font-metal-mania);
+  --font-nosifer: var(--font-nosifer);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,4 +56,9 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@page {
+  size: A6 portrait;
+  margin: 0;
 }

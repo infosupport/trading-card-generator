@@ -1,4 +1,4 @@
-import { GenerateCardRequest, GenerateCardResponse } from './types';
+import { GenerateCardRequest, GenerateCardResponse, GenerateDinoCardRequest, SceneDescription } from './types';
 
 const API_BASE_URL = process.env.BACKEND_HTTP || 'http://localhost:5000';
 
@@ -20,6 +20,47 @@ export class TradingCardApi {
       return await response.json();
     } catch (error) {
       console.error('Error generating trading card:', error);
+      throw error;
+    }
+  }
+
+  static async generateDinoCard(request: GenerateDinoCardRequest): Promise<GenerateCardResponse> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/cards/jurassic`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(request),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error generating dino card:', error);
+      throw error;
+    }
+  }
+
+  static async getAvailableScenes(): Promise<SceneDescription[]> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/cards/jurassic/scenes`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching available scenes:', error);
       throw error;
     }
   }
