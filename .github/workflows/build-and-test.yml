@@ -17,17 +17,17 @@ jobs:
         with:
           dotnet-version: "10.0.x"
           cache: true
-          cache-dependency-path: '**/packages.lock.json'
+          cache-dependency-path: "**/packages.lock.json"
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: "22"
-          cache: 'npm'
-          cache-dependency-path: 'src/InfoSupport.TradingCardGenerator.Web/package-lock.json'
+          cache: "npm"
+          cache-dependency-path: "src/InfoSupport.TradingCardGenerator.Web/package-lock.json"
 
       - name: Restore backend dependencies
-        run: dotnet restore --locked-mode 
+        run: dotnet restore
 
       - name: Build backend API
         run: dotnet build InfoSupport.TradingCardGenerator.slnx --no-restore --configuration Release
@@ -35,10 +35,10 @@ jobs:
       - name: Restore frontend dependencies
         run: npm ci --prefer-offline --no-audit --no-fund
         working-directory: src/InfoSupport.TradingCardGenerator.Web
-      
+
       - name: Build frontend
         run: npm run build
         working-directory: src/InfoSupport.TradingCardGenerator.Web
-        
+
       - name: Run tests
         run: dotnet test InfoSupport.TradingCardGenerator.slnx --no-build --configuration Release --verbosity normal --filter "Category!=Integration"
