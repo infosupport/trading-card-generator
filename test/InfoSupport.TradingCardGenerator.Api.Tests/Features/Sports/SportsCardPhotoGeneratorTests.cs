@@ -1,5 +1,4 @@
-using System.ClientModel;
-using Azure.AI.OpenAI;
+using Azure.Identity;
 using InfoSupport.TradingCardGenerator.Api.Features.Sports;
 using InfoSupport.TradingCardGenerator.Api.Features.Sports.Models;
 using InfoSupport.TradingCardGenerator.Api.Shared;
@@ -16,21 +15,20 @@ namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.Sports
         {
             var configuration = GetConfiguration();
 
-            var languageModelSettings = new ImageModelSettings
+            var settings = Options.Create(new ImageModelSettings
             {
                 DeploymentName = configuration["ImageGenerationModel:DeploymentName"]!,
                 Endpoint = configuration["ImageGenerationModel:Endpoint"]!,
-                ApiKey = configuration["ImageGenerationModel:ApiKey"]!,
-            };
+                Provider = ImageModelProvider.Mai,
+            });
 
-            var azureClient = new AzureOpenAIClient(
-                new Uri(configuration["ImageGenerationModel:Endpoint"]!),
-                new ApiKeyCredential(configuration["ImageGenerationModel:ApiKey"]!),
-                new AzureOpenAIClientOptions(AzureOpenAIClientOptions.ServiceVersion.V2025_04_01_Preview));
+            var imageEditClient = new MaiImageEditClient(
+                new HttpClient(),
+                new AzureCliCredential(),
+                settings);
 
-            var settings = Options.Create(languageModelSettings);
             var imageMetadataInjector = new ImageMetadataInjector();
-            var generator = new SportsCardPhotoGenerator(azureClient, settings, imageMetadataInjector);
+            var generator = new SportsCardPhotoGenerator(imageEditClient, imageMetadataInjector);
 
             var request = new GenerateCardRequest
             {
@@ -50,7 +48,6 @@ namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.Sports
             Assert.NotNull(result);
             Assert.False(string.IsNullOrEmpty(result.Image));
 
-            // Save the image to disk
             SaveGeneratedImage(result.Image);
         }
 

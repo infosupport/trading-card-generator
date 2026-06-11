@@ -1,10 +1,7 @@
-using System.ClientModel;
-using Azure.AI.OpenAI;
 using Azure.Identity;
 using InfoSupport.TradingCardGenerator.Api.Features.Jurassic;
 using InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Models;
 using InfoSupport.TradingCardGenerator.Api.Shared;
-using InfoSupport.TradingCardGenerator.Api.Tests.Features.Sports;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
@@ -18,21 +15,20 @@ namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.Jurassic
         {
             var configuration = GetConfiguration();
 
-            var languageModelSettings = new ImageModelSettings
+            var settings = Options.Create(new ImageModelSettings
             {
                 DeploymentName = configuration["ImageGenerationModel:DeploymentName"]!,
                 Endpoint = configuration["ImageGenerationModel:Endpoint"]!,
-                ApiKey = configuration["ImageGenerationModel:ApiKey"]!,
-            };
+                Provider = ImageModelProvider.Mai,
+            });
 
-            var azureClient = new AzureOpenAIClient(
-                new Uri(configuration["ImageGenerationModel:Endpoint"]!),
+            var imageEditClient = new MaiImageEditClient(
+                new HttpClient(),
                 new AzureCliCredential(),
-                new AzureOpenAIClientOptions(AzureOpenAIClientOptions.ServiceVersion.V2025_04_01_Preview));
+                settings);
 
-            var settings = Options.Create(languageModelSettings);
             var imageMetadataInjector = new ImageMetadataInjector();
-            var generator = new JurassicCardPhotoGenerator(azureClient, settings, imageMetadataInjector);
+            var generator = new JurassicCardPhotoGenerator(imageEditClient, imageMetadataInjector);
 
             var request = new GenerateCardRequest
             {
@@ -45,7 +41,6 @@ namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.Jurassic
             Assert.NotNull(result);
             Assert.False(string.IsNullOrEmpty(result.Image));
 
-            // Save the image to disk
             SaveGeneratedImage(result.Image);
         }
 
@@ -58,7 +53,7 @@ namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.Jurassic
         private IConfiguration GetConfiguration()
         {
             IConfiguration configuration = new ConfigurationBuilder()
-                .AddUserSecrets(typeof(TradingCardPhotoGeneratorIntegrationTests).Assembly)
+                .AddUserSecrets(typeof(JurassicCardPhotoGeneratorIntegrationTests).Assembly)
                 .AddEnvironmentVariables()
                 .Build();
 
@@ -67,7 +62,7 @@ namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.Jurassic
 
         private string GetSamplePhoto()
         {
-            var assembly = typeof(TradingCardPhotoGeneratorIntegrationTests).Assembly;
+            var assembly = typeof(JurassicCardPhotoGeneratorIntegrationTests).Assembly;
 
             using var photoStream = assembly.GetManifestResourceStream(
                 "InfoSupport.TradingCardGenerator.Api.Tests.TestData.photo.png")
@@ -75,7 +70,7 @@ namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.Jurassic
 
             using var ms = new MemoryStream();
             photoStream.CopyTo(ms);
- 
+
             return Convert.ToBase64String(ms.ToArray());
         }
     }

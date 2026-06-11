@@ -1,24 +1,18 @@
-using System.Buffers.Text;
-using Azure.AI.OpenAI;
 using HandlebarsDotNet;
 using InfoSupport.TradingCardGenerator.Api.Features.Sports.Models;
 using InfoSupport.TradingCardGenerator.Api.Shared;
-using Microsoft.Extensions.Options;
-using OpenAI.Images;
 
 namespace InfoSupport.TradingCardGenerator.Api.Features.Sports;
 
 /// <summary>
-/// The sports  card generator is responsible for generating images with a sports theme.
+/// The sports card generator is responsible for generating images with a sports theme.
 /// </summary>
-/// <param name="azureClient">The azure AI client needed to talk to the image generation model.</param>
-/// <param name="modelSettings">The settings containing the deployment name of the image generation model.</param>
+/// <param name="imageEditClient">The image edit client used to transform the photo.</param>
 /// <param name="metadataInjector">The metadata injector used to watermark the generated image.</param>
 public class SportsCardPhotoGenerator(
-    AzureOpenAIClient azureClient,
-    IOptions<ImageModelSettings> modelSettings,
+    IImageEditClient imageEditClient,
     ImageMetadataInjector metadataInjector)
-    : CardPhotoGeneratorBase(azureClient, modelSettings, metadataInjector)
+    : CardPhotoGeneratorBase(imageEditClient, metadataInjector)
 {
     const string SportsCardPrompt = "InfoSupport.TradingCardGenerator.Api.Features.Sports.Prompts.GeneratePhoto.md";
 
