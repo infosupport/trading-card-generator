@@ -3,6 +3,8 @@ using Azure.Core;
 using Azure.Identity;
 using InfoSupport.TradingCardGenerator.Api.Features.Jurassic;
 using InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Endpoints;
+using InfoSupport.TradingCardGenerator.Api.Features.Medieval;
+using InfoSupport.TradingCardGenerator.Api.Features.Medieval.Endpoints;
 using InfoSupport.TradingCardGenerator.Api.Features.Sports;
 using InfoSupport.TradingCardGenerator.Api.Features.Sports.Endpoints;
 using InfoSupport.TradingCardGenerator.Api.Shared;
@@ -52,6 +54,7 @@ else
 builder.Services.AddSingleton<ImageMetadataInjector>();
 builder.Services.AddSingleton<SportsCardPhotoGenerator>();
 builder.Services.AddSingleton<JurassicCardPhotoGenerator>();
+builder.Services.AddSingleton<MedievalCardPhotoGenerator>();
 
 var app = builder.Build();
 
@@ -60,5 +63,6 @@ app.UseCors("AllowFrontend");
 app.UseStaticFiles();
 app.MapSportsCardEndpoints();
 app.MapJurassicCardEndpoints();
+app.MapMedievalCardEndpoints();
 
 app.Run();

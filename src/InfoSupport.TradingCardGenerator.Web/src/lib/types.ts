@@ -65,6 +65,12 @@ export interface GenerateDinoCardRequest {
   scene: string; // scene identifier (e.g., "scene01", "scene02")
 }
 
+// Medieval Card Types
+export interface GenerateMedievalCardRequest {
+  photo: string; // base64 encoded photo
+  scene: string; // scene identifier (e.g., "scene01", "scene02")
+}
+
 export interface SceneDescription {
   identifier: string;
   description: string;

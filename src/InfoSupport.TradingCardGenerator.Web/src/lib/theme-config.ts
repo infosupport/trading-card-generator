@@ -62,6 +62,43 @@ export const sportsTheme: ThemeConfig = {
   ],
 };
 
+// Medieval theme configuration
+export const medievalTheme: ThemeConfig = {
+  id: 'medieval',
+  name: 'Medieval Cards',
+  title: 'Medieval Card Generator',
+  subtitle: 'Step into the Middle Ages and become a stained glass legend',
+  headerTitle: '⚔️ MEDIEVAL EDITION 🏰',
+  headerSubtitle: 'STAINED GLASS CARD CREATOR',
+  firstNamePlaceholder: '🛡️ GUEST FIRST NAME',
+  lastNamePlaceholder: '⚔️ GUEST LAST NAME',
+  playerNameFallback: 'GUEST NAME',
+  colors: {
+    primary: '#7c2d12', // deep crimson
+    cardBackground: '#fef3c7', // parchment
+    border: '#92400e',
+    borderHover: '#b45309',
+    borderActive: '#d4af37', // gold
+  },
+  loadingMessages: [
+    "Illuminating the manuscript...",
+    "Firing the kiln for your glass panel...",
+    "Grinding the lead came...",
+    "Mixing jewel-bright pigments...",
+    "Cutting the coloured glass...",
+    "Soldering the lead lines...",
+    "Polishing the tracery border...",
+    "Lighting the candles in the tavern...",
+    "Inscribing your heraldic device...",
+    "Hanging the panel in the lancet...",
+    "Stoking the forge...",
+    "Sharpening the glazier's diamond...",
+    "Casting the amber glow...",
+    "Raising the portcullis...",
+    "Hammering the armour plates..."
+  ],
+};
+
 // Jurassic theme configuration
 export const jurassicTheme: ThemeConfig = {
   id: 'jurassic',

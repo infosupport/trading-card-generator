@@ -34,6 +34,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Features\Sports\Prompts\*.md" />
     <EmbeddedResource Include="Features\Jurassic\Prompts\*.md" />
+    <EmbeddedResource Include="Features\Medieval\Prompts\*.md" />
   </ItemGroup>
 
 </Project>
