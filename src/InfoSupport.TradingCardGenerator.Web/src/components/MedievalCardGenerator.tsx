@@ -2,12 +2,14 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useWebcam } from '@/hooks/useWebcam';
+import { useFaceDetection } from '@/hooks/useFaceDetection';
 import { TradingCardApi, blobToBase64, base64ToDataUrl } from '@/lib/api';
 import { GenerateMedievalCardRequest } from '@/lib/types';
 import { medievalTheme } from '@/lib/theme-config';
 
 import MedievalActionButtons from './MedievalActionButtons';
 import MedievalSceneSelector from './MedievalSceneSelector';
+import MedievalCardBack from './MedievalCardBack';
 import Image from 'next/image';
 import { CameraIcon } from '@heroicons/react/24/outline';
 import { 
@@ -33,6 +35,8 @@ export default function MedievalCardGenerator() {
   const [lastName, setLastName] = useState('');
   const [stats, setStats] = useState({ strength: 5, wisdom: 5, charisma: 5 });
   const [isRolling, setIsRolling] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [countdown, setCountdown] = useState<number | null>(null);
 
   const guildName = scenes.find((scene) => scene.id === selectedScene)?.name ?? '';
   const playerName = (firstName.trim() + ' ' + lastName.trim()).trim().toUpperCase() || 'UNKNOWN ADVENTURER';
@@ -44,14 +48,17 @@ export default function MedievalCardGenerator() {
   });
 
   const handleRollFate = () => {
-    if (isRolling) return;
+    if (isRolling || !firstName.trim() || !lastName.trim()) return;
     setIsRolling(true);
     if (scenes.length > 0) {
       const randomScene = scenes[Math.floor(Math.random() * scenes.length)];
       setSelectedScene(randomScene.id);
     }
     setStats(rollStats());
-    setTimeout(() => setIsRolling(false), 500);
+    setTimeout(() => {
+      setIsRolling(false);
+      setIsFlipped(true);
+    }, 500);
   };
 
   const {
@@ -63,6 +70,34 @@ export default function MedievalCardGenerator() {
   } = useWebcam({
     facingMode: 'user'
   });
+
+  // Only look for a face once the card has flipped to the front and it's ready for a fresh capture
+  const readyToCapture = isFlipped && isStreaming && !isCapturing && !isGenerating && !generatedCardImage;
+  const { faceDetected } = useFaceDetection({ videoRef, enabled: readyToCapture });
+
+  // Start (or cancel) the 3-2-1 countdown as a face comes in and out of view
+  useEffect(() => {
+    if (!readyToCapture || !faceDetected) {
+      setCountdown(null);
+      return;
+    }
+    setCountdown((current) => (current === null ? 3 : current));
+  }, [readyToCapture, faceDetected]);
+
+  // Tick the countdown down, then trigger the capture automatically
+  useEffect(() => {
+    if (countdown === null) return;
+    if (countdown <= 0) {
+      handleCapturePhoto();
+      setCountdown(null);
+      return;
+    }
+    const timeout = setTimeout(() => {
+      setCountdown((current) => (current !== null ? current - 1 : null));
+    }, 1000);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countdown]);
 
   // Rotate loading messages during generation
   useEffect(() => {
@@ -260,10 +295,21 @@ export default function MedievalCardGenerator() {
 
         {/* Center - Medieval Card */}
         <div className="flex justify-center w-full lg:w-auto">
+          <div className={isFlipped ? 'hidden' : ''}>
+            <MedievalCardBack
+              firstName={firstName}
+              lastName={lastName}
+              onFirstNameChange={setFirstName}
+              onLastNameChange={setLastName}
+              onRollFate={handleRollFate}
+              isRolling={isRolling}
+              canRoll={firstName.trim().length > 0 && lastName.trim().length > 0}
+            />
+          </div>
           <div
             id="medieval-card-print-container"
             ref={cardDisplayRef}
-            className="w-[420px] h-[587px] p-3.5 rounded-2xl transition-all duration-700 ease-in-out mx-auto overflow-hidden"
+            className={`${isFlipped ? '' : 'hidden'} w-[420px] h-[587px] p-3.5 rounded-2xl transition-all duration-700 ease-in-out mx-auto overflow-hidden`}
             style={{
               background: 'linear-gradient(135deg, #5a3d24 0%, #2b1c10 100%)',
               border: '3px solid var(--theme-border-active)',
@@ -336,6 +382,42 @@ export default function MedievalCardGenerator() {
                         </div>
                       </div>
                     )}
+
+                    {/* Face-detection hint while scrying for a face */}
+                    {isStreaming && countdown === null && readyToCapture && (
+                      <div className="absolute top-3 left-0 right-0 flex justify-center">
+                        <div
+                          className="px-3 py-1 rounded-full text-xs sm:text-sm tracking-wide animate-pulse"
+                          style={{
+                            fontFamily: "var(--font-metal-mania), 'Georgia', serif",
+                            background: 'rgba(30,20,12,0.7)',
+                            color: '#f3d98a',
+                          }}
+                        >
+                          {faceDetected ? 'Hold still...' : 'Seeking thy visage...'}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Countdown overlay - triggers automatically once a face is steadily detected */}
+                    {isStreaming && countdown !== null && (
+                      <div
+                        className="absolute inset-0 flex items-center justify-center"
+                        style={{ background: 'rgba(20,13,8,0.4)' }}
+                      >
+                        <div
+                          key={countdown}
+                          className="text-8xl sm:text-9xl"
+                          style={{
+                            fontFamily: "var(--font-metal-mania), 'Georgia', serif",
+                            color: 'var(--theme-border-active)',
+                            textShadow: '0 4px 12px rgba(0,0,0,0.6)',
+                          }}
+                        >
+                          {countdown === 0 ? '📸' : countdown}
+                        </div>
+                      </div>
+                    )}
                   </>
                 )}
 
@@ -395,66 +477,15 @@ export default function MedievalCardGenerator() {
           </div>
         </div>
 
-        {/* Right side - Adventurer details */}
-        <div className="flex flex-col w-full lg:w-auto">
-          <div className="p-2 sm:p-4">
-            <h3
-              className="text-lg sm:text-xl mb-3 sm:mb-4 text-center tracking-wide"
-              style={{ fontFamily: "var(--font-metal-mania), 'Georgia', serif", color: 'var(--theme-primary)' }}
-            >
-              Sign Thy Name
-            </h3>
-            <div className="flex flex-col gap-2 w-full max-w-[320px] mx-auto">
-              <input
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                placeholder="First Name"
-                maxLength={20}
-                className="px-3 py-2 rounded-lg text-center outline-none"
-                style={{
-                  fontFamily: "var(--font-metal-mania), 'Georgia', serif",
-                  background: 'linear-gradient(180deg, var(--theme-card-bg) 0%, #e4cfa0 100%)',
-                  color: 'var(--theme-primary)',
-                  border: '2px solid var(--theme-border-active)',
-                }}
-              />
-              <input
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                placeholder="Last Name"
-                maxLength={20}
-                className="px-3 py-2 rounded-lg text-center outline-none"
-                style={{
-                  fontFamily: "var(--font-metal-mania), 'Georgia', serif",
-                  background: 'linear-gradient(180deg, var(--theme-card-bg) 0%, #e4cfa0 100%)',
-                  color: 'var(--theme-primary)',
-                  border: '2px solid var(--theme-border-active)',
-                }}
-              />
-              <button
-                onClick={handleRollFate}
-                disabled={isGenerating}
-                className="mt-2 flex items-center justify-center gap-2 px-4 py-2 rounded-full transition-transform duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                style={{
-                  fontFamily: "var(--font-metal-mania), 'Georgia', serif",
-                  background: 'linear-gradient(180deg, var(--theme-primary) 0%, #5a1d0c 100%)',
-                  color: 'var(--theme-card-bg)',
-                  border: '2px solid var(--theme-border-active)',
-                  boxShadow: '0 3px 0 rgba(0,0,0,0.4)',
-                }}
-              >
-                <span className={isRolling ? 'inline-block animate-spin' : 'inline-block'}>🎲</span>
-                Roll for Fate
-              </button>
-            </div>
-          </div>
-        </div>
+        {/* Right side - empty for symmetry */}
+        <div className="flex flex-col w-full lg:w-auto" />
       </div>
 
       <MedievalActionButtons
         isStreaming={isStreaming}
         isCapturing={isCapturing}
         isGenerating={isGenerating}
+        canCapture={isFlipped}
         generatedCardImage={generatedCardImage}
         cardDisplayRef={cardDisplayRef}
         onCapturePhoto={handleCapturePhoto}

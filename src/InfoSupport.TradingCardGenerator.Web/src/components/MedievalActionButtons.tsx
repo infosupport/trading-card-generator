@@ -6,6 +6,7 @@ interface MedievalActionButtonsProps {
   isStreaming: boolean;
   isCapturing: boolean;
   isGenerating: boolean;
+  canCapture: boolean;
   generatedCardImage: string | null;
   cardDisplayRef: RefObject<HTMLDivElement | null>;
   onCapturePhoto: () => void;
@@ -16,6 +17,7 @@ export default function MedievalActionButtons({
   isStreaming,
   isCapturing,
   isGenerating,
+  canCapture,
   generatedCardImage,
   cardDisplayRef,
   onCapturePhoto,
@@ -78,7 +80,7 @@ export default function MedievalActionButtons({
       {/* Capture button */}
       <button
         onClick={onCapturePhoto}
-        disabled={!isStreaming || isCapturing || isGenerating}
+        disabled={!canCapture || !isStreaming || isCapturing || isGenerating}
         className="flex items-center gap-2 px-7 py-3 rounded-full transition-all duration-200 hover:scale-105 hover:shadow-[0_0_14px_rgba(212,175,55,0.6)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
         style={primaryButtonStyle}
       >
@@ -89,7 +91,7 @@ export default function MedievalActionButtons({
       {/* Upload button */}
       <label
         className={`flex items-center gap-2 px-7 py-3 rounded-full transition-all duration-200 cursor-pointer ${
-          isGenerating ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 hover:shadow-[0_0_14px_rgba(212,175,55,0.6)]'
+          isGenerating || !canCapture ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 hover:shadow-[0_0_14px_rgba(212,175,55,0.6)]'
         }`}
         style={primaryButtonStyle}
       >
@@ -99,7 +101,7 @@ export default function MedievalActionButtons({
           type="file"
           accept="image/*"
           onChange={handleFileUpload}
-          disabled={isGenerating}
+          disabled={isGenerating || !canCapture}
           className="hidden"
         />
       </label>

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "face-api.js": "^0.22.2",
     "html-to-image": "^1.11.13",
     "next": "^16.1.6",
     "pdf-lib": "^1.17.1",
