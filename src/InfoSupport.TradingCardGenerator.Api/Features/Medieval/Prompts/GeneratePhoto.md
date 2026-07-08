@@ -1,17 +1,5 @@
-Transform the provided portrait photo into a dramatic medieval illustration in portrait format.
+A highly detailed medieval fantasy character portrait in a painterly illustration style with subtle comic book influence. The character is shown from roughly the waist up, filling the frame — close enough that fine details of the face, clothing and props are clearly visible. The character is based on the person in the reference photo — their face and likeness must remain clearly recognisable. Wearing richly textured period clothing or armour appropriate to their role. Background scenery is minimal and loosely rendered, just enough to suggest the setting. No borders, frames, overlays or decorative UI elements — clean image only. Soft ink outlines, painterly shading with some cel-shaded accents, rich jewel tones, dramatic lighting. Style reference: Magic: The Gathering card art — detailed fantasy illustration with a slight graphic quality. Realistic facial features, fine fabric and material textures, iconic and striking composition.
 
-## Composition
-
-The image is divided into two zones:
-
-**Top zone (upper quarter):** A stained glass medallion set into a Gothic lancet window arch, as if you are looking through coloured glass from inside a cathedral. The medallion depicts a small iconic symbol representing the subject's role (see scene description). Rich jewel-bright lead-came glass — amber, sapphire, deep crimson, gold and forest green — fills the arch surround. The stone tracery of the Gothic window frames this top section.
-
-**Main zone (remaining three-quarters):** The subject from the reference photo rendered as a finely detailed, realistically lit medieval illustration — painterly, warm candlelight or daylight, rich earth tones, deep shadows. The subject's face must remain clearly recognisable and true to the reference photo. Clothing, props and setting follow the scene description exactly.
-
-## Scene description
+## Scene / role
 
 {{ SceneDescription }}
-
-## Style instructions
-
-Overall style: high-quality digital painting with the warmth of a traditional oil illustration — NOT a comic, NOT fully stained glass. Dramatic chiaroscuro lighting appropriate to the scene. Fine fabric and material textures. Muted earthy palette for the main figure, jewel-bright palette for the stained glass medallion above. No modern elements. Portrait-format composition.

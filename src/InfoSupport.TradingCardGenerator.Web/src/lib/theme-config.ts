@@ -18,6 +18,7 @@ export interface ThemeConfig {
   subtitle: string;
   headerTitle: string;
   headerSubtitle: string;
+  sceneSelectorLabel: string;
   firstNamePlaceholder: string;
   lastNamePlaceholder: string;
   playerNameFallback: string;
@@ -33,6 +34,7 @@ export const sportsTheme: ThemeConfig = {
   subtitle: 'Transform your photo into a professional sports trading card',
   headerTitle: '🏆 TECHORAMA SPORTS EDITION 🏆',
   headerSubtitle: 'ULTIMATE TECH TRADING CARD CREATOR',
+  sceneSelectorLabel: 'Choose Scene',
   firstNamePlaceholder: '⚡ PLAYER FIRST NAME',
   lastNamePlaceholder: '🚀 PLAYER LAST NAME',
   playerNameFallback: 'PLAYER NAME',
@@ -68,8 +70,9 @@ export const medievalTheme: ThemeConfig = {
   name: 'Medieval Cards',
   title: 'Medieval Card Generator',
   subtitle: 'Step into the Middle Ages and become a stained glass legend',
-  headerTitle: '⚔️ MEDIEVAL EDITION 🏰',
-  headerSubtitle: 'STAINED GLASS CARD CREATOR',
+  headerTitle: 'Medieval Edition',
+  headerSubtitle: 'Hear ye, get your keepsake here',
+  sceneSelectorLabel: 'Choose Thy Guild',
   firstNamePlaceholder: '🛡️ GUEST FIRST NAME',
   lastNamePlaceholder: '⚔️ GUEST LAST NAME',
   playerNameFallback: 'GUEST NAME',
@@ -107,6 +110,7 @@ export const jurassicTheme: ThemeConfig = {
   subtitle: 'Journey back in time and become a prehistoric legend',
   headerTitle: '🦖 JURASSIC EDITION 🦕',
   headerSubtitle: 'PREHISTORIC ADVENTURE CARD CREATOR',
+  sceneSelectorLabel: 'Choose Scene',
   firstNamePlaceholder: '🦴 GUEST FIRST NAME',
   lastNamePlaceholder: '🌿 GUEST LAST NAME',
   playerNameFallback: 'GUEST NAME',
