@@ -16,6 +16,7 @@ public static class CardGenerationEndpoints
     {
         app.MapPost("/cards/medieval", GenerateTradingCard);
         app.MapGet("/cards/medieval/scenes", GetAvailableScenes);
+        app.MapGet("/cards/medieval/leaderboard", GetLeaderboard);
     }
 
     private static async Task<GenerateCardResponse> GenerateTradingCard(
@@ -23,6 +24,12 @@ public static class CardGenerationEndpoints
         [FromServices] MedievalCardPhotoGenerator generator)
     {
         return await generator.TransformPhoto(request);
+    }
+
+    private static IReadOnlyList<LeaderboardEntry> GetLeaderboard(
+        [FromServices] MedievalLeaderboardService leaderboardService)
+    {
+        return leaderboardService.GetTopEntries();
     }
 
     private static IEnumerable<SceneDescription> GetAvailableScenes()

@@ -25,17 +25,17 @@ interface UseFaceDetectionOptions {
 }
 
 /**
- * Polls the given video element for a face using face-api.js's TinyFaceDetector.
+ * Polls the given video element for faces using face-api.js's TinyFaceDetector.
  * Detection only runs while `enabled` is true, so callers can pause it when the
  * camera preview isn't visible or a capture is already in progress.
  */
 export function useFaceDetection({ videoRef, enabled, intervalMs = 400 }: UseFaceDetectionOptions) {
-  const [faceDetected, setFaceDetected] = useState(false);
+  const [faceCount, setFaceCount] = useState(0);
   const cancelledRef = useRef(false);
 
   useEffect(() => {
     if (!enabled) {
-      setFaceDetected(false);
+      setFaceCount(0);
       return;
     }
 
@@ -53,9 +53,9 @@ export function useFaceDetection({ videoRef, enabled, intervalMs = 400 }: UseFac
           const video = videoRef.current;
           if (!video || video.readyState < 2) return;
           try {
-            const detection = await faceapi.detectSingleFace(video, options);
+            const detections = await faceapi.detectAllFaces(video, options);
             if (!cancelledRef.current) {
-              setFaceDetected(!!detection);
+              setFaceCount(detections.length);
             }
           } catch {
             // Ignore transient detection errors (e.g. video not ready yet)
@@ -71,9 +71,9 @@ export function useFaceDetection({ videoRef, enabled, intervalMs = 400 }: UseFac
     return () => {
       cancelledRef.current = true;
       if (intervalId) clearInterval(intervalId);
-      setFaceDetected(false);
+      setFaceCount(0);
     };
   }, [enabled, videoRef, intervalMs]);
 
-  return { faceDetected };
+  return { faceCount };
 }

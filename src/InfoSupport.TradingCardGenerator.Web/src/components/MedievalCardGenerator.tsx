@@ -4,12 +4,13 @@ import { useState, useEffect, useRef } from 'react';
 import { useWebcam } from '@/hooks/useWebcam';
 import { useFaceDetection } from '@/hooks/useFaceDetection';
 import { TradingCardApi, blobToBase64, base64ToDataUrl } from '@/lib/api';
-import { GenerateMedievalCardRequest } from '@/lib/types';
+import { GenerateMedievalCardRequest, LeaderboardEntry } from '@/lib/types';
 import { medievalTheme } from '@/lib/theme-config';
 
 import MedievalActionButtons from './MedievalActionButtons';
 import MedievalSceneSelector from './MedievalSceneSelector';
 import MedievalCardBack from './MedievalCardBack';
+import MedievalLeaderboard from './MedievalLeaderboard';
 import Image from 'next/image';
 import { CameraIcon } from '@heroicons/react/24/outline';
 import { 
@@ -20,6 +21,15 @@ import {
 // Standard playing card dimensions (63mm × 88mm) - portrait orientation
 const CARD_DISPLAY_WIDTH = 420;
 const CARD_DISPLAY_HEIGHT = 587;
+
+// Stained-glass trade emblems, keyed by scene identifier
+export const SCENE_EMBLEMS: Record<string, string> = {
+  scene01: '/medieval/knight.png',
+  scene02: '/medieval/king.png',
+  scene03: '/medieval/minstrel.png',
+  scene04: '/medieval/bard.png',
+  scene05: '/medieval/alchemist.png',
+};
 
 export default function MedievalCardGenerator() {
   const [isCapturing, setIsCapturing] = useState(false);
@@ -37,6 +47,7 @@ export default function MedievalCardGenerator() {
   const [isRolling, setIsRolling] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
   const [countdown, setCountdown] = useState<number | null>(null);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
 
   const guildName = scenes.find((scene) => scene.id === selectedScene)?.name ?? '';
   const playerName = (firstName.trim() + ' ' + lastName.trim()).trim().toUpperCase() || 'UNKNOWN ADVENTURER';
@@ -73,16 +84,18 @@ export default function MedievalCardGenerator() {
 
   // Only look for a face once the card has flipped to the front and it's ready for a fresh capture
   const readyToCapture = isFlipped && isStreaming && !isCapturing && !isGenerating && !generatedCardImage;
-  const { faceDetected } = useFaceDetection({ videoRef, enabled: readyToCapture });
+  const { faceCount } = useFaceDetection({ videoRef, enabled: readyToCapture });
+  const singleFaceDetected = faceCount === 1;
+  const multipleFacesDetected = faceCount > 1;
 
-  // Start (or cancel) the 3-2-1 countdown as a face comes in and out of view
+  // Start (or cancel) the 3-2-1 countdown as a single face comes in and out of view
   useEffect(() => {
-    if (!readyToCapture || !faceDetected) {
+    if (!readyToCapture || !singleFaceDetected) {
       setCountdown(null);
       return;
     }
     setCountdown((current) => (current === null ? 3 : current));
-  }, [readyToCapture, faceDetected]);
+  }, [readyToCapture, singleFaceDetected]);
 
   // Tick the countdown down, then trigger the capture automatically
   useEffect(() => {
@@ -152,6 +165,10 @@ export default function MedievalCardGenerator() {
     };
 
     fetchScenes();
+
+    TradingCardApi.getMedievalLeaderboard()
+      .then(setLeaderboard)
+      .catch((err) => console.error('Error fetching medieval leaderboard:', err));
   }, [startWebcam]);
 
   const handleCapturePhoto = async () => {
@@ -183,20 +200,35 @@ export default function MedievalCardGenerator() {
     }
   };
 
+  const handleNextAdventurer = () => {
+    setGeneratedCardImage(null);
+    setCapturedPhoto(null);
+    setFirstName('');
+    setLastName('');
+    setIsFlipped(false);
+  };
+
   const processPhoto = async (imageSource: Blob | File) => {
-    setStats(rollStats());
+    const rolledStats = rollStats();
+    setStats(rolledStats);
     const base64Photo = await blobToBase64(imageSource);
     const photoDataUrl = base64ToDataUrl(base64Photo);
     setCapturedPhoto(photoDataUrl);
 
     const request: GenerateMedievalCardRequest = {
       photo: base64Photo,
-      scene: selectedScene
+      scene: selectedScene,
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      strength: rolledStats.strength,
+      wisdom: rolledStats.wisdom,
+      charisma: rolledStats.charisma,
     };
 
     const response = await TradingCardApi.generateMedievalCard(request);
     const cardImageDataUrl = base64ToDataUrl(response.image);
     setGeneratedCardImage(cardImageDataUrl);
+    setLeaderboard(response.leaderboard);
   };
 
   return (
@@ -309,7 +341,7 @@ export default function MedievalCardGenerator() {
           <div
             id="medieval-card-print-container"
             ref={cardDisplayRef}
-            className={`${isFlipped ? '' : 'hidden'} w-[420px] h-[587px] p-3.5 rounded-2xl transition-all duration-700 ease-in-out mx-auto overflow-hidden`}
+            className={`${isFlipped ? '' : 'hidden'} relative w-[420px] h-[587px] p-3.5 rounded-2xl transition-all duration-700 ease-in-out mx-auto overflow-hidden`}
             style={{
               background: 'linear-gradient(135deg, #5a3d24 0%, #2b1c10 100%)',
               border: '3px solid var(--theme-border-active)',
@@ -383,18 +415,36 @@ export default function MedievalCardGenerator() {
                       </div>
                     )}
 
+                    {/* Detection frame - glows gold once exactly one face is steadily found, amber warning if more than one */}
+                    {isStreaming && readyToCapture && (
+                      <div
+                        className={`absolute inset-0 pointer-events-none transition-all duration-300 ${singleFaceDetected || multipleFacesDetected ? 'animate-pulse' : ''}`}
+                        style={{
+                          boxShadow: multipleFacesDetected
+                            ? 'inset 0 0 0 5px #dc2626, inset 0 0 30px rgba(220,38,38,0.55)'
+                            : singleFaceDetected
+                            ? 'inset 0 0 0 5px var(--theme-border-active), inset 0 0 30px rgba(212,175,55,0.55)'
+                            : 'inset 0 0 0 2px rgba(212,175,55,0.3)',
+                        }}
+                      />
+                    )}
+
                     {/* Face-detection hint while scrying for a face */}
                     {isStreaming && countdown === null && readyToCapture && (
                       <div className="absolute top-3 left-0 right-0 flex justify-center">
                         <div
-                          className="px-3 py-1 rounded-full text-xs sm:text-sm tracking-wide animate-pulse"
+                          className="px-3 py-1 rounded-full text-xs sm:text-sm tracking-wide animate-pulse text-center"
                           style={{
                             fontFamily: "var(--font-metal-mania), 'Georgia', serif",
-                            background: 'rgba(30,20,12,0.7)',
-                            color: '#f3d98a',
+                            background: multipleFacesDetected ? 'rgba(127,29,29,0.85)' : 'rgba(30,20,12,0.7)',
+                            color: multipleFacesDetected ? '#fecaca' : '#f3d98a',
                           }}
                         >
-                          {faceDetected ? 'Hold still...' : 'Seeking thy visage...'}
+                          {multipleFacesDetected
+                            ? 'Only one may be crowned - all but one must step aside'
+                            : singleFaceDetected
+                            ? 'Hold still...'
+                            : 'Seeking thy visage...'}
                         </div>
                       </div>
                     )}
@@ -429,6 +479,22 @@ export default function MedievalCardGenerator() {
                       'linear-gradient(0deg, rgba(30,20,12,0.95) 0%, rgba(30,20,12,0.8) 65%, rgba(30,20,12,0) 100%)',
                   }}
                 >
+                  {generatedCardImage && (
+                    <div
+                      className="absolute left-1/2 -translate-x-1/2 bottom-22 sm:bottom-26 z-10 w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden"
+                      style={{
+                        border: '2px solid var(--theme-border-active)',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.55), inset 0 0 6px rgba(0,0,0,0.4)',
+                      }}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element -- avoid slow on-the-fly optimization of large source art */}
+                      <img
+                        src={SCENE_EMBLEMS[selectedScene] ?? SCENE_EMBLEMS.scene01}
+                        alt={guildName || 'Trade emblem'}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
                   <div className="flex items-baseline justify-between gap-2">
                     <span
                       className="text-base sm:text-lg tracking-wide truncate"
@@ -477,8 +543,10 @@ export default function MedievalCardGenerator() {
           </div>
         </div>
 
-        {/* Right side - empty for symmetry */}
-        <div className="flex flex-col w-full lg:w-auto" />
+        {/* Right side - Leaderboard */}
+        <div className="flex flex-col w-full lg:w-auto">
+          <MedievalLeaderboard entries={leaderboard} />
+        </div>
       </div>
 
       <MedievalActionButtons
@@ -490,6 +558,7 @@ export default function MedievalCardGenerator() {
         cardDisplayRef={cardDisplayRef}
         onCapturePhoto={handleCapturePhoto}
         onUploadPhoto={handleUploadPhoto}
+        onNextAdventurer={handleNextAdventurer}
       />
     </div>
   );

@@ -55,6 +55,7 @@ builder.Services.AddSingleton<ImageMetadataInjector>();
 builder.Services.AddSingleton<SportsCardPhotoGenerator>();
 builder.Services.AddSingleton<JurassicCardPhotoGenerator>();
 builder.Services.AddSingleton<MedievalCardPhotoGenerator>();
+builder.Services.AddSingleton<MedievalLeaderboardService>();
 
 var app = builder.Build();
 

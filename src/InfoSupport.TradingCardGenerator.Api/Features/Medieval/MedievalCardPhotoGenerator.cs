@@ -9,9 +9,11 @@ namespace InfoSupport.TradingCardGenerator.Api.Features.Medieval;
 /// </summary>
 /// <param name="imageEditClient">The image edit client used to transform the photo.</param>
 /// <param name="metadataInjector">The metadata injector used to watermark the images.</param>
+/// <param name="leaderboardService">The service used to record rolled stats on the leaderboard.</param>
 public class MedievalCardPhotoGenerator(
     IImageEditClient imageEditClient,
-    ImageMetadataInjector metadataInjector) : CardPhotoGeneratorBase(imageEditClient, metadataInjector)
+    ImageMetadataInjector metadataInjector,
+    MedievalLeaderboardService leaderboardService) : CardPhotoGeneratorBase(imageEditClient, metadataInjector)
 {
     private const string GeneratePhotoPrompt = "InfoSupport.TradingCardGenerator.Api.Features.Medieval.Prompts.GeneratePhoto.md";
     private const string Scene01Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Medieval.Prompts.Scene01.md";
@@ -31,9 +33,19 @@ public class MedievalCardPhotoGenerator(
         var renderedPromptTemplate = RenderPromptTemplate(request);
         var imageGenerationResult = await InternalTransformPhoto(imageStream, renderedPromptTemplate);
 
+        leaderboardService.Record(new LeaderboardEntry
+        {
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            Strength = request.Strength,
+            Wisdom = request.Wisdom,
+            Charisma = request.Charisma,
+        });
+
         return new GenerateCardResponse
         {
             Image = Convert.ToBase64String(imageGenerationResult),
+            Leaderboard = leaderboardService.GetTopEntries(),
         };
     }
 

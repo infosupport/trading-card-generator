@@ -1,6 +1,7 @@
 'use client';
 
 import { medievalTheme } from '@/lib/theme-config';
+import { SCENE_EMBLEMS } from './MedievalCardGenerator';
 
 interface MedievalSceneSelectorProps {
   selectedScene?: string;
@@ -21,38 +22,33 @@ export default function MedievalSceneSelector({
   return (
     <div className="p-2 sm:p-4">
       <h3
-        className="text-lg sm:text-xl mb-3 sm:mb-4 text-center tracking-wide"
+        className="text-xl sm:text-2xl mb-3 sm:mb-4 text-center tracking-wide"
         style={{ fontFamily: "var(--font-metal-mania), 'Georgia', serif", color: 'var(--theme-primary)' }}
       >
         {medievalTheme.sceneSelectorLabel}
       </h3>
-      <div className="grid grid-cols-2 gap-2 sm:gap-3 w-full max-w-[320px] mx-auto">
+      <div className="flex flex-wrap justify-center gap-3 sm:gap-4 w-full max-w-95 mx-auto">
         {scenes.map((scene) => {
           const isSelected = selectedScene === scene.id;
           return (
             <button
               key={scene.id}
               onClick={() => onSceneSelect(scene.id)}
-              className={`p-2 rounded-lg border-2 transition-all duration-200 hover:scale-105 text-left ${
+              title={scene.name}
+              aria-label={scene.name}
+              className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 transition-all duration-200 hover:scale-105 ${
                 isSelected ? 'shadow-[0_0_14px_rgba(212,175,55,0.6)]' : 'hover:shadow-[0_0_10px_rgba(212,175,55,0.35)]'
               }`}
               style={{
-                background: 'linear-gradient(180deg, var(--theme-card-bg) 0%, #e4cfa0 100%)',
                 borderColor: isSelected ? 'var(--theme-border-active)' : 'var(--theme-border)',
-                boxShadow: isSelected
-                  ? '0 0 14px rgba(212,175,55,0.6), inset 0 1px 0 rgba(255,255,255,0.6)'
-                  : 'inset 0 1px 0 rgba(255,255,255,0.6)',
               }}
             >
-              <div className="flex flex-col items-center gap-1">
-                <span className="text-2xl">{scene.icon}</span>
-                <div
-                  className="text-[11px] text-center leading-tight tracking-wide"
-                  style={{ fontFamily: "var(--font-metal-mania), 'Georgia', serif", color: 'var(--theme-primary)' }}
-                >
-                  {scene.name}
-                </div>
-              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element -- avoid slow on-the-fly optimization of large source art */}
+              <img
+                src={SCENE_EMBLEMS[scene.id] ?? SCENE_EMBLEMS.scene01}
+                alt={scene.name}
+                className="w-full h-full object-cover"
+              />
             </button>
           );
         })}

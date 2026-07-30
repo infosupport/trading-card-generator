@@ -1,4 +1,4 @@
-import { GenerateCardRequest, GenerateCardResponse, GenerateDinoCardRequest, GenerateMedievalCardRequest, SceneDescription } from './types';
+import { GenerateCardRequest, GenerateCardResponse, GenerateDinoCardRequest, GenerateMedievalCardRequest, GenerateMedievalCardResponse, LeaderboardEntry, SceneDescription } from './types';
 
 const API_BASE_URL = process.env.BACKEND_HTTP || 'http://localhost:5000';
 
@@ -45,7 +45,7 @@ export class TradingCardApi {
     }
   }
 
-  static async generateMedievalCard(request: GenerateMedievalCardRequest): Promise<GenerateCardResponse> {
+  static async generateMedievalCard(request: GenerateMedievalCardRequest): Promise<GenerateMedievalCardResponse> {
     try {
       const response = await fetch(`${API_BASE_URL}/cards/medieval`, {
         method: 'POST',
@@ -62,6 +62,26 @@ export class TradingCardApi {
       return await response.json();
     } catch (error) {
       console.error('Error generating medieval card:', error);
+      throw error;
+    }
+  }
+
+  static async getMedievalLeaderboard(): Promise<LeaderboardEntry[]> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/cards/medieval/leaderboard`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching medieval leaderboard:', error);
       throw error;
     }
   }

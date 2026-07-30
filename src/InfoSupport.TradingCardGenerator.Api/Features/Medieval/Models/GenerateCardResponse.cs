@@ -9,4 +9,9 @@ public class GenerateCardResponse
     /// Generated trading card image as base64 encoded string.
     /// </summary>
     public required string Image { get; set; }
+
+    /// <summary>
+    /// Current top ranked leaderboard entries after recording this roll.
+    /// </summary>
+    public required IReadOnlyList<LeaderboardEntry> Leaderboard { get; set; }
 }

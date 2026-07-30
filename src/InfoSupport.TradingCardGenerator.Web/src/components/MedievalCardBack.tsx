@@ -1,5 +1,9 @@
 'use client';
 
+// Total characters the printed name (first + last) should have room for on the card
+const MAX_COMBINED_NAME_LENGTH = 30;
+const MAX_SINGLE_NAME_LENGTH = 20;
+
 interface MedievalCardBackProps {
   firstName: string;
   lastName: string;
@@ -26,9 +30,11 @@ export default function MedievalCardBack({
     border: '2px solid var(--theme-border-active)',
   };
 
+  const isAtCombinedLimit = firstName.length + lastName.length >= MAX_COMBINED_NAME_LENGTH;
+
   return (
     <div
-      className="w-[420px] h-[587px] p-6 sm:p-8 rounded-2xl mx-auto flex flex-col items-center justify-center gap-4 sm:gap-5 text-center"
+      className="w-105 h-146.75 p-6 sm:p-8 rounded-2xl mx-auto flex flex-col items-center justify-center gap-4 sm:gap-5 text-center"
       style={{
         background: 'linear-gradient(135deg, #5a3d24 0%, #2b1c10 100%)',
         border: '3px solid var(--theme-border-active)',
@@ -45,20 +51,20 @@ export default function MedievalCardBack({
         Forge Thy Legend
       </h2>
 
-      <div className="flex flex-col gap-2 w-full max-w-[260px]">
+      <div className="flex flex-col gap-2 w-full max-w-65">
         <input
           value={firstName}
-          onChange={(e) => onFirstNameChange(e.target.value)}
+          onChange={(e) => onFirstNameChange(e.target.value.slice(0, Math.max(0, MAX_COMBINED_NAME_LENGTH - lastName.length)))}
           placeholder="First Name"
-          maxLength={20}
+          maxLength={MAX_SINGLE_NAME_LENGTH}
           className="px-3 py-2 rounded-lg text-center outline-none"
           style={inputStyle}
         />
         <input
           value={lastName}
-          onChange={(e) => onLastNameChange(e.target.value)}
+          onChange={(e) => onLastNameChange(e.target.value.slice(0, Math.max(0, MAX_COMBINED_NAME_LENGTH - firstName.length)))}
           placeholder="Last Name"
-          maxLength={20}
+          maxLength={MAX_SINGLE_NAME_LENGTH}
           className="px-3 py-2 rounded-lg text-center outline-none"
           style={inputStyle}
         />
@@ -80,8 +86,10 @@ export default function MedievalCardBack({
         Roll for Fate
       </button>
 
-      <p className="text-xs sm:text-sm italic" style={{ fontFamily: 'Georgia, serif', color: '#e8d9b8' }}>
-        Enter thy name to seal thy fate
+      <p className="text-xs sm:text-sm italic" style={{ fontFamily: 'Georgia, serif', color: isAtCombinedLimit ? '#e8a35c' : '#e8d9b8' }}>
+        {isAtCombinedLimit
+          ? 'Thy name hath reached its limit - shorten one to lengthen the other'
+          : 'Enter thy name to seal thy fate'}
       </p>
     </div>
   );
