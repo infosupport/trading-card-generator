@@ -14,7 +14,7 @@ export default function Home() {
           Choose your adventure
         </p>
 
-        <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {/* Sports Card Theme */}
           <Link 
             href="/sports"
@@ -72,6 +72,26 @@ export default function Home() {
             </p>
             <div className="mt-6 flex justify-center gap-2 text-2xl">
               🏰 🛡️ 🪨 🕯️
+            </div>
+          </Link>
+
+          {/* ISKS 2026 Theme */}
+          <Link
+            href="/isks"
+            className="group block p-8 rounded-2xl border-4 border-[#1e3a8a] hover:border-[#c0c0c0] bg-gradient-to-br from-[#3f4a5a] to-[#1e3a8a] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-2xl"
+          >
+            <div className="text-6xl mb-4 text-center">🖨️</div>
+            <h2
+              className="text-3xl font-bold text-center mb-3 text-[#e8e4d9] group-hover:text-white"
+              style={{ fontFamily: "var(--font-bebas-neue), Arial, sans-serif" }}
+            >
+              ISKS 2026
+            </h2>
+            <p className="text-center text-gray-200">
+              Report to the photo booth for your 1990s employee portrait
+            </p>
+            <div className="mt-6 flex justify-center gap-2 text-2xl">
+              💾 📠 ☎️ 📼
             </div>
           </Link>
         </div>

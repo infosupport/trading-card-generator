@@ -36,6 +36,14 @@
   --theme-border-active: #d4af37;
 }
 
+[data-theme="isks"] {
+  --theme-primary: #1e3a8a;
+  --theme-card-bg: #e8e4d9;
+  --theme-border: #9ca3af;
+  --theme-border-hover: #6b7280;
+  --theme-border-active: #c0c0c0;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

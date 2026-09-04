@@ -88,6 +88,11 @@ export interface GenerateMedievalCardResponse extends GenerateCardResponse {
   leaderboard: LeaderboardEntry[];
 }
 
+// ISKS 2026 Card Types
+export interface GenerateIsksCardRequest {
+  photo: string; // base64 encoded photo
+}
+
 export interface SceneDescription {
   identifier: string;
   description: string;

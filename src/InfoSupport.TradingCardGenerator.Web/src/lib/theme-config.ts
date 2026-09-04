@@ -103,8 +103,7 @@ export const medievalTheme: ThemeConfig = {
 };
 
 // Jurassic theme configuration
-export const jurassicTheme: ThemeConfig = {
-  id: 'jurassic',
+export const jurassicTheme: ThemeConfig = {  id: 'jurassic',
   name: 'Jurassic Cards',
   title: 'Jurassic Card Generator',
   subtitle: 'Journey back in time and become a prehistoric legend',
@@ -139,3 +138,42 @@ export const jurassicTheme: ThemeConfig = {
     "Building ancient mountain ranges..."
   ],
 };
+
+// ISKS 2026 theme configuration
+export const isksTheme: ThemeConfig = {
+  id: 'isks',
+  name: 'ISKS 2026 Cards',
+  title: 'ISKS 2026 Card Generator',
+  subtitle: 'Get your official 1990s employee portrait',
+  headerTitle: 'ISKS 2026',
+  headerSubtitle: 'EMPLOYEE PHOTO DAY — PLEASE FORM AN ORDERLY QUEUE',
+  sceneSelectorLabel: '',
+  firstNamePlaceholder: 'FIRST NAME',
+  lastNamePlaceholder: 'LAST NAME',
+  playerNameFallback: 'EMPLOYEE',
+  colors: {
+    primary: '#1e3a8a',
+    cardBackground: '#e8e4d9',
+    border: '#9ca3af',
+    borderHover: '#6b7280',
+    borderActive: '#c0c0c0',
+  },
+  loadingMessages: [
+    "Warming up the flash bulb...",
+    "Adjusting the swivel stool...",
+    "Straightening your tie...",
+    "Loading a fresh roll of film...",
+    "Dusting the blue backdrop...",
+    "Rewinding the answering machine...",
+    "Defragmenting the hard drive...",
+    "Waiting for the fax to finish...",
+    "Feeding the dot matrix printer...",
+    "Applying a light dusting of hairspray...",
+    "Booting from the floppy...",
+    "Filing your paperwork in triplicate...",
+    "Refilling the water cooler...",
+    "Rewinding to the start of the tape...",
+    "Printing your name badge..."
+  ],
+};
+

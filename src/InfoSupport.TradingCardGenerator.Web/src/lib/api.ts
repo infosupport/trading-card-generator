@@ -1,4 +1,4 @@
-import { GenerateCardRequest, GenerateCardResponse, GenerateDinoCardRequest, GenerateMedievalCardRequest, GenerateMedievalCardResponse, LeaderboardEntry, SceneDescription } from './types';
+import { GenerateCardRequest, GenerateCardResponse, GenerateDinoCardRequest, GenerateIsksCardRequest, GenerateMedievalCardRequest, GenerateMedievalCardResponse, LeaderboardEntry, SceneDescription } from './types';
 
 const API_BASE_URL = process.env.BACKEND_HTTP || 'http://localhost:5000';
 
@@ -66,8 +66,28 @@ export class TradingCardApi {
     }
   }
 
-  static async getMedievalLeaderboard(): Promise<LeaderboardEntry[]> {
+  static async generateIsksCard(request: GenerateIsksCardRequest): Promise<GenerateCardResponse> {
     try {
+      const response = await fetch(`${API_BASE_URL}/cards/isks`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(request),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error generating ISKS card:', error);
+      throw error;
+    }
+  }
+
+  static async getMedievalLeaderboard(): Promise<LeaderboardEntry[]> {    try {
       const response = await fetch(`${API_BASE_URL}/cards/medieval/leaderboard`, {
         method: 'GET',
         headers: {
