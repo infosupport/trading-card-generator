@@ -1,6 +1,5 @@
 using Azure.Core;
 using InfoSupport.TradingCardGenerator.Api.Shared;
-using Microsoft.Extensions.Options;
 
 namespace InfoSupport.TradingCardGenerator.Api.Tests.Shared;
 
@@ -13,12 +12,12 @@ public class MaiImageEditClientTests
         var client = new MaiImageEditClient(
             new HttpClient(handler),
             new ThrowingTokenCredential(),
-            Options.Create(new ImageModelSettings
+            new ImageModelSettings
             {
                 Endpoint = "https://example.test",
                 DeploymentName = "mai-test",
                 ApiKey = "test-api-key"
-            }));
+            });
 
         var imageBytes = new byte[] { 1, 2, 3 };
 

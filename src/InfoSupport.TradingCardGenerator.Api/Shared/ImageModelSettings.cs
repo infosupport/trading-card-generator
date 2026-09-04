@@ -8,8 +8,8 @@ public enum ImageModelProvider
 
 public class ImageModelSettings
 {
-    public required string Endpoint { get; set; }
+    public string Endpoint { get; set; } = string.Empty;
     public string? ApiKey { get; set; }
-    public required string DeploymentName { get; set; }
+    public string DeploymentName { get; set; } = string.Empty;
     public ImageModelProvider Provider { get; set; } = ImageModelProvider.AzureOpenAI;
 }

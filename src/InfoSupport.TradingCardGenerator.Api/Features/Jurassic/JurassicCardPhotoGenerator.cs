@@ -10,7 +10,7 @@ namespace InfoSupport.TradingCardGenerator.Api.Features.Jurassic;
 /// <param name="imageEditClient">The image edit client used to transform the photo.</param>
 /// <param name="metadataInjector">The metadata injector used to watermark the images.</param>
 public class JurassicCardPhotoGenerator(
-    IImageEditClient imageEditClient,
+    [FromKeyedServices(ImageGenerationFeatures.Jurassic)] IImageEditClient imageEditClient,
     ImageMetadataInjector metadataInjector) : CardPhotoGeneratorBase(imageEditClient, metadataInjector)
 {
     private const string GeneratePhotoPrompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.GeneratePhoto.md";

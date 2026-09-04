@@ -1,5 +1,4 @@
 using Azure.AI.OpenAI;
-using Microsoft.Extensions.Options;
 using OpenAI.Images;
 
 namespace InfoSupport.TradingCardGenerator.Api.Shared;
@@ -9,12 +8,12 @@ namespace InfoSupport.TradingCardGenerator.Api.Shared;
 /// </summary>
 public class AzureOpenAiImageEditClient(
     AzureOpenAIClient azureClient,
-    IOptions<ImageModelSettings> modelSettings) : IImageEditClient
+    ImageModelSettings modelSettings) : IImageEditClient
 {
     /// <inheritdoc />
     public async Task<byte[]> EditImageAsync(MemoryStream imageStream, string prompt, CancellationToken cancellationToken = default)
     {
-        var imageClient = azureClient.GetImageClient(modelSettings.Value.DeploymentName);
+        var imageClient = azureClient.GetImageClient(modelSettings.DeploymentName);
 
         var imageEditOptions = new ImageEditOptions
         {
@@ -23,7 +22,7 @@ public class AzureOpenAiImageEditClient(
 
         imageStream.Position = 0;
         var result = await imageClient.GenerateImageEditAsync(
-            imageStream, "player-photo.jpg", prompt, imageEditOptions);
+            imageStream, "player-photo.jpg", prompt, imageEditOptions, cancellationToken);
 
         return result.Value.ImageBytes.ToArray();
     }

@@ -11,7 +11,7 @@ namespace InfoSupport.TradingCardGenerator.Api.Features.Medieval;
 /// <param name="metadataInjector">The metadata injector used to watermark the images.</param>
 /// <param name="leaderboardService">The service used to record rolled stats on the leaderboard.</param>
 public class MedievalCardPhotoGenerator(
-    IImageEditClient imageEditClient,
+    [FromKeyedServices(ImageGenerationFeatures.Medieval)] IImageEditClient imageEditClient,
     ImageMetadataInjector metadataInjector,
     MedievalLeaderboardService leaderboardService) : CardPhotoGeneratorBase(imageEditClient, metadataInjector)
 {

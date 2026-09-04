@@ -10,7 +10,7 @@ namespace InfoSupport.TradingCardGenerator.Api.Features.Sports;
 /// <param name="imageEditClient">The image edit client used to transform the photo.</param>
 /// <param name="metadataInjector">The metadata injector used to watermark the generated image.</param>
 public class SportsCardPhotoGenerator(
-    IImageEditClient imageEditClient,
+    [FromKeyedServices(ImageGenerationFeatures.Sports)] IImageEditClient imageEditClient,
     ImageMetadataInjector metadataInjector)
     : CardPhotoGeneratorBase(imageEditClient, metadataInjector)
 {

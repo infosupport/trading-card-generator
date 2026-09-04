@@ -2,7 +2,6 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Azure.Core;
-using Microsoft.Extensions.Options;
 
 namespace InfoSupport.TradingCardGenerator.Api.Shared;
 
@@ -12,7 +11,7 @@ namespace InfoSupport.TradingCardGenerator.Api.Shared;
 public class MaiImageEditClient(
     HttpClient httpClient,
     TokenCredential credential,
-    IOptions<ImageModelSettings> modelSettings) : IImageEditClient
+    ImageModelSettings modelSettings) : IImageEditClient
 {
     private static readonly TokenRequestContext TokenRequestContext =
         new(["https://cognitiveservices.azure.com/.default"]);
@@ -25,16 +24,16 @@ public class MaiImageEditClient(
         imageContent.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
 
         using var content = new MultipartFormDataContent();
-        content.Add(new StringContent(modelSettings.Value.DeploymentName), "model");
+        content.Add(new StringContent(modelSettings.DeploymentName), "model");
         content.Add(new StringContent(prompt), "prompt");
         content.Add(imageContent, "image", "player-photo.jpg");
 
-        var endpoint = modelSettings.Value.Endpoint.TrimEnd('/');
+        var endpoint = modelSettings.Endpoint.TrimEnd('/');
         var request = new HttpRequestMessage(HttpMethod.Post, $"{endpoint}/mai/v1/images/edits");
 
-        if (!string.IsNullOrWhiteSpace(modelSettings.Value.ApiKey))
+        if (!string.IsNullOrWhiteSpace(modelSettings.ApiKey))
         {
-            request.Headers.Add("api-key", modelSettings.Value.ApiKey);
+            request.Headers.Add("api-key", modelSettings.ApiKey);
         }
         else
         {

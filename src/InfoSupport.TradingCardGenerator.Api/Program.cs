@@ -1,4 +1,3 @@
-using Azure.AI.OpenAI;
 using Azure.Core;
 using Azure.Identity;
 using InfoSupport.TradingCardGenerator.Api.Features.Jurassic;
@@ -23,32 +22,26 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Bind the configuration for the image generation model
-builder.Services.Configure<ImageModelSettings>(builder.Configuration.GetSection("ImageGenerationModel"));
-var imageModelSettings = builder.Configuration.GetSection("ImageGenerationModel").Get<ImageModelSettings>();
+// Bind the configuration describing the available image models and the model each feature uses
+builder.Services.Configure<ImageGenerationOptions>(
+    builder.Configuration.GetSection(ImageGenerationOptions.SectionName));
 
-// Register the image edit client based on the configured provider
 TokenCredential credential = new ChainedTokenCredential(
     new AzureCliCredential(),
     new ManagedIdentityCredential());
 
-if (imageModelSettings?.Provider == ImageModelProvider.Mai)
+builder.Services.AddSingleton(credential);
+builder.Services.AddHttpClient(ImageEditClientFactory.HttpClientName, client =>
 {
-    builder.Services.AddSingleton(credential);
-    builder.Services.AddHttpClient<IImageEditClient, MaiImageEditClient>(client =>
-    {
-        client.Timeout = TimeSpan.FromMinutes(5);
-    });
-}
-else
-{
-    var azureClient = new AzureOpenAIClient(
-        new Uri(imageModelSettings!.Endpoint),
-        credential,
-        new AzureOpenAIClientOptions(AzureOpenAIClientOptions.ServiceVersion.V2025_04_01_Preview));
+    client.Timeout = TimeSpan.FromMinutes(5);
+});
 
-    builder.Services.AddSingleton(azureClient);
-    builder.Services.AddSingleton<IImageEditClient, AzureOpenAiImageEditClient>();
+builder.Services.AddSingleton<IImageEditClientFactory, ImageEditClientFactory>();
+
+foreach (var feature in ImageGenerationFeatures.All)
+{
+    builder.Services.AddKeyedSingleton<IImageEditClient>(feature, (sp, key) =>
+        sp.GetRequiredService<IImageEditClientFactory>().CreateForFeature((string)key!));
 }
 
 builder.Services.AddSingleton<ImageMetadataInjector>();
