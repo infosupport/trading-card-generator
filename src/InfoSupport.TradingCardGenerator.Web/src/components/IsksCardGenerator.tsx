@@ -133,8 +133,8 @@ export default function IsksCardGenerator() {
       <style jsx global>{`
         @media print {
           html, body {
-            height: 88mm;
-            width: 63mm;
+            height: 148mm;
+            width: 105mm;
             margin: 0;
             padding: 0;
             overflow: hidden;
@@ -161,11 +161,12 @@ export default function IsksCardGenerator() {
           }
 
           #isks-card-print-container {
+            display: block !important;
             position: fixed;
             left: 0;
             top: 0;
-            width: 63mm !important;
-            height: 88mm !important;
+            width: 105mm !important;
+            height: 148mm !important;
             margin: 0;
             padding: 0;
             overflow: hidden;
@@ -175,8 +176,14 @@ export default function IsksCardGenerator() {
             break-inside: avoid;
           }
 
+          #isks-card-print-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+
           @page {
-            size: 63mm 88mm;
+            size: A6;
             margin: 0;
           }
         }
@@ -216,10 +223,17 @@ export default function IsksCardGenerator() {
         )}
       </div>
 
+      {/* Print-only container - renders solely the generated image, nothing else */}
+      {generatedCardImage && (
+        <div id="isks-card-print-container" className="hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element -- print output must be a plain img, not next/image */}
+          <img src={generatedCardImage} alt="Generated ISKS Card" />
+        </div>
+      )}
+
       {/* Card display */}
       <div className="flex justify-center my-6">
         <div
-          id="isks-card-print-container"
           ref={cardDisplayRef}
           className="relative w-[420px] h-[587px] p-3.5 overflow-hidden"
           style={{
