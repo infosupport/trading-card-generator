@@ -177,3 +177,38 @@ export const isksTheme: ThemeConfig = {
   ],
 };
 
+// ISKS 2026 8-Bit Postcard theme configuration
+export const isks8BitTheme: ThemeConfig = {
+  id: 'isks-8bit',
+  name: 'ISKS 2026',
+  title: 'ISKS 2026 Postcard Generator',
+  subtitle: 'Transform your photo into an authentic 8-bit postcard',
+  headerTitle: 'ISKS 2026 — 8-BIT POSTCARD',
+  headerSubtitle: '8-BIT PIXEL ART GENERATOR',
+  sceneSelectorLabel: 'Choose Fair Scene',
+  firstNamePlaceholder: '🕹️ GUEST FIRST NAME',
+  lastNamePlaceholder: '👾 GUEST LAST NAME',
+  playerNameFallback: 'ATTENDEE',
+  colors: {
+    primary: '#c2410c', // rust orange
+    cardBackground: '#fff7ed', // warm sunny amber/cream
+    border: '#9a3412', // deep rust
+    borderHover: '#ea580c', // vibrant orange
+    borderActive: '#f59e0b', // sunny amber/gold
+  },
+  loadingMessages: [
+    "Warming up the sunny fairground...",
+    "Pitching the rust-orange tents...",
+    "Pixelating the outdoor fairgoers...",
+    "Hanging the festival bunting...",
+    "Drawing 8-bit pixel art conversations...",
+    "Catching the golden sunshine...",
+    "Setting up the outdoor fair booths...",
+    "Applying warm rust-orange palette...",
+    "Rendering 8-bit postcard sprites...",
+    "Brewing iced drinks in the shade...",
+    "Printing retro fair souvenir...",
+    "Stamping your outdoor fair postcard..."
+  ],
+};
+

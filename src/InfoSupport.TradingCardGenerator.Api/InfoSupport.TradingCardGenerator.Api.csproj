@@ -36,6 +36,7 @@
     <EmbeddedResource Include="Features\Jurassic\Prompts\*.md" />
     <EmbeddedResource Include="Features\Medieval\Prompts\*.md" />
     <EmbeddedResource Include="Features\Isks\Prompts\*.md" />
+    <EmbeddedResource Include="Features\Isks8Bit\Prompts\*.md" />
   </ItemGroup>
 
 </Project>

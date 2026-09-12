@@ -1,0 +1,1 @@
+[Subject from reference photo] walking through the sunny outdoor fair promenade between colorful vendor tents, laughing and chatting with friends under string lights and fluttering banners in warm rust-orange and sunlit tones.

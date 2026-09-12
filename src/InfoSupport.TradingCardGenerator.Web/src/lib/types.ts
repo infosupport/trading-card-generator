@@ -93,6 +93,12 @@ export interface GenerateIsksCardRequest {
   photo: string; // base64 encoded photo
 }
 
+// ISKS 2026 8-Bit Postcard Types
+export interface GenerateIsks8BitCardRequest {
+  photo: string; // base64 encoded photo
+  scene?: string; // scene identifier (e.g., "scene01")
+}
+
 export interface SceneDescription {
   identifier: string;
   description: string;

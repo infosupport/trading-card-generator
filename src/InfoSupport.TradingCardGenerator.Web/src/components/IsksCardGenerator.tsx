@@ -226,8 +226,16 @@ export default function IsksCardGenerator() {
       {/* Print-only container - renders solely the generated image, nothing else */}
       {generatedCardImage && (
         <div id="isks-card-print-container" className="hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element -- print output must be a plain img, not next/image */}
-          <img src={generatedCardImage} alt="Generated ISKS Card" />
+          <div className="relative w-full h-full">
+            {/* eslint-disable-next-line @next/next/no-img-element -- print output must be a plain img, not next/image */}
+            <img src={generatedCardImage} alt="Generated ISKS Card" className="w-full h-full object-cover" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/isks/builttolast.png"
+              alt="Built To Last"
+              className="absolute bottom-4 right-4 w-28 h-auto drop-shadow-lg"
+            />
+          </div>
         </div>
       )}
 
@@ -245,13 +253,24 @@ export default function IsksCardGenerator() {
         >
           <div className="relative w-full h-full overflow-hidden" style={{ border: '2px inset #808080' }}>
             {generatedCardImage ? (
-              <Image
-                src={generatedCardImage}
-                alt="Generated ISKS Card"
-                width={CARD_DISPLAY_WIDTH}
-                height={CARD_DISPLAY_HEIGHT}
-                className="w-full h-full object-cover"
-              />
+              <div className="relative w-full h-full">
+                <Image
+                  src={generatedCardImage}
+                  alt="Generated ISKS Card"
+                  width={CARD_DISPLAY_WIDTH}
+                  height={CARD_DISPLAY_HEIGHT}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute bottom-3 right-3 pointer-events-none z-20">
+                  <Image
+                    src="/isks/builttolast.png"
+                    alt="Built To Last"
+                    width={110}
+                    height={60}
+                    className="drop-shadow-lg object-contain"
+                  />
+                </div>
+              </div>
             ) : isGenerating && capturedPhoto ? (
               /* Loading state */
               <div className="relative w-full h-full overflow-hidden">
