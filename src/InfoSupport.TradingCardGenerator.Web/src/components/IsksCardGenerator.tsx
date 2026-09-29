@@ -176,10 +176,18 @@ export default function IsksCardGenerator() {
             break-inside: avoid;
           }
 
-          #isks-card-print-container img {
+          #isks-card-print-container img.isks-print-photo {
             width: 100%;
             height: 100%;
             object-fit: cover;
+          }
+
+          #isks-card-print-container img.isks-print-logo {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            width: 7rem;
+            height: auto;
           }
 
           @page {
@@ -228,12 +236,16 @@ export default function IsksCardGenerator() {
         <div id="isks-card-print-container" className="hidden">
           <div className="relative w-full h-full">
             {/* eslint-disable-next-line @next/next/no-img-element -- print output must be a plain img, not next/image */}
-            <img src={generatedCardImage} alt="Generated ISKS Card" className="w-full h-full object-cover" />
+            <img
+              src={generatedCardImage}
+              alt="Generated ISKS Card"
+              className="isks-print-photo w-full h-full object-cover"
+            />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/isks/builttolast.png"
               alt="Built To Last"
-              className="absolute bottom-4 right-4 w-28 h-auto drop-shadow-lg"
+              className="isks-print-logo absolute bottom-4 right-4 w-28 h-auto drop-shadow-lg"
             />
           </div>
         </div>
