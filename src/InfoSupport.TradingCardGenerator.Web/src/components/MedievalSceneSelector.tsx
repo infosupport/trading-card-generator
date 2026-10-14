@@ -43,7 +43,6 @@ export default function MedievalSceneSelector({
                 borderColor: isSelected ? 'var(--theme-border-active)' : 'var(--theme-border)',
               }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element -- avoid slow on-the-fly optimization of large source art */}
               <img
                 src={SCENE_EMBLEMS[scene.id] ?? SCENE_EMBLEMS.scene01}
                 alt={scene.name}

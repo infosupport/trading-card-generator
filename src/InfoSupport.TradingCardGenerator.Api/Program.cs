@@ -1,9 +1,5 @@
 using Azure.Core;
 using Azure.Identity;
-using InfoSupport.TradingCardGenerator.Api.Features.Isks;
-using InfoSupport.TradingCardGenerator.Api.Features.Isks.Endpoints;
-using InfoSupport.TradingCardGenerator.Api.Features.Isks8Bit;
-using InfoSupport.TradingCardGenerator.Api.Features.Isks8Bit.Endpoints;
 using InfoSupport.TradingCardGenerator.Api.Features.Jurassic;
 using InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Endpoints;
 using InfoSupport.TradingCardGenerator.Api.Features.Medieval;
@@ -26,6 +22,9 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<ImageGenerationExceptionHandler>();
+
 // Bind the configuration describing the available image models and the model each feature uses
 builder.Services.Configure<ImageGenerationOptions>(
     builder.Configuration.GetSection(ImageGenerationOptions.SectionName));
@@ -37,7 +36,16 @@ TokenCredential credential = new ChainedTokenCredential(
 builder.Services.AddSingleton(credential);
 builder.Services.AddHttpClient(ImageEditClientFactory.HttpClientName, client =>
 {
-    client.Timeout = TimeSpan.FromMinutes(5);
+    client.Timeout = TimeSpan.FromMinutes(10);
+})
+.AddStandardResilienceHandler(options =>
+{
+    // Image edits regularly take tens of seconds, so the default sub-second budgets are far too tight.
+    options.AttemptTimeout.Timeout = TimeSpan.FromMinutes(2);
+    options.TotalRequestTimeout.Timeout = TimeSpan.FromMinutes(5);
+    options.CircuitBreaker.SamplingDuration = TimeSpan.FromMinutes(4);
+    options.Retry.MaxRetryAttempts = 3;
+    options.Retry.Delay = TimeSpan.FromSeconds(2);
 });
 
 builder.Services.AddSingleton<IImageEditClientFactory, ImageEditClientFactory>();
@@ -48,23 +56,26 @@ foreach (var feature in ImageGenerationFeatures.All)
         sp.GetRequiredService<IImageEditClientFactory>().CreateForFeature((string)key!));
 }
 
-builder.Services.AddSingleton<ImageMetadataInjector>();
 builder.Services.AddSingleton<SportsCardPhotoGenerator>();
 builder.Services.AddSingleton<JurassicCardPhotoGenerator>();
 builder.Services.AddSingleton<MedievalCardPhotoGenerator>();
-builder.Services.AddSingleton<IsksCardPhotoGenerator>();
-builder.Services.AddSingleton<Isks8BitCardPhotoGenerator>();
-builder.Services.AddSingleton<MedievalLeaderboardService>();
+var leaderboardDatabasePath = builder.Configuration["MedievalLeaderboard:DatabasePath"]
+    ?? Path.Combine("App_Data", "medieval-leaderboard.db");
+if (!Path.IsPathRooted(leaderboardDatabasePath))
+{
+    leaderboardDatabasePath = Path.Combine(builder.Environment.ContentRootPath, leaderboardDatabasePath);
+}
+builder.Services.AddSingleton(new MedievalLeaderboardService(leaderboardDatabasePath));
 
 var app = builder.Build();
 
+app.Services.GetRequiredService<MedievalLeaderboardService>().Initialize();
+
 app.UseCors("AllowFrontend");
+app.UseExceptionHandler();
 
 app.UseStaticFiles();
 app.MapSportsCardEndpoints();
 app.MapJurassicCardEndpoints();
 app.MapMedievalCardEndpoints();
-app.MapIsksCardEndpoints();
-app.MapIsks8BitCardEndpoints();
-
 app.Run();

@@ -31,8 +31,6 @@ public static class ImageGenerationFeatures
     public const string Sports = "Sports";
     public const string Jurassic = "Jurassic";
     public const string Medieval = "Medieval";
-    public const string Isks = "Isks";
-    public const string Isks8Bit = "Isks8Bit";
 
-    public static readonly string[] All = [Sports, Jurassic, Medieval, Isks, Isks8Bit];
+    public static readonly string[] All = [Sports, Jurassic, Medieval];
 }

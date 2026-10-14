@@ -18,9 +18,10 @@
     <PackageReference Include="Azure.AI.OpenAI" Version="2.8.0-beta.1" />
     <PackageReference Include="Azure.Identity" Version="1.17.1" />
     <PackageReference Include="Handlebars.Net" Version="2.1.6" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.0" />
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.71.0" />
     <PackageReference Include="Microsoft.SemanticKernel.PromptTemplates.Handlebars" Version="1.71.0" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,8 +36,6 @@
     <EmbeddedResource Include="Features\Sports\Prompts\*.md" />
     <EmbeddedResource Include="Features\Jurassic\Prompts\*.md" />
     <EmbeddedResource Include="Features\Medieval\Prompts\*.md" />
-    <EmbeddedResource Include="Features\Isks\Prompts\*.md" />
-    <EmbeddedResource Include="Features\Isks8Bit\Prompts\*.md" />
   </ItemGroup>
 
 </Project>

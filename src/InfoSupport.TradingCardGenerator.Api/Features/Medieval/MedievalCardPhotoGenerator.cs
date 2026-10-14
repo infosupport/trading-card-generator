@@ -8,12 +8,10 @@ namespace InfoSupport.TradingCardGenerator.Api.Features.Medieval;
 /// Generates medieval themed trading card images rendered as stained glass panels.
 /// </summary>
 /// <param name="imageEditClient">The image edit client used to transform the photo.</param>
-/// <param name="metadataInjector">The metadata injector used to watermark the images.</param>
 /// <param name="leaderboardService">The service used to record rolled stats on the leaderboard.</param>
 public class MedievalCardPhotoGenerator(
     [FromKeyedServices(ImageGenerationFeatures.Medieval)] IImageEditClient imageEditClient,
-    ImageMetadataInjector metadataInjector,
-    MedievalLeaderboardService leaderboardService) : CardPhotoGeneratorBase(imageEditClient, metadataInjector)
+    MedievalLeaderboardService leaderboardService) : CardPhotoGeneratorBase(imageEditClient)
 {
     private const string GeneratePhotoPrompt = "InfoSupport.TradingCardGenerator.Api.Features.Medieval.Prompts.GeneratePhoto.md";
     private const string Scene01Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Medieval.Prompts.Scene01.md";

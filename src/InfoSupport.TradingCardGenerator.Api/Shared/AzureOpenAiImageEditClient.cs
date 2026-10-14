@@ -1,3 +1,4 @@
+using Azure;
 using Azure.AI.OpenAI;
 using OpenAI.Images;
 
@@ -21,9 +22,18 @@ public class AzureOpenAiImageEditClient(
         };
 
         imageStream.Position = 0;
-        var result = await imageClient.GenerateImageEditAsync(
-            imageStream, "player-photo.jpg", prompt, imageEditOptions, cancellationToken);
 
-        return result.Value.ImageBytes.ToArray();
+        try
+        {
+            var result = await imageClient.GenerateImageEditAsync(
+                imageStream, "player-photo.jpg", prompt, imageEditOptions, cancellationToken);
+
+            return result.Value.ImageBytes.ToArray();
+        }
+        catch (RequestFailedException ex) when (ex.Status >= 500 || ex.Status is 408 or 429)
+        {
+            throw new ImageGenerationUnavailableException(
+                $"Azure OpenAI image edit failed ({ex.Status}): {ex.Message}", ex);
+        }
     }
 }

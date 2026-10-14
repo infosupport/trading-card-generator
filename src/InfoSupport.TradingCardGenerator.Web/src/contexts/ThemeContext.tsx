@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, ReactNode } from 'react';
 
-type ThemeType = 'sports' | 'jurassic' | 'medieval' | 'isks' | 'isks-8bit';
+type ThemeType = 'sports' | 'jurassic' | 'medieval';
 
 interface ThemeContextType {
   theme: ThemeType;

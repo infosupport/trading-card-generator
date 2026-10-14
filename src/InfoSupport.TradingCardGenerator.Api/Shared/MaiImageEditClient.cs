@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -43,13 +44,26 @@ public class MaiImageEditClient(
 
         request.Content = content;
 
-        var response = await httpClient.SendAsync(request, cancellationToken);
+        HttpResponseMessage response;
+
+        try
+        {
+            response = await httpClient.SendAsync(request, cancellationToken);
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException
+                                   && !cancellationToken.IsCancellationRequested)
+        {
+            throw new ImageGenerationUnavailableException("Could not reach the MAI image edit service.", ex);
+        }
 
         if (!response.IsSuccessStatusCode)
         {
             var errorBody = await response.Content.ReadAsStringAsync(cancellationToken);
-            throw new HttpRequestException(
-                $"MAI image edit failed ({(int)response.StatusCode} {response.StatusCode}): {errorBody}");
+            var message = $"MAI image edit failed ({(int)response.StatusCode} {response.StatusCode}): {errorBody}";
+
+            throw IsTransient(response.StatusCode)
+                ? new ImageGenerationUnavailableException(message)
+                : new HttpRequestException(message);
         }
 
         var json = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken: cancellationToken);
@@ -63,4 +77,7 @@ public class MaiImageEditClient(
 
         return Convert.FromBase64String(b64);
     }
+
+    private static bool IsTransient(HttpStatusCode statusCode) =>
+        (int)statusCode >= 500 || statusCode is HttpStatusCode.RequestTimeout or HttpStatusCode.TooManyRequests;
 }

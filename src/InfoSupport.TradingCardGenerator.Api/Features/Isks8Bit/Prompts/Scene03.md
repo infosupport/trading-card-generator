@@ -1,1 +1,0 @@
-[Subject from reference photo] sitting casually among a crowd of fellow attendees inside a festival tent, blending naturally into the audience during a keynote session. A speaker and stage screen glow softly in the background, out of focus, while warm rust-orange and amber lighting and festival bunting set the scene. Do not show screen content directly.

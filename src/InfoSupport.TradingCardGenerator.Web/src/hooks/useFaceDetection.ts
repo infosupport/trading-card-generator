@@ -34,10 +34,7 @@ export function useFaceDetection({ videoRef, enabled, intervalMs = 400 }: UseFac
   const cancelledRef = useRef(false);
 
   useEffect(() => {
-    if (!enabled) {
-      setFaceCount(0);
-      return;
-    }
+    if (!enabled) return;
 
     let intervalId: ReturnType<typeof setInterval> | undefined;
     cancelledRef.current = false;
@@ -75,5 +72,5 @@ export function useFaceDetection({ videoRef, enabled, intervalMs = 400 }: UseFac
     };
   }, [enabled, videoRef, intervalMs]);
 
-  return { faceCount };
+  return { faceCount: enabled ? faceCount : 0 };
 }

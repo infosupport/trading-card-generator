@@ -6,6 +6,12 @@
 # dotenv files
 .env
 
+# Demo laptop secrets
+demo/secrets.cmd
+
+# Local medieval leaderboard database
+src/InfoSupport.TradingCardGenerator.Api/App_Data/
+
 # ASP.NET Core development settings
 appsettings.Development.json
 

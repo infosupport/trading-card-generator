@@ -8,11 +8,9 @@ namespace InfoSupport.TradingCardGenerator.Api.Features.Sports;
 /// The sports card generator is responsible for generating images with a sports theme.
 /// </summary>
 /// <param name="imageEditClient">The image edit client used to transform the photo.</param>
-/// <param name="metadataInjector">The metadata injector used to watermark the generated image.</param>
 public class SportsCardPhotoGenerator(
-    [FromKeyedServices(ImageGenerationFeatures.Sports)] IImageEditClient imageEditClient,
-    ImageMetadataInjector metadataInjector)
-    : CardPhotoGeneratorBase(imageEditClient, metadataInjector)
+    [FromKeyedServices(ImageGenerationFeatures.Sports)] IImageEditClient imageEditClient)
+    : CardPhotoGeneratorBase(imageEditClient)
 {
     const string SportsCardPrompt = "InfoSupport.TradingCardGenerator.Api.Features.Sports.Prompts.GeneratePhoto.md";
 

@@ -9,6 +9,7 @@ builder
     .AddNpmApp("frontend", "../InfoSupport.TradingCardGenerator.Web", "dev")
     .WithHttpEndpoint(env: "PORT", port: 3000, isProxied: false)
     .WithExternalHttpEndpoints()
-    .WithReference(backend);
+    .WithReference(backend)
+    .WaitFor(backend);
 
 builder.Build().Run();

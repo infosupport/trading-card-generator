@@ -3,9 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useWebcam } from '@/hooks/useWebcam';
 import { useFaceDetection } from '@/hooks/useFaceDetection';
-import { TradingCardApi, blobToBase64, base64ToDataUrl } from '@/lib/api';
+import { TradingCardApi, blobToBase64, base64ToDataUrl, getFriendlyErrorMessage } from '@/lib/api';
 import { GenerateMedievalCardRequest, LeaderboardEntry } from '@/lib/types';
 import { medievalTheme } from '@/lib/theme-config';
+import GenerationErrorBanner from './GenerationErrorBanner';
 
 import MedievalActionButtons from './MedievalActionButtons';
 import MedievalSceneSelector from './MedievalSceneSelector';
@@ -48,6 +49,8 @@ export default function MedievalCardGenerator() {
   const [isFlipped, setIsFlipped] = useState(false);
   const [countdown, setCountdown] = useState<number | null>(null);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [generationError, setGenerationError] = useState<string | null>(null);
+  const [isAutoCapturePaused, setIsAutoCapturePaused] = useState(false);
 
   const guildName = scenes.find((scene) => scene.id === selectedScene)?.name ?? '';
   const playerName = (firstName.trim() + ' ' + lastName.trim()).trim().toUpperCase() || 'UNKNOWN ADVENTURER';
@@ -83,34 +86,18 @@ export default function MedievalCardGenerator() {
   });
 
   // Only look for a face once the card has flipped to the front and it's ready for a fresh capture
-  const readyToCapture = isFlipped && isStreaming && !isCapturing && !isGenerating && !generatedCardImage;
+  const readyToCapture = isFlipped && isStreaming && !isCapturing && !isGenerating && !generatedCardImage && !isAutoCapturePaused;
   const { faceCount } = useFaceDetection({ videoRef, enabled: readyToCapture });
   const singleFaceDetected = faceCount === 1;
   const multipleFacesDetected = faceCount > 1;
 
   // Start (or cancel) the 3-2-1 countdown as a single face comes in and out of view
-  useEffect(() => {
-    if (!readyToCapture || !singleFaceDetected) {
-      setCountdown(null);
-      return;
-    }
-    setCountdown((current) => (current === null ? 3 : current));
-  }, [readyToCapture, singleFaceDetected]);
-
-  // Tick the countdown down, then trigger the capture automatically
-  useEffect(() => {
-    if (countdown === null) return;
-    if (countdown <= 0) {
-      handleCapturePhoto();
-      setCountdown(null);
-      return;
-    }
-    const timeout = setTimeout(() => {
-      setCountdown((current) => (current !== null ? current - 1 : null));
-    }, 1000);
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countdown]);
+  const countdownActive = readyToCapture && singleFaceDetected;
+  const [wasCountdownActive, setWasCountdownActive] = useState(false);
+  if (countdownActive !== wasCountdownActive) {
+    setWasCountdownActive(countdownActive);
+    setCountdown(countdownActive ? 3 : null);
+  }
 
   // Rotate loading messages during generation
   useEffect(() => {
@@ -172,9 +159,11 @@ export default function MedievalCardGenerator() {
   }, [startWebcam]);
 
   const handleCapturePhoto = async () => {
+    setIsAutoCapturePaused(false);
     setIsCapturing(true);
     setIsGenerating(true);
     setGeneratedCardImage(null);
+    setGenerationError(null);
     try {
       const blob = await capturePhoto(undefined, undefined, IMAGE_FORMAT, IMAGE_QUALITY);
       if (blob) {
@@ -182,6 +171,8 @@ export default function MedievalCardGenerator() {
       }
     } catch (err) {
       console.error('Error generating medieval card:', err);
+      setGenerationError(getFriendlyErrorMessage(err));
+      setIsAutoCapturePaused(true);
     } finally {
       setIsCapturing(false);
       setIsGenerating(false);
@@ -189,12 +180,16 @@ export default function MedievalCardGenerator() {
   };
 
   const handleUploadPhoto = async (file: File) => {
+    setIsAutoCapturePaused(false);
     setIsGenerating(true);
     setGeneratedCardImage(null);
+    setGenerationError(null);
     try {
       await processPhoto(file);
     } catch (err) {
       console.error('Error generating medieval card from uploaded image:', err);
+      setGenerationError(getFriendlyErrorMessage(err));
+      setIsAutoCapturePaused(true);
     } finally {
       setIsGenerating(false);
     }
@@ -203,14 +198,14 @@ export default function MedievalCardGenerator() {
   const handleNextAdventurer = () => {
     setGeneratedCardImage(null);
     setCapturedPhoto(null);
+    setIsAutoCapturePaused(false);
+    setGenerationError(null);
     setFirstName('');
     setLastName('');
     setIsFlipped(false);
   };
 
   const processPhoto = async (imageSource: Blob | File) => {
-    const rolledStats = rollStats();
-    setStats(rolledStats);
     const base64Photo = await blobToBase64(imageSource);
     const photoDataUrl = base64ToDataUrl(base64Photo);
     setCapturedPhoto(photoDataUrl);
@@ -220,9 +215,9 @@ export default function MedievalCardGenerator() {
       scene: selectedScene,
       firstName: firstName.trim(),
       lastName: lastName.trim(),
-      strength: rolledStats.strength,
-      wisdom: rolledStats.wisdom,
-      charisma: rolledStats.charisma,
+      strength: stats.strength,
+      wisdom: stats.wisdom,
+      charisma: stats.charisma,
     };
 
     const response = await TradingCardApi.generateMedievalCard(request);
@@ -231,14 +226,31 @@ export default function MedievalCardGenerator() {
     setLeaderboard(response.leaderboard);
   };
 
+  // Tick the countdown down, then trigger the capture automatically
+  useEffect(() => {
+    if (countdown === null) return;
+    const timeout = setTimeout(() => {
+      if (countdown <= 0) {
+        setCountdown(null);
+        handleCapturePhoto();
+      } else {
+        setCountdown(countdown - 1);
+      }
+    }, countdown <= 0 ? 0 : 1000);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countdown]);
+
   return (
     <div>
+      <GenerationErrorBanner message={generationError} onDismiss={() => setGenerationError(null)} />
+
       {/* Print-only styles */}
       <style jsx global>{`
         @media print {
           html, body {
-            height: 88mm;
-            width: 63mm;
+            height: 105mm;
+            width: 74mm;
             margin: 0;
             padding: 0;
             overflow: hidden;
@@ -268,8 +280,8 @@ export default function MedievalCardGenerator() {
             position: fixed;
             left: 0;
             top: 0;
-            width: 63mm !important;
-            height: 88mm !important;
+            width: 74mm !important;
+            height: 105mm !important;
             margin: 0;
             padding: 0;
             overflow: hidden;
@@ -280,7 +292,7 @@ export default function MedievalCardGenerator() {
           }
 
           @page {
-            size: 63mm 88mm;
+            size: 74mm 105mm;
             margin: 0;
           }
         }
@@ -449,6 +461,14 @@ export default function MedievalCardGenerator() {
                       </div>
                     )}
 
+                    {isStreaming && isAutoCapturePaused && !isGenerating && (
+                      <div className="absolute top-3 left-0 right-0 flex justify-center">
+                        <div className="px-3 py-2 rounded-lg text-xs sm:text-sm text-center bg-black/75 text-amber-100">
+                          Automatic capture paused. Select Capture &amp; Generate to try again.
+                        </div>
+                      </div>
+                    )}
+
                     {/* Countdown overlay - triggers automatically once a face is steadily detected */}
                     {isStreaming && countdown !== null && (
                       <div
@@ -487,7 +507,6 @@ export default function MedievalCardGenerator() {
                         boxShadow: '0 2px 8px rgba(0,0,0,0.55), inset 0 0 6px rgba(0,0,0,0.4)',
                       }}
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element -- avoid slow on-the-fly optimization of large source art */}
                       <img
                         src={SCENE_EMBLEMS[selectedScene] ?? SCENE_EMBLEMS.scene01}
                         alt={guildName || 'Trade emblem'}

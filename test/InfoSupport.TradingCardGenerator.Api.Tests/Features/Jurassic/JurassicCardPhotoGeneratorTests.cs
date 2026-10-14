@@ -29,8 +29,7 @@ namespace InfoSupport.TradingCardGenerator.Api.Tests.Features.Jurassic
                     new AzureOpenAIClientOptions(AzureOpenAIClientOptions.ServiceVersion.V2025_04_01_Preview)),
                 settings);
 
-            var imageMetadataInjector = new ImageMetadataInjector();
-            var generator = new JurassicCardPhotoGenerator(imageEditClient, imageMetadataInjector);
+            var generator = new JurassicCardPhotoGenerator(imageEditClient);
 
             var request = new GenerateCardRequest
             {

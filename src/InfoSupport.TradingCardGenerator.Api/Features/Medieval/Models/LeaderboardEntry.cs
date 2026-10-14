@@ -6,6 +6,11 @@ namespace InfoSupport.TradingCardGenerator.Api.Features.Medieval.Models;
 public class LeaderboardEntry
 {
     /// <summary>
+    /// The local calendar date when this score was recorded.
+    /// </summary>
+    public DateOnly RecordedOn { get; set; }
+
+    /// <summary>
     /// The adventurer's first name.
     /// </summary>
     public required string FirstName { get; set; }

@@ -4,8 +4,7 @@ namespace InfoSupport.TradingCardGenerator.Api.Shared;
 /// Provides base functionality to turn a regular photo into a themed trading card photo.
 /// </summary>
 public abstract class CardPhotoGeneratorBase(
-    IImageEditClient imageEditClient,
-    ImageMetadataInjector metadataInjector)
+    IImageEditClient imageEditClient)
 {
     /// <summary>
     /// Generates an image based on the input image and a pre-rendered prompt.
@@ -14,11 +13,9 @@ public abstract class CardPhotoGeneratorBase(
     /// <param name="prompt">The prompt to modify the image.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Returns the raw data of the output image.</returns>
-    /// <remarks>The output image is watermarked so we can recognize it as AI generated.</remarks>
     protected async Task<byte[]> InternalTransformPhoto(MemoryStream imageStream, string prompt, CancellationToken cancellationToken = default)
     {
-        var imageBytes = await imageEditClient.EditImageAsync(imageStream, prompt, cancellationToken);
-        return metadataInjector.InjectMetadata(imageBytes);
+        return await imageEditClient.EditImageAsync(imageStream, prompt, cancellationToken);
     }
 
     /// <summary>

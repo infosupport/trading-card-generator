@@ -77,6 +77,7 @@ export interface GenerateMedievalCardRequest {
 }
 
 export interface LeaderboardEntry {
+  recordedOn: string;
   firstName: string;
   lastName: string;
   strength: number;
@@ -86,17 +87,6 @@ export interface LeaderboardEntry {
 
 export interface GenerateMedievalCardResponse extends GenerateCardResponse {
   leaderboard: LeaderboardEntry[];
-}
-
-// ISKS 2026 Card Types
-export interface GenerateIsksCardRequest {
-  photo: string; // base64 encoded photo
-}
-
-// ISKS 2026 8-Bit Postcard Types
-export interface GenerateIsks8BitCardRequest {
-  photo: string; // base64 encoded photo
-  scene?: string; // scene identifier (e.g., "scene01")
 }
 
 export interface SceneDescription {

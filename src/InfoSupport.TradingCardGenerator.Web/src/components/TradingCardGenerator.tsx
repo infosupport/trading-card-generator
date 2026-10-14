@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useWebcam } from '@/hooks/useWebcam';
-import { TradingCardApi, blobToBase64, base64ToDataUrl } from '@/lib/api';
+import { TradingCardApi, blobToBase64, base64ToDataUrl, getFriendlyErrorMessage } from '@/lib/api';
 import { GenerateCardRequest } from '@/lib/types';
 import { ThemeConfig, sportsTheme } from '@/lib/theme-config';
+import GenerationErrorBanner from './GenerationErrorBanner';
 import TradingCardHeader from './TradingCardHeader';
 import TradingCardDisplay from './TradingCardDisplay';
 import ActionButtons from './ActionButtons';
@@ -40,8 +41,8 @@ export default function TradingCardGenerator({ theme = sportsTheme }: TradingCar
   const [sport, setSport] = useState<string>();
   const [loadingMessage, setLoadingMessage] = useState(theme.loadingMessages[0]);
   const [messageIndex, setMessageIndex] = useState(0);
-  const [specialProperty, setSpecialProperty] = useState<keyof typeof SPECIAL_PROPERTIES>('none');
-  const [isVipMode, setIsVipMode] = useState(false);
+  const [selectedSpecialProperty, setSpecialProperty] = useState<keyof typeof SPECIAL_PROPERTIES>('none');
+  const [generationError, setGenerationError] = useState<string | null>(null);
 
   const {
     videoRef,
@@ -57,16 +58,9 @@ export default function TradingCardGenerator({ theme = sportsTheme }: TradingCar
 
   const playerName = (firstName.trim() + ' ' + lastName.trim()).trim().toUpperCase() || theme.playerNameFallback;
 
-  // Check for VIP mode when names change
-  useEffect(() => {
-    const isVipUser = isVip(firstName, lastName);
-    setIsVipMode(isVipUser);
-    
-    // If VIP mode is activated, set special property to MVP
-    if (isVipUser && specialProperty === 'none') {
-      setSpecialProperty('mvp');
-    }
-  }, [firstName, lastName, specialProperty]);
+  const isVipMode = isVip(firstName, lastName);
+  // VIP mode defaults the special property to MVP unless another one is selected
+  const specialProperty = isVipMode && selectedSpecialProperty === 'none' ? 'mvp' : selectedSpecialProperty;
 
   // Rotate loading messages during generation
   useEffect(() => {
@@ -126,6 +120,7 @@ export default function TradingCardGenerator({ theme = sportsTheme }: TradingCar
     setIsCapturing(true);
     setIsGenerating(true);
     setGeneratedCardImage(null); // Clear any previous result
+    setGenerationError(null);
     try {
       // Capture at optimized resolution with JPEG compression to reduce API payload size
       const blob = await capturePhoto(CAPTURE_WIDTH, CAPTURE_HEIGHT, IMAGE_FORMAT, IMAGE_QUALITY);
@@ -134,7 +129,7 @@ export default function TradingCardGenerator({ theme = sportsTheme }: TradingCar
       }
     } catch (err) {
       console.error('Error generating trading card:', err);
-      // You might want to show an error message to the user here
+      setGenerationError(getFriendlyErrorMessage(err));
     } finally {
       setIsCapturing(false);
       setIsGenerating(false);
@@ -144,11 +139,12 @@ export default function TradingCardGenerator({ theme = sportsTheme }: TradingCar
   const handleUploadPhoto = async (file: File) => {
     setIsGenerating(true);
     setGeneratedCardImage(null); // Clear any previous result
+    setGenerationError(null);
     try {
       await processPhoto(file);
     } catch (err) {
       console.error('Error generating trading card from uploaded image:', err);
-      // You might want to show an error message to the user here
+      setGenerationError(getFriendlyErrorMessage(err));
     } finally {
       setIsGenerating(false);
     }
@@ -232,6 +228,8 @@ export default function TradingCardGenerator({ theme = sportsTheme }: TradingCar
 
   return (
     <div>
+      <GenerationErrorBanner message={generationError} onDismiss={() => setGenerationError(null)} />
+
       <TradingCardHeader 
         firstName={firstName}
         lastName={lastName}

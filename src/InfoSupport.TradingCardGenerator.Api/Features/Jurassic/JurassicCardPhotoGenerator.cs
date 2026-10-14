@@ -8,10 +8,9 @@ namespace InfoSupport.TradingCardGenerator.Api.Features.Jurassic;
 /// Generates jurassic themed trading card images.
 /// </summary>
 /// <param name="imageEditClient">The image edit client used to transform the photo.</param>
-/// <param name="metadataInjector">The metadata injector used to watermark the images.</param>
 public class JurassicCardPhotoGenerator(
-    [FromKeyedServices(ImageGenerationFeatures.Jurassic)] IImageEditClient imageEditClient,
-    ImageMetadataInjector metadataInjector) : CardPhotoGeneratorBase(imageEditClient, metadataInjector)
+    [FromKeyedServices(ImageGenerationFeatures.Jurassic)] IImageEditClient imageEditClient)
+    : CardPhotoGeneratorBase(imageEditClient)
 {
     private const string GeneratePhotoPrompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.GeneratePhoto.md";
     private const string Scene01Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.Scene01.md";
