@@ -13,7 +13,8 @@ for %%P in (5000 3000) do (
     )
 )
 
-taskkill /im msedge.exe /f >nul 2>&1
+rem Only close the kiosk Chrome (dedicated profile), not any other Chrome windows
+powershell -NoProfile -Command "Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'chrome.exe' -and $_.CommandLine -like '*TradingCardGenerator\ChromeKiosk*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }" >nul 2>&1
 
 if /i not "%~1"=="/quiet" (
     echo Demo stopped.

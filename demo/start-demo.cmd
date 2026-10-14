@@ -20,6 +20,13 @@ if not exist "%~dp0secrets.cmd" (echo [ERROR] demo\secrets.cmd is missing. Run p
 if not exist "%API_DIR%\InfoSupport.TradingCardGenerator.Api.exe" (echo [ERROR] Backend is not built. Run prepare-demo.cmd first. & goto :failed)
 if not exist "%WEB_DIR%\.next\BUILD_ID" (echo [ERROR] Frontend is not built. Run prepare-demo.cmd first. & goto :failed)
 
+set "CHROME_PROFILE=%LOCALAPPDATA%\TradingCardGenerator\ChromeKiosk"
+set "CHROME="
+for %%C in ("%ProgramFiles%\Google\Chrome\Application\chrome.exe" "%ProgramFiles(x86)%\Google\Chrome\Application\chrome.exe" "%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe") do (
+    if not defined CHROME if exist "%%~C" set "CHROME=%%~C"
+)
+if not defined CHROME (echo [ERROR] Google Chrome is not installed. Install Chrome first. & goto :failed)
+
 call "%~dp0secrets.cmd"
 
 rem Clean up anything left over from a previous run
@@ -46,11 +53,14 @@ start "TCG Frontend" /min /d "%WEB_DIR%" cmd /c "npm run start > "%LOGS%\fronten
 call :wait_for "http://localhost:3000/%DEMO_PAGE%" "frontend" || goto :failed
 
 echo [3/3] Opening the browser...
-rem --use-fake-ui-for-media-stream auto-accepts the camera prompt so the kiosk never blocks on it
-start "" msedge --kiosk "http://localhost:3000/%DEMO_PAGE%" --edge-kiosk-type=fullscreen --no-first-run --use-fake-ui-for-media-stream
+rem A dedicated profile makes sure the kiosk flags apply even when Chrome is already open.
+rem --kiosk-printing sends window.print() straight to the default printer without a dialog.
+rem --use-fake-ui-for-media-stream auto-accepts the camera prompt so the kiosk never blocks on it.
+start "" "%CHROME%" --kiosk "http://localhost:3000/%DEMO_PAGE%" --kiosk-printing --user-data-dir="%CHROME_PROFILE%" --no-first-run --no-default-browser-check --use-fake-ui-for-media-stream --overscroll-history-navigation=0 --disable-pinch
 
 echo.
 echo The demo is running. You can close this window.
+echo Cards are printed on the Windows default printer.
 echo To exit the full-screen browser press Alt+F4. To stop everything run stop-demo.cmd.
 timeout /t 10 >nul
 exit /b 0

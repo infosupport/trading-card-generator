@@ -41,7 +41,7 @@ export default function MedievalCardGenerator() {
   const [loadingMessage, setLoadingMessage] = useState(medievalTheme.loadingMessages[0]);
   const [messageIndex, setMessageIndex] = useState(0);
   const [scenes, setScenes] = useState<Array<{id: string; name: string; description: string; icon: string}>>([]);
-  const [selectedScene, setSelectedScene] = useState('scene01');
+  const [selectedScene, setSelectedScene] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [stats, setStats] = useState({ strength: 5, wisdom: 5, charisma: 5 });
@@ -62,11 +62,10 @@ export default function MedievalCardGenerator() {
   });
 
   const handleRollFate = () => {
-    if (isRolling || !firstName.trim() || !lastName.trim()) return;
+    if (isRolling || !firstName.trim() || !lastName.trim() || scenes.length === 0) return;
     setIsRolling(true);
-    if (scenes.length > 0) {
-      const randomScene = scenes[Math.floor(Math.random() * scenes.length)];
-      setSelectedScene(randomScene.id);
+    if (!selectedScene) {
+      setSelectedScene(scenes[Math.floor(Math.random() * scenes.length)].id);
     }
     setStats(rollStats());
     setTimeout(() => {
@@ -143,9 +142,6 @@ export default function MedievalCardGenerator() {
           };
         });
         setScenes(mappedScenes);
-        if (mappedScenes.length > 0) {
-          setSelectedScene(mappedScenes[0].id);
-        }
       } catch (err) {
         console.error('Error fetching medieval scenes:', err);
       }
@@ -202,6 +198,7 @@ export default function MedievalCardGenerator() {
     setGenerationError(null);
     setFirstName('');
     setLastName('');
+    setSelectedScene('');
     setIsFlipped(false);
   };
 
@@ -347,7 +344,7 @@ export default function MedievalCardGenerator() {
               onLastNameChange={setLastName}
               onRollFate={handleRollFate}
               isRolling={isRolling}
-              canRoll={firstName.trim().length > 0 && lastName.trim().length > 0}
+              canRoll={firstName.trim().length > 0 && lastName.trim().length > 0 && scenes.length > 0}
             />
           </div>
           <div

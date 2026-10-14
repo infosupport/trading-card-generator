@@ -70,7 +70,7 @@ export const medievalTheme: ThemeConfig = {
   name: 'Medieval Cards',
   title: 'Medieval Card Generator',
   subtitle: 'Step into the Middle Ages and become a stained glass legend',
-  headerTitle: 'Medieval Edition',
+  headerTitle: 'Techorama Medieval',
   headerSubtitle: 'Hear ye, get your keepsake here',
   sceneSelectorLabel: 'Choose Thy Guild',
   firstNamePlaceholder: '🛡️ GUEST FIRST NAME',
