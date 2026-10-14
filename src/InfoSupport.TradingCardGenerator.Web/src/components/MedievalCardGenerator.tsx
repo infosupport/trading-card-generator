@@ -296,9 +296,9 @@ export default function MedievalCardGenerator() {
       `}</style>
 
       {/* Header */}
-      <div className="text-center mb-6">
+      <div className="text-center mb-3">
         <div
-          className="inline-block relative px-10 py-6 sm:px-14 sm:py-8 -rotate-1"
+          className="inline-block relative px-10 py-3 sm:px-14 sm:py-4 -rotate-1"
           style={{
             background: 'radial-gradient(circle at 25% 20%, #f5e8c8 0%, #ecd9a8 45%, #d8bd82 100%)',
             boxShadow: '0 10px 24px rgba(0,0,0,0.35), inset 0 0 30px rgba(146,64,14,0.25)',
@@ -324,7 +324,7 @@ export default function MedievalCardGenerator() {
       </div>
 
       {/* Card Display with Scene Selector */}
-      <div className="flex flex-col lg:grid lg:grid-cols-[1fr_420px_1fr] gap-4 lg:gap-0 justify-center items-start lg:items-center my-6">
+      <div className="flex flex-col lg:grid lg:grid-cols-[1fr_420px_1fr] gap-4 lg:gap-0 justify-center items-start lg:items-center my-3">
         {/* Left side - Scene Selector */}
         <div className="flex flex-col w-full lg:w-auto">
           <MedievalSceneSelector

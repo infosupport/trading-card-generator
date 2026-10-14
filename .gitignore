@@ -6,6 +6,10 @@
 # dotenv files
 .env
 
+# Playwright browser artifacts
+.playwright/
+.playwright-cli/
+
 # Demo laptop secrets
 demo/secrets.cmd
 

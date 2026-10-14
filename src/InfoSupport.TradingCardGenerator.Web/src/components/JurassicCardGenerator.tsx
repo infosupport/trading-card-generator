@@ -251,7 +251,7 @@ export default function JurassicCardGenerator() {
       `}</style>
 
       {/* Header */}
-      <div className="text-center mb-6">
+      <div className="text-center mb-3">
         <h1 className="text-4xl font-bold mb-2" style={{ color: jurassicTheme.colors.primary }}>
           {jurassicTheme.headerTitle}
         </h1>
@@ -264,7 +264,7 @@ export default function JurassicCardGenerator() {
       </div>
 
       {/* Jurassic Card Display with Scene Selector */}
-      <div className="flex flex-col lg:grid lg:grid-cols-[1fr_420px_1fr] gap-4 lg:gap-0 justify-center items-start lg:items-center my-6">
+      <div className="flex flex-col lg:grid lg:grid-cols-[1fr_420px_1fr] gap-4 lg:gap-0 justify-center items-start lg:items-center my-3">
         {/* Left side - Scene Selector */}
         <div className='flex flex-col w-full lg:w-auto'>
           <SceneSelector

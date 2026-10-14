@@ -56,6 +56,12 @@ To run the full application execute the following command from the root of the r
 aspire run
 ```
 
+### Conference display sizing
+
+The generator pages use compact vertical spacing to leave more room for the
+card preview and controls on demo screens. Card sizes, text sizes, downloads,
+and printing are unchanged. Smaller windows retain normal scrolling.
+
 ## 🏗️ Project Structure
 
 ```text

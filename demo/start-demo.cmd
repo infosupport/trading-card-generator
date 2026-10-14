@@ -26,6 +26,7 @@ for %%C in ("%ProgramFiles%\Google\Chrome\Application\chrome.exe" "%ProgramFiles
     if not defined CHROME if exist "%%~C" set "CHROME=%%~C"
 )
 if not defined CHROME (echo [ERROR] Google Chrome is not installed. Install Chrome first. & goto :failed)
+reg query "HKLM\SOFTWARE\Policies\Google\Chrome" /v PrintPreviewUseSystemDefaultPrinter 2>nul | find "0x1" >nul || (echo [ERROR] Chrome is not set up to use the default printer. Run prepare-demo.cmd first. & goto :failed)
 
 call "%~dp0secrets.cmd"
 

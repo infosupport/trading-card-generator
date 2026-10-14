@@ -78,7 +78,7 @@ export default function MedievalActionButtons({
   };
 
   return (
-    <div className="flex flex-wrap justify-center gap-4 mt-6 px-4">
+    <div className="flex flex-wrap justify-center gap-4 mt-3 px-4">
       {generatedCardImage ? (
         /* Next adventurer button - resets the flow for a fresh capture */
         <button
