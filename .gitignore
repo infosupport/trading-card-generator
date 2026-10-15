@@ -6,6 +6,16 @@
 # dotenv files
 .env
 
+# Playwright browser artifacts
+.playwright/
+.playwright-cli/
+
+# Demo laptop secrets
+demo/secrets.cmd
+
+# Local medieval leaderboard database
+src/InfoSupport.TradingCardGenerator.Api/App_Data/
+
 # ASP.NET Core development settings
 appsettings.Development.json
 

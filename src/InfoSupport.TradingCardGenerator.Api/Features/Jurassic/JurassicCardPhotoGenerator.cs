@@ -1,21 +1,16 @@
-using Azure.AI.OpenAI;
 using HandlebarsDotNet;
 using InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Models;
 using InfoSupport.TradingCardGenerator.Api.Shared;
-using Microsoft.Extensions.Options;
 
 namespace InfoSupport.TradingCardGenerator.Api.Features.Jurassic;
 
 /// <summary>
 /// Generates jurassic themed trading card images.
 /// </summary>
-/// <param name="azureClient">The client to talk to the Azure hosted image generation model</param>
-/// <param name="modelSettings">The settings needed to find the deployment of the image generation model</param>
-/// <param name="metadataInjector">The metadata injector used to watermark the images</param>
+/// <param name="imageEditClient">The image edit client used to transform the photo.</param>
 public class JurassicCardPhotoGenerator(
-    AzureOpenAIClient azureClient,
-    IOptions<ImageModelSettings> modelSettings,
-    ImageMetadataInjector metadataInjector) : CardPhotoGeneratorBase(azureClient, modelSettings, metadataInjector)
+    [FromKeyedServices(ImageGenerationFeatures.Jurassic)] IImageEditClient imageEditClient)
+    : CardPhotoGeneratorBase(imageEditClient)
 {
     private const string GeneratePhotoPrompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.GeneratePhoto.md";
     private const string Scene01Prompt = "InfoSupport.TradingCardGenerator.Api.Features.Jurassic.Prompts.Scene01.md";

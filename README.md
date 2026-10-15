@@ -17,19 +17,50 @@ uploading their photo and customizing team information and colors.
 
 Make sure you have the following user-secrets configured for the `src/InfoSupport.TradingCardGenerator.Api` project:
 
-| Secret Name                         | Description                                        |
-| ----------------------------------- | -------------------------------------------------- |
-| ImageGenerationModel:Endpoint       | The endpoint URL for the Azure OpenAI service      |
-| ImageGenerationModel:ApiKey         | The API key for accessing the Azure OpenAI service |
-| ImageGenerationModel:DeploymentName | The deployment name for the gpt-image-1 model      |
+| Secret Name                                        | Description                                            |
+| -------------------------------------------------- | ------------------------------------------------------ |
+| ImageGeneration:Models:gpt-image-1.5:Endpoint       | The Foundry endpoint hosting the gpt-image-1.5 model    |
+| ImageGeneration:Models:gpt-image-1.5:ApiKey         | Optional API key; Entra ID is used when omitted         |
+| ImageGeneration:Models:mai-image-flash:Endpoint     | The endpoint hosting the MAI-Image-2.5-Flash model      |
+| ImageGeneration:Models:mai-image-flash:ApiKey       | Optional API key; Entra ID is used when omitted         |
 
-> **Note**: The deployment name **must** be `gpt-image-1` due to an issue in the Azure AI client library implementation by Microsoft.
+The models themselves and the mapping between features and models live in
+`appsettings.json` under the `ImageGeneration` section:
+
+```json
+{
+  "ImageGeneration": {
+    "DefaultModel": "gpt-image-1.5",
+    "Models": {
+      "gpt-image-1.5": { "Provider": "AzureOpenAI", "DeploymentName": "gpt-image-1.5" },
+      "mai-image-flash": { "Provider": "Mai", "DeploymentName": "MAI-Image-2.5-Flash" }
+    },
+    "Features": {
+      "Sports": "gpt-image-1.5",
+      "Jurassic": "gpt-image-1.5",
+      "Medieval": "mai-image-flash"
+    }
+  }
+}
+```
+
+Each provider has its own `IImageEditClient` implementation (`AzureOpenAiImageEditClient`,
+`MaiImageEditClient`) because the APIs differ: the gpt-image family uses the deployment-scoped
+Azure OpenAI image edit API, while MAI uses its own `/mai/v1/images/edits` REST endpoint.
+Switching a feature to another model is a matter of pointing its entry in `Features` at a
+different model key. `DeploymentName` must match the deployment name in Foundry.
 
 To run the full application execute the following command from the root of the repository:
 
 ```bash
 aspire run
 ```
+
+### Conference display sizing
+
+The generator pages use compact vertical spacing to leave more room for the
+card preview and controls on demo screens. Card sizes, text sizes, downloads,
+and printing are unchanged. Smaller windows retain normal scrolling.
 
 ## 🏗️ Project Structure
 

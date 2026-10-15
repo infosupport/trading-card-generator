@@ -28,6 +28,14 @@
   --theme-border-active: #d4af37;
 }
 
+[data-theme="medieval"] {
+  --theme-primary: #7c2d12;
+  --theme-card-bg: #fef3c7;
+  --theme-border: #92400e;
+  --theme-border-hover: #b45309;
+  --theme-border-active: #d4af37;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

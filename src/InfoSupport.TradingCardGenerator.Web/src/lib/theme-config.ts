@@ -18,6 +18,7 @@ export interface ThemeConfig {
   subtitle: string;
   headerTitle: string;
   headerSubtitle: string;
+  sceneSelectorLabel: string;
   firstNamePlaceholder: string;
   lastNamePlaceholder: string;
   playerNameFallback: string;
@@ -33,6 +34,7 @@ export const sportsTheme: ThemeConfig = {
   subtitle: 'Transform your photo into a professional sports trading card',
   headerTitle: '🏆 TECHORAMA SPORTS EDITION 🏆',
   headerSubtitle: 'ULTIMATE TECH TRADING CARD CREATOR',
+  sceneSelectorLabel: 'Choose Scene',
   firstNamePlaceholder: '⚡ PLAYER FIRST NAME',
   lastNamePlaceholder: '🚀 PLAYER LAST NAME',
   playerNameFallback: 'PLAYER NAME',
@@ -62,14 +64,52 @@ export const sportsTheme: ThemeConfig = {
   ],
 };
 
+// Medieval theme configuration
+export const medievalTheme: ThemeConfig = {
+  id: 'medieval',
+  name: 'Medieval Cards',
+  title: 'Medieval Card Generator',
+  subtitle: 'Step into the Middle Ages and become a stained glass legend',
+  headerTitle: 'Techorama Medieval',
+  headerSubtitle: 'Hear ye, get your keepsake here',
+  sceneSelectorLabel: 'Choose Thy Guild',
+  firstNamePlaceholder: '🛡️ GUEST FIRST NAME',
+  lastNamePlaceholder: '⚔️ GUEST LAST NAME',
+  playerNameFallback: 'GUEST NAME',
+  colors: {
+    primary: '#7c2d12', // deep crimson
+    cardBackground: '#fef3c7', // parchment
+    border: '#92400e',
+    borderHover: '#b45309',
+    borderActive: '#d4af37', // gold
+  },
+  loadingMessages: [
+    "Illuminating the manuscript...",
+    "Firing the kiln for your glass panel...",
+    "Grinding the lead came...",
+    "Mixing jewel-bright pigments...",
+    "Cutting the coloured glass...",
+    "Soldering the lead lines...",
+    "Polishing the tracery border...",
+    "Lighting the candles in the tavern...",
+    "Inscribing your heraldic device...",
+    "Hanging the panel in the lancet...",
+    "Stoking the forge...",
+    "Sharpening the glazier's diamond...",
+    "Casting the amber glow...",
+    "Raising the portcullis...",
+    "Hammering the armour plates..."
+  ],
+};
+
 // Jurassic theme configuration
-export const jurassicTheme: ThemeConfig = {
-  id: 'jurassic',
+export const jurassicTheme: ThemeConfig = {  id: 'jurassic',
   name: 'Jurassic Cards',
   title: 'Jurassic Card Generator',
   subtitle: 'Journey back in time and become a prehistoric legend',
   headerTitle: '🦖 JURASSIC EDITION 🦕',
   headerSubtitle: 'PREHISTORIC ADVENTURE CARD CREATOR',
+  sceneSelectorLabel: 'Choose Scene',
   firstNamePlaceholder: '🦴 GUEST FIRST NAME',
   lastNamePlaceholder: '🌿 GUEST LAST NAME',
   playerNameFallback: 'GUEST NAME',

@@ -1,0 +1,5 @@
+{
+  "appHost": {
+    "path": "src/InfoSupport.TradingCardGenerator.AppHost/InfoSupport.TradingCardGenerator.AppHost.csproj"
+  }
+}

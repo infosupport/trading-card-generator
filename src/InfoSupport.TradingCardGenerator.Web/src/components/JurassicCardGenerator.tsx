@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useWebcam } from '@/hooks/useWebcam';
-import { TradingCardApi, blobToBase64, base64ToDataUrl } from '@/lib/api';
+import { TradingCardApi, blobToBase64, base64ToDataUrl, getFriendlyErrorMessage } from '@/lib/api';
 import { GenerateDinoCardRequest } from '@/lib/types';
 import { jurassicTheme } from '@/lib/theme-config';
+import GenerationErrorBanner from './GenerationErrorBanner';
 
 import JurassicActionButtons from './JurassicActionButtons';
 import SceneSelector from './SceneSelector';
@@ -36,6 +37,9 @@ const GREETING_PHRASES = [
   'Unlocked new skills at'
 ];
 
+const pickRandomGreetingPhrase = () =>
+  GREETING_PHRASES[Math.floor(Math.random() * GREETING_PHRASES.length)];
+
 export default function JurassicCardGenerator() {
   const [isCapturing, setIsCapturing] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -47,11 +51,7 @@ export default function JurassicCardGenerator() {
   const [scenes, setScenes] = useState<Array<{id: string; name: string; description: string; icon: string}>>([]);
   const [selectedScene, setSelectedScene] = useState('scene01');
   const [greetingPhrase, setGreetingPhrase] = useState(GREETING_PHRASES[0]);
-
-  // Set random greeting phrase on client mount to avoid hydration mismatch
-  useEffect(() => {
-    setGreetingPhrase(GREETING_PHRASES[Math.floor(Math.random() * GREETING_PHRASES.length)]);
-  }, []);
+  const [generationError, setGenerationError] = useState<string | null>(null);
 
   const {
     videoRef,
@@ -140,9 +140,8 @@ export default function JurassicCardGenerator() {
     setIsCapturing(true);
     setIsGenerating(true);
     setGeneratedCardImage(null);
-    // Pick a random greeting phrase
-    const randomPhrase = GREETING_PHRASES[Math.floor(Math.random() * GREETING_PHRASES.length)];
-    setGreetingPhrase(randomPhrase);
+    setGreetingPhrase(pickRandomGreetingPhrase());
+    setGenerationError(null);
     try {
       // Capture at native webcam resolution without forcing dimensions
       const blob = await capturePhoto(undefined, undefined, IMAGE_FORMAT, IMAGE_QUALITY);
@@ -151,6 +150,7 @@ export default function JurassicCardGenerator() {
       }
     } catch (err) {
       console.error('Error generating jurassic card:', err);
+      setGenerationError(getFriendlyErrorMessage(err));
     } finally {
       setIsCapturing(false);
       setIsGenerating(false);
@@ -160,10 +160,12 @@ export default function JurassicCardGenerator() {
   const handleUploadPhoto = async (file: File) => {
     setIsGenerating(true);
     setGeneratedCardImage(null);
+    setGenerationError(null);
     try {
       await processPhoto(file);
     } catch (err) {
       console.error('Error generating jurassic card from uploaded image:', err);
+      setGenerationError(getFriendlyErrorMessage(err));
     } finally {
       setIsGenerating(false);
     }
@@ -193,6 +195,8 @@ export default function JurassicCardGenerator() {
 
   return (
     <div>
+      <GenerationErrorBanner message={generationError} onDismiss={() => setGenerationError(null)} />
+
       {/* Print-only styles */}
       <style jsx global>{`
         @media print {
@@ -247,7 +251,7 @@ export default function JurassicCardGenerator() {
       `}</style>
 
       {/* Header */}
-      <div className="text-center mb-6">
+      <div className="text-center mb-3">
         <h1 className="text-4xl font-bold mb-2" style={{ color: jurassicTheme.colors.primary }}>
           {jurassicTheme.headerTitle}
         </h1>
@@ -260,7 +264,7 @@ export default function JurassicCardGenerator() {
       </div>
 
       {/* Jurassic Card Display with Scene Selector */}
-      <div className="flex flex-col lg:grid lg:grid-cols-[1fr_420px_1fr] gap-4 lg:gap-0 justify-center items-start lg:items-center my-6">
+      <div className="flex flex-col lg:grid lg:grid-cols-[1fr_420px_1fr] gap-4 lg:gap-0 justify-center items-start lg:items-center my-3">
         {/* Left side - Scene Selector */}
         <div className='flex flex-col w-full lg:w-auto'>
           <SceneSelector

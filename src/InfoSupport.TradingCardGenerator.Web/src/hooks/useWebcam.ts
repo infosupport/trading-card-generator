@@ -100,6 +100,14 @@ export function useWebcam({ width = 640, height = 480, facingMode = 'user' }: Us
     };
   }, [stopWebcam]);
 
+  // Re-attach the active stream whenever the <video> element (re)mounts, e.g. after being
+  // conditionally swapped out for the generated card result and back again
+  useEffect(() => {
+    if (videoRef.current && streamRef.current && videoRef.current.srcObject !== streamRef.current) {
+      videoRef.current.srcObject = streamRef.current;
+    }
+  });
+
   return {
     videoRef,
     isStreaming,

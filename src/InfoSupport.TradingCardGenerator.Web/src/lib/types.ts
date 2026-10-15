@@ -65,6 +65,30 @@ export interface GenerateDinoCardRequest {
   scene: string; // scene identifier (e.g., "scene01", "scene02")
 }
 
+// Medieval Card Types
+export interface GenerateMedievalCardRequest {
+  photo: string; // base64 encoded photo
+  scene: string; // scene identifier (e.g., "scene01", "scene02")
+  firstName: string;
+  lastName: string;
+  strength: number;
+  wisdom: number;
+  charisma: number;
+}
+
+export interface LeaderboardEntry {
+  recordedOn: string;
+  firstName: string;
+  lastName: string;
+  strength: number;
+  wisdom: number;
+  charisma: number;
+}
+
+export interface GenerateMedievalCardResponse extends GenerateCardResponse {
+  leaderboard: LeaderboardEntry[];
+}
+
 export interface SceneDescription {
   identifier: string;
   description: string;
